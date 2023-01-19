@@ -1,0 +1,59 @@
+{
+    "name": "spatialdao",
+    "version": "1.0.0",
+    "description": "SpatialDao is a project builded for the Hack => SpaceWarp : The second Filecoin Virtual Machine hackathon. SpacialDao aims to create a Bounty DataDAO for organizations!!!",
+    "main": "index.js",
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "start": "next start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nijoe1/spatialDAO.git"
+    },
+    "keywords": [
+        "FEVM",
+        "WEB3",
+        "DataDao",
+        "EthGlobal",
+        "Hackthon"
+    ],
+    "author": "Nick Lionis",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/nijoe1/spatialDAO/issues"
+    },
+    "homepage": "https://github.com/nijoe1/spatialDAO#readme",
+    "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/server": "^11.10.0",
+        "@gitcoinco/passport-sdk-reader": "^0.1.4",
+        "@lit-protocol/sdk-browser": "^1.1.241",
+        "@mantine/core": "^5.6.4",
+        "@mantine/dates": "^5.6.4",
+        "@mantine/dropzone": "^5.6.4",
+        "@mantine/form": "^5.6.4",
+        "@mantine/hooks": "^5.6.4",
+        "@mantine/next": "^5.6.4",
+        "@mantine/notifications": "^5.6.4",
+        "@orbisclub/orbis-sdk": "0.4.9",
+        "@rainbow-me/rainbowkit": "^0.7.4",
+        "@tabler/icons": "^1.109.0",
+        "@vocdoni/sdk": "^0.0.2-alpha",
+        "alchemy-sdk": "^2.2.0",
+        "dayjs": "^1.11.7",
+        "ethereum-blockies-base64": "^1.0.2",
+        "ethers": "^5.7.2",
+        "next": "12.3.1",
+        "nft.storage": "^7.0.0",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "tabler-icons-react": "^1.56.0",
+        "typescript": "4.8.4",
+        "wagmi": "^0.7.10"
+    },
+    "devDependencies": {
+        "typescript": "4.9.4"
+    }
+}
