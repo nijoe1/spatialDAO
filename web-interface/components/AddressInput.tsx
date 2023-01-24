@@ -47,7 +47,7 @@ export function AddressInput(props: AddressProps) {
     };
 
     return (
-        <Group my={"md"}>
+        <Group mx={"md"} my={"sm"}>
             <AsyncInput
                 label={"Add member"}
                 placeholder="Address or ENS"

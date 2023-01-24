@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import {createStyles, Navbar, Group, Code, Text} from '@mantine/core';
+import {createStyles, Navbar, Text} from '@mantine/core';
 import {
     IconArtboard,
     IconHammer, IconMapSearch,
     IconMessageDots
 } from '@tabler/icons';
-import Link from "next/link";
-import {useRouter} from "next/router";
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
@@ -89,14 +87,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 
 const data = [
-    { link: '/create-nft', label: 'Create NFT', icon: IconHammer },
+    { link: '/create-dao', label: 'Create DAO', icon: IconHammer },
     { link: '/my-nft', label: 'Your Profile', icon: IconArtboard },
     { link: '/discussions', label: 'Group Chat', icon: IconMessageDots },
     { link: '/explore-spaces', label: "Explore Spaces", icon: IconMapSearch },
 ];
 
 export function NavbarSide() {
-    const router = useRouter()
     const { classes, cx } = useStyles();
     const [active, setActive] = useState(null);
 

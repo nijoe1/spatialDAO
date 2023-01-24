@@ -108,8 +108,8 @@ const links = [
         "label": "Discussions"
     },
     {
-        "link": "/create-nft",
-        "label": "Create NFT"
+        "link": "/create-dao",
+        "label": "Create DAO"
     },
     {
         "link": `/my-nft`,
@@ -147,7 +147,7 @@ export function HeaderSimple() {
                     <Image src="/logo.webp" width={50} height={50} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
                            onClick={() => router.push('/')}/>
                     <Title onClick={() => router.push("/")} className={classes.title}>
-                        The Crypto Studio
+                        spatialDAO
                     </Title>
                 </Group>
                 <Group className={classes.hiddenMobile}>

@@ -46,8 +46,8 @@ const hyperspace = {
 const {chains, provider, webSocketProvider} = configureChains(
     [hyperspace],
     [
-        alchemyProvider({apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}),
-        publicProvider()
+        // @ts-ignore
+        alchemyProvider({apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}), publicProvider()
     ]
 );
 const {connectors} = getDefaultWallets({

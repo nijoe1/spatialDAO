@@ -81,7 +81,7 @@ export default function Discussions() {
     return (
         <>
             <Head>
-                <title>Discussions - The Crypto Studio</title>
+                <title>Discussions - SpatialDAO</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <Layout>
