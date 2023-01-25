@@ -69,21 +69,21 @@ function Feature({ icon: Icon, title, description, className, ...others }: Featu
 const mockdata = [
     {
         icon: IconWallet,
-        title: 'Mint NFTs',
+        title: 'Create your dataDAO',
         description:
-            'Upload your audio file and mint your NFT. You can mint from a variety of beautiful visualisations.',
+            'Host your community and persist your wanted files on filecoin',
     },
     {
         icon: IconHeadphones,
-        title: 'Update Minted NFT Audio',
+        title: 'Make file proposals',
         description:
-            'Feel like changing the tune of your minted NFT? No problem, you can easily update the audio file of your NFT.',
+            'So the community voters can decide about the files to get stored',
     },
     {
         icon: IconMessages,
-        title: 'Network With Artists',
+        title: 'Create file bounties',
         description:
-            'Network with other artists and creators on the platform.',
+            'Incentivize deal makers to store your community files by rewarding them for that',
     },
 ];
 

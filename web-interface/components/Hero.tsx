@@ -102,17 +102,16 @@ export function Hero() {
 
             <div className={classes.inner}>
                 <Title className={classes.title}>
-                    Build{' '}
+                    Create{' '}
                     <Text component="span" className={classes.highlight} inherit>
-                        dynamic 
+                        & Monetize 
                     </Text>{' '}
-                    NFTs
+                    your dataDAO
                 </Title>
 
                 <Container p={0} size={600}>
                     <Text size="lg" color="dimmed" className={classes.description}>
-                        This is a place where you can create tradable, digital assets from any piece of audio or image. What’s
-                        more, you don’t need to be an expert to use The Crypto Studio.
+                    SpatialDAO is a DataDAO that allows organizations to create deal bounties for specific pieces of data. Deal clients, on the other hand, are hunting bounties and making storage deals for DAO-proposed data and getting rewarded for that!
                     </Text>
                 </Container>
 
@@ -121,9 +120,9 @@ export function Hero() {
                             className={classes.control} size="lg" variant="default" color="indigo">
                         Source Code
                     </Button>
-                    <Button target={"_blank"} href={"/create-nft"} component={"a"} className={classes.control}
+                    <Button target={"_blank"} href={"/create-dao"} component={"a"} className={classes.control}
                             size="lg" color={"indigo"}>
-                        Mint Your NFT
+                        Create your DAO
                     </Button>
                 </div>
             </div>

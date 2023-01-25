@@ -5,8 +5,6 @@ import {Hero} from "../components/Hero";
 import {Features} from "../components/Features";
 import {IconCheck} from "@tabler/icons";
 import {useContext, useEffect, useState} from "react";
-import {getTcsNfts} from "../utils/getTcsNfts";
-import NftCard from "../components/NftCard";
 import ComingSoon1 from "../components/ComingSoon1";
 import ComingSoon from "../components/ComingSoon";
 import { GlobalContext } from '../contexts/GlobalContext';
@@ -34,33 +32,11 @@ export default function Home() {
         logout()
     }, [isDisconnected])
 
-    useEffect(() => {
-        getTcsNfts().then((nfts) => {
-            // @ts-ignore
-            setNfts(nfts);
-        })
-    }, [])
-
-    let renderNfts
-    // @ts-ignore
-    if (nfts?.length > 0) {
-        // @ts-ignore
-        renderNfts = nfts?.map(nft => {
-            const spaceName = nft.attributes.filter((trait: any) => trait.trait_type === "spaceName")[0].value
-            return (
-                <Grid.Col key={nft.tokenID} lg={4} md={6}>
-                    <NftCard spaceName={spaceName} setAddAttribute={() => console.log("I'm clicked")} title={nft.name} tokenId={nft.tokenID} animationUrl={nft.animation_url} description={nft.description} image={nft.image} setModalOpen={() => console.log("I'm clicked")}/>
-                </Grid.Col>
-            )
-        })
-    } else {
-        renderNfts = <Text>Loading</Text>
-    }
 
     return (
         <>
             <Head>
-                <title>The Crypto Studio</title>
+                <title>spatial.DAO</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <Layout>
@@ -86,19 +62,17 @@ export default function Home() {
                             }
                         >
                             <List.Item>
-                                <b>Mint Your Space</b> – choose a name of your NFT collection, an image and mint a space
+                                <b>Create your dataDAO</b> – choose the DAO proposers and Voters create you
+Decentralized social layer with one click
                             </List.Item>
                             <List.Item>
-                                <b>Mint NFT</b> – choose a name of your NFT, write a description, upload an audio and
-                                mint your NFT
+                                <b>Propose Files</b> – choose a file that your DAO wants it permanent
                             </List.Item>
                             <List.Item>
-                                <b>Update NFT audio</b> – head over to your NFTs page and click on pencil icon to
-                                update the audio of your NFT
+                                <b>Create Bounties</b> – Create bunties on succesfully proposed files
                             </List.Item>
                             <List.Item>
-                                <b>Network with other creators</b> – head over to the Group Chat page and network with
-                                other creators
+                                <b>Reward deal makers</b> – Reward deal clients that claim your dataDAO bounties
                             </List.Item>
                         </List>
                     </Stack>
@@ -120,14 +94,7 @@ export default function Home() {
                         </Grid>
                     </Container>
                 </Center>
-                <Container size={"xl"}>
-                    <Center p={"xl"} m={"xl"}>
-                        <Title order={1}>Have a look at some of our NFTs</Title>
-                    </Center>
-                    <Grid gutter={"xl"}>
-                        {renderNfts}
-                    </Grid>
-                </Container>
+                
             </Layout>
         </>
     )

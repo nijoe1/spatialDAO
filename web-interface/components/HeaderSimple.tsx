@@ -2,6 +2,7 @@ import {
     createStyles,
     Header,
     Group,
+    Center,
     Image,
     Burger, Title, Transition, Paper, Stack, useMantineColorScheme, useMantineTheme, Switch,
 } from '@mantine/core';
@@ -141,14 +142,16 @@ export function HeaderSimple() {
     ));
 
     return (
-        <Header height={100} p="md">
+        <Header height={120} p="md">
             <Group position="apart" p={"md"} sx={{height: '100%'}}>
                 <Group>
-                    <Image src="/logo.webp" width={50} height={50} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
-                           onClick={() => router.push('/')}/>
-                    <Title onClick={() => router.push("/")} className={classes.title}>
-                        spatialDAO
-                    </Title>
+                    <Center>
+                        <Image src="/logo.webp" width={80} height={80} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
+                               onClick={() => router.push('/')}/>
+                        <Title onClick={() => router.push("/")} className={classes.title}>
+                            spatial.DAO
+                        </Title>
+                    </Center>
                 </Group>
                 <Group className={classes.hiddenMobile}>
                     <Group position="center" mb={15}>
