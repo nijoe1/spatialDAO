@@ -1,0 +1,648 @@
+[{
+        "inputs": [{
+                "internalType": "address[]",
+                "name": "DAOproposers",
+                "type": "address[]"
+            },
+            {
+                "internalType": "address[]",
+                "name": "DAOvoters",
+                "type": "address[]"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "groupid",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "DEFAULT_ADMIN_ROLE",
+        "outputs": [{
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "DaoName",
+        "outputs": [{
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "PROPOSER_ROLE",
+        "outputs": [{
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "VOTER_ROLE",
+        "outputs": [{
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "uint64",
+            "name": "",
+            "type": "uint64"
+        }],
+        "name": "blacklistedSPs",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address",
+            "name": "proposer",
+            "type": "address"
+        }],
+        "name": "checkProposerRole",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address",
+            "name": "voter",
+            "type": "address"
+        }],
+        "name": "checkVoterRole",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "uint64",
+            "name": "deal_id",
+            "type": "uint64"
+        }],
+        "name": "claim_bounty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "",
+            "type": "bytes"
+        }],
+        "name": "commpToBounty",
+        "outputs": [{
+                "internalType": "uint256",
+                "name": "numberOfBounties",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "bountyReward",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "donatedTokens",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "requiredTokens",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "enabled",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "size",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int64",
+                "name": "minDealDays",
+                "type": "int64"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "",
+            "type": "bytes"
+        }],
+        "name": "commpToProposal",
+        "outputs": [{
+                "internalType": "uint256",
+                "name": "proposalID",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "detailsURL",
+                "type": "string"
+            },
+            {
+                "internalType": "int64",
+                "name": "votes",
+                "type": "int64"
+            },
+            {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "result",
+                "type": "bool"
+            },
+            {
+                "internalType": "bool",
+                "name": "Activestate",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "duration",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
+            },
+            {
+                "internalType": "uint64",
+                "name": "",
+                "type": "uint64"
+            }
+        ],
+        "name": "commpToSPs",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes",
+                "name": "commP",
+                "type": "bytes"
+            },
+            {
+                "internalType": "uint256",
+                "name": "numberOfBounties",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "bountyReward",
+                "type": "uint256"
+            },
+            {
+                "internalType": "int64",
+                "name": "minDealDays",
+                "type": "int64"
+            },
+            {
+                "internalType": "uint256",
+                "name": "size",
+                "type": "uint256"
+            }
+        ],
+        "name": "createBounty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes",
+                "name": "commP",
+                "type": "bytes"
+            },
+            {
+                "internalType": "string",
+                "name": "proposalURL",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "duration",
+                "type": "uint256"
+            }
+        ],
+        "name": "createProposal",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "executeProposal",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "fundBounty",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "getDeals",
+        "outputs": [{
+            "internalType": "uint32[]",
+            "name": "commP_deals",
+            "type": "uint32[]"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "getProposal",
+        "outputs": [{
+            "components": [{
+                    "internalType": "uint256",
+                    "name": "proposalID",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "detailsURL",
+                    "type": "string"
+                },
+                {
+                    "internalType": "int64",
+                    "name": "votes",
+                    "type": "int64"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "start",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "result",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "Activestate",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "duration",
+                    "type": "uint256"
+                }
+            ],
+            "internalType": "struct commpGovernor.proposal",
+            "name": "",
+            "type": "tuple"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+        }],
+        "name": "getRoleAdmin",
+        "outputs": [{
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getRoleMember",
+        "outputs": [{
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+        }],
+        "name": "getRoleMemberCount",
+        "outputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getTotalCIDs",
+        "outputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "grantRole",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "groupID",
+        "outputs": [{
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "hasRole",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "name": "idToCommP",
+        "outputs": [{
+            "internalType": "bytes",
+            "name": "",
+            "type": "bytes"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "isBountyEnabled",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "uint256",
+            "name": "commpid",
+            "type": "uint256"
+        }],
+        "name": "isBountyFunded",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "isCommpProposed",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "isProposalEnded",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes",
+            "name": "commP",
+            "type": "bytes"
+        }],
+        "name": "isValidProposedFile",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "renounceRole",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "revokeRole",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "bytes4",
+            "name": "interfaceId",
+            "type": "bytes4"
+        }],
+        "name": "supportsInterface",
+        "outputs": [{
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "bytes",
+                "name": "commP",
+                "type": "bytes"
+            },
+            {
+                "internalType": "bool",
+                "name": "desition",
+                "type": "bool"
+            }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

@@ -17,7 +17,6 @@ async function callRpc(method, params) {
     var options = {
         method: "POST",
         url: "https://api.hyperspace.node.glif.io/rpc/v1",
-        // url: "http://localhost:1234/rpc/v0",
         headers: {
             "Content-Type": "application/json",
         },
@@ -55,35 +54,9 @@ module.exports = async({ deployments }) => {
     const chainId = network.config.chainId
     const tokenToBeMinted = networkConfig[chainId]["tokenToBeMinted"]
 
-    // console.log("deploying SimpleCoin...")
-    // await deployLogError("SimpleCoin", {
-    //     from: deployer.address,
-    //     args: [tokenToBeMinted],
-    //     // maxPriorityFeePerGas to instruct hardhat to use EIP-1559 tx format
-    //     maxPriorityFeePerGas: priorityFee,
-    //     log: true,
-    // })
 
-    // console.log("deploying MockMinerAPI...")
-    // await deployLogError("MockMinerAPI", {
-    //     from: deployer.address,
-    //     args: [0x0000001],
-    //     // maxPriorityFeePerGas to instruct hardhat to use EIP-1559 tx format
-    //     maxPriorityFeePerGas: priorityFee,
-    //     log: true,
-    // })
-
-    // console.log("deploying MockMarketAPI...")
-    // await deployLogError("MockMarketAPI", {
-    //     from: deployer.address,
-    //     args: [],
-    //     // maxPriorityFeePerGas to instruct hardhat to use EIP-1559 tx format
-    //     maxPriorityFeePerGas: priorityFee,
-    //     log: true,
-    // })
-
-    console.log("Deploying FilecoinMarketConsumer...")
-    await deployLogError("FilecoinMarketConsumer", {
+    console.log("Deploying DAOFactory...")
+    await deployLogError("DAOFactory", {
         from: deployer.address,
         args: [],
         // maxPriorityFeePerGas to instruct hardhat to use EIP-1559 tx format

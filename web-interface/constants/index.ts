@@ -1,11 +1,10 @@
-import tcsAbi from "./tcs.abi.json"
-import tcsContractAddress from "./contractAddress.json"
-import tableland from "./tableland.json"
-import nftImages from "./nftImages.json"
+import factory_abi from "./factory.abi.json"
+import DAO_abi from "./factory.abi.json"
+import daoFactoryAddress from "./contractAddress.json"
+
 
 export {
-    tcsAbi,
-    tcsContractAddress,
-    tableland,
-    nftImages
+    factory_abi,
+    DAO_abi,
+    daoFactoryAddress,
 }
