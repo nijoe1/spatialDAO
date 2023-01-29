@@ -45,7 +45,7 @@ export default function UserPosts() {
     const [checked, setChecked] = useState(false)
 
     const getTokenId = async () => {
-        if (router.pathname === "/my-nft") {
+        if (router.pathname === "/Profile") {
             let tokenIds: any = []
             // getCreatedNfts(address!.toLowerCase()).then((nfts) => {
             //     nfts.forEach((nft: any) => {

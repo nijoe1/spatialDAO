@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import {Layout} from "../components/Layout";
 import {useContext, useEffect, useState} from "react";
-import {getNfts} from "../utils/getNfts";
 import NftCard from "../components/NftCard"
 import {Button, Center, Container, createStyles, Grid, Skeleton, Stack, Tabs, Text, Title} from "@mantine/core";
 import {GlobalContext} from "../contexts/GlobalContext";
@@ -206,19 +205,6 @@ export default function User() {
             })
         }
     }
-
-    useEffect(() => {
-        if (!mounted) return
-        if (router.query.address) {
-            const address = router.query.address as `0x${string}`
-            setUserAddress(address)
-            getProfile(address)
-            getNfts(address).then((nfts) => {
-                setNfts(nfts)
-            })
-            getIsFollowing(address)
-        }
-    }, [mounted, router.isReady])
 
 
     let renderNfts

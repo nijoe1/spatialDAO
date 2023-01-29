@@ -10,8 +10,7 @@ import {useRouter} from "next/router";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
 import {daoFactoryAddress} from "../constants";
-import {getNfts} from "../utils/getNfts";
-import {getOwnersForNft} from "../utils/getOwnersForNft";
+
 
 dayjs.extend(relativeTime)
 
@@ -30,46 +29,7 @@ export default function PostCard(props: any) {
     const [body, setBody] = useState("")
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
-    useEffect(() => {
-        let cond = props.post.content.tags[1]
-        console.log(props)
-        if (cond) {
-            let data = JSON.parse(props.post.content.tags[1].title)
-            if(data.tokenid){
-                getOwnersForNft(data.tokenid).then((owners:any)=>{
-                    console.log(owners.owners)
-                    if(owners.owners.includes(props.address.toLowerCase())){
-                        setAble(true)
-                    }else{
-                        setBody(`Post only visible to token holders of tokenID = ${data.tokenid}`)
-                    }
-                })
-            }
-            let tokenIds: any = []
-            if (props.groupId) {
-                getNfts(props.groupId).then((nfts) => {
-                    nfts.forEach((nft: any) => {
-                        tokenIds.push(nft.tokenID)
-                    });
-                    // console.log(tokenIds)
-                    tokenIds.forEach((tokenid: any) => {
-                        if (tokenid == data.tokenid) {
-                            setAble(true)
-                        }
-                    })
-                })
-            }
-            setEncrypted(true)
-        } else {
-            setEncrypted(false)
-            setAble(false)
-        }
-
-
-        if (props.post.content.body.includes("This is an encrypted post visible only to")) {
-            setEncrypted(true)
-        }
-    }, [props.post.content.body])
+    
 
     function getTokenGatedConditions(tokenid: any) {
         return [
@@ -181,7 +141,7 @@ export default function PostCard(props: any) {
         decrypt(encryption).then(res => setBody(res?res:`Post only visible to spaceMembers. You will be a space member if u hold one NFT from that space`))
     }
 
-    if ((router.pathname === "/user" || router.pathname === "/my-nft") && encrypted && able) {
+    if ((router.pathname === "/user" || router.pathname === "/Profile") && encrypted && able) {
         let EncryptionData = JSON.parse(props.post.content.tags[1].title)
         
             if (EncryptionData.tokenid) {
@@ -330,7 +290,7 @@ export default function PostCard(props: any) {
                             {haha}
                         </Text>
                     </Group>
-                    {router.pathname === "/my-nft" && <Group>
+                    {router.pathname === "/Profile" && <Group>
                         <ActionIcon onClick={handleDelete}>
                             <IconTrash color={"red"}/>
                         </ActionIcon>

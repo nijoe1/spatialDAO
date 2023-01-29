@@ -24,7 +24,6 @@ export const useContract = () => {
     const {data: signer} = useSigner()
 
     const contract = new ethers.Contract(daoFactoryAddress["dao-factory"], factory_abi, signer!)
-    console.log(contract)
     const PROPOSER_ROLE = "0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1"
     const VOTER_ROLE = "0x72c3eec1760bf69946625c2d4fb8e44e2c806345041960b434674fb9ab3976cf"
     // Creates a new DataDao

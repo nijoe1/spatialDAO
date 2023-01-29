@@ -12,7 +12,6 @@ import {useAccount} from "wagmi";
 
 
 export default function Home() {
-    const [nfts, setNfts] = useState();
     const {isDisconnected} = useAccount()
     // @ts-ignore
     const {orbis, user, setUser} = useContext(GlobalContext)

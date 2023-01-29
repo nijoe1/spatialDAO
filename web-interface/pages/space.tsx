@@ -3,7 +3,6 @@ import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
-import getSpaceNfts from "../utils/getSpaceNfts";
 import NftCard from "../components/NftCard";
 import CreatorCard from "../components/CreatorCard";
 import StyledTabs from "../components/StyledTabs";
@@ -28,6 +27,7 @@ import Proposals from "../components/Proposals";
 import Bounty from "../components/Bounty";
 
 let query = "https://testnets.opensea.io/collection/thecryptostudio?search[sortAscending]=true&search[sortBy]=UNIT_PRICE&search[stringTraits][0][name]=spaceName&search[stringTraits][0][values][0]="
+
 let orbisGroup = "https://app.orbis.club/group/"
 
 const useStyles = createStyles((theme) => ({
@@ -65,7 +65,6 @@ export default function Space() {
     const {classes} = useStyles()
     const router = useRouter()
     const {isConnected, isConnecting, isDisconnected, address} = useAccount()
-    const [nfts, setNfts] = useState()
     const [spaceName, setSpaceName] = useState("")
     const [mounted, setMounted] = useState(false)
     const [isOwner, setIsOwner] = useState<boolean>(false)
@@ -215,10 +214,6 @@ export default function Space() {
 
     const buttons =
         <>
-            <Button component={"a"} href={query} target={"_blank"} color={"indigo"} sx={{height: "-webkit-fill-available"}}
-                    className={classes.btn}>
-                View Space on Opensea
-            </Button>
             {!user &&
                 <Button onClick={() => router.push('/discussions')} color={"indigo"} sx={{height: "-webkit-fill-available"}}
                         variant={"light"}

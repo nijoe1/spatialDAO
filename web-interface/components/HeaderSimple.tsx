@@ -113,7 +113,7 @@ const links = [
         "label": "Create DAO"
     },
     {
-        "link": `/my-nft`,
+        "link": `/Profile`,
         "label": "Your Profile"
     },
     {

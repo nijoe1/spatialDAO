@@ -166,7 +166,7 @@ export default function SpaceNftCard({
                     </Text>
                 </>
             )}
-            {router.pathname === "/my-nft" && badgeContext.includes("Audio") && mutable == "1" && (
+            {router.pathname === "/Profile" && badgeContext.includes("Audio") && mutable == "1" && (
                 <Group>
                     <Tooltip label={"Edit NFT Audio"}>
                         <ActionIcon onClick={setModalOpen}>
