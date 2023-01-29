@@ -6,17 +6,24 @@ import SpaceCard from "../components/SpaceCard";
 import { useAccount, useSigner } from "wagmi";
 import { GlobalContext } from "../contexts/GlobalContext";
 import {useContract} from "../hooks/useContract";
+import { useIsMounted } from './../hooks/useIsMounted';
 
 
 export default function ExploreSpaces() {
-  const [data, setData] = useState<any>(null);
-  const { data: signer } = useSigner();
-  const { isDisconnected } = useAccount();
+  const [data, setData] = useState<any>(null)
+  const { data: signer } = useSigner()
+  const { isDisconnected } = useAccount()
   const {getDataDaos} = useContract()
+  const isMounted = useIsMounted()
+
   useEffect(() => {
+    if(!signer) return
+    console.log(isMounted)
+    if(!isMounted) return
     getDAOs()
 
-  }, []);
+
+  }, [isMounted,signer]);
 
   // @ts-ignore
   const { orbis, user, setUser } = useContext(GlobalContext);
@@ -48,11 +55,9 @@ export default function ExploreSpaces() {
       return (
         <Grid.Col key={index} lg={4} md={6}>
           <SpaceCard
-            signer={signer}
             title={nft[1]}
             address={nft[0]}
             groupId={nft[2]}
-            image={`https://${nft.image}.ipfs.nftstorage.link`}
           />
         </Grid.Col>
       );

@@ -6,12 +6,11 @@ import {useIsMounted} from "../hooks/useIsMounted";
 import {GlobalContext} from "../contexts/GlobalContext";
 import PostCard from "./PostCard";
 import {useAccount} from "wagmi";
-// import getCreatedNfts from "../utils/getCreatedNfts";
 
 
 export default function UserPosts() {
     const router = useRouter()
-    const [isDashboard, setIsDashboard] = useState(false)
+    const [isDashboard, setIsDashboard] = useState(true)
     const {address} = useAccount()
     const [data, setData] = useState<any>()
     const [selectedToken, setSelectedToken] = useState("")
@@ -28,26 +27,14 @@ export default function UserPosts() {
             setData([])
         }
     }
-    const [checked, setChecked] = useState(false)
-
     return (
         <Container>
             {isDashboard &&
-                <PostInput spaceName={""} groupId={address as string} tag={address as string} encrypted={checked}
-                           tokenId={selectedToken}/>}
+                <PostInput spaceName={""} groupId={address as string} tag={address as string} tokenId={selectedToken}/>}
             {isDashboard && <div style={{
                 marginTop: -60
             }}></div>}
             <>
-                {isDashboard && <Group>
-                    <Checkbox color={"indigo"} label={"Make post visible only to people with your NFTs."}
-                              checked={checked}
-                              onChange={(event) => setChecked(event.currentTarget.checked)}/>
-                    {checked &&
-                        <NativeSelect label={"Token IDs"} description={"Select a token ID to encrypt the post with."}
-                                      value={selectedToken} data={tokenIds}
-                                      onChange={(event) => setSelectedToken(event.currentTarget.value)}/>}
-                </Group>}
                 {
                     data?.map((post: any, index: number) => {
                         return (

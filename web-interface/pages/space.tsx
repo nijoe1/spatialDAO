@@ -97,28 +97,25 @@ export default function Space() {
     }, [isDisconnected])
 
     const getProfile = async (address: string) => {
-        let {data: dids} = await orbis.getDids(address)
-        let {data, error} = await orbis.getProfile(dids[0].did)
+        let {data} = await orbis.getGroup(address)
         if (data) {
             return data
         }
-        return error
+
     }
 
     useEffect(() => {
         if (!router.isReady) return
-        const {address} = router.query
+        const {groupId , address} = router.query
         // @ts-ignore
-        getProfile(address).then(res => {
+        getProfile(groupId).then(res => {
             if (!res) return
             if (typeof res["details"] === "string") {
                 // @ts-ignore
                 setRenderCreator(<CreatorCard email={router.query.address}/>)
             } else {
-                {/*@ts-ignore*/
-                }
-                setRenderCreator(<CreatorCard image={res?.details?.profile?.pfp} name={res?.username}
-                                              email={res?.address}/>)
+                {/*@ts-ignore*/}
+                setRenderCreator(<CreatorCard image={res?.content?.pfp} name={res?.content?.name} email={address!}/>)
             }
         })
     }, [router.isReady])
@@ -160,23 +157,7 @@ export default function Space() {
     }, [router.isReady])
 
     let renderNfts
-    // @ts-ignore
-    if (nfts?.length > 0) {
-        // @ts-ignore
-        renderNfts = nfts.map((nft: any, index: number) => {
-            return (
-                <Grid.Col key={index} lg={4} md={6}>
-                    <SpaceNftCard key={nft.tokenID} setAddAttribute={() => console.log("I'm clicked")} title={nft.name}
-                                  tokenId={nft.tokenID}
-                                  animationUrl={nft.animation_url} description={nft.description}
-                                  price={nft.mintPrice} remaining={nft.currentSupply} total={nft.maxSupply} creator={nft.creator} mutable={nft.mutable}
-                                  image={nft.image} setModalOpen={() => console.log("I'm clicked")}/>
-                </Grid.Col>
-            )
-        })
-    } else {
-        renderNfts = <Title m={"xl"}>There are no NFTs in this space</Title>
-    }
+    
 
     const handleJoin = async () => {
         const {groupId} = router.query

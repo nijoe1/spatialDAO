@@ -4,11 +4,13 @@ interface NftCardProps {
     groupId: string;
 }
 
-import {
-    Card,
+import { useState,useContext,useEffect } from 'react';
+import {Card,
     Text,
     createStyles, Image, Tooltip,
 } from '@mantine/core';
+import { GlobalContext } from '../contexts/GlobalContext';
+
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -43,7 +45,19 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function SpaceCard({ title, address, groupId}: NftCardProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof NftCardProps>) {
+      // @ts-ignore
+    const {orbis, user, setUser} = useContext(GlobalContext)
     const {classes, cx, theme} = useStyles();
+    const [image,setImage] = useState(""); 
+    
+    useEffect(() => {
+        (async () => {
+            
+            let {data: group} = await orbis.getGroup(groupId)
+            setImage(group.content.pfp)
+
+        })()
+    }, [address, orbis, user])
 
     const linkProps = {href: `/space/?id=${title}&address=${address}&groupId=${groupId}`, rel: 'noopener noreferrer'};
 
