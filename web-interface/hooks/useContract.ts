@@ -1,7 +1,6 @@
-import {BigNumber, ethers} from "ethers";
-import {factory_abi,DAO_abi, daoFactoryAddress} from "../constants"
+import {ethers} from "ethers";
+import {DAO_abi, daoFactoryAddress, factory_abi} from "../constants"
 import {useSigner} from "wagmi";
-import { Txt } from "tabler-icons-react";
 import CID from 'cids';
 
 
@@ -9,6 +8,7 @@ import CID from 'cids';
 //  So from that we know how to find the possible states of the Proposal by those conditions
 
     // if isProposalEnded == false {Voting Period}
+    // if isProposalEnded == true && getCommPPropsal(commP).activateState == true {Proposal needs execution}
     // if isProposalEnded == true && isValidProposedFile == true {Proposal Passed}
     // if isProposalEnded == true && isValidProposedFile == false {Proposal Declined}
 
@@ -24,6 +24,7 @@ export const useContract = () => {
     const {data: signer} = useSigner()
 
     const contract = new ethers.Contract(daoFactoryAddress["dao-factory"], factory_abi, signer!)
+    console.log(contract)
     const PROPOSER_ROLE = "0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1"
     const VOTER_ROLE = "0x72c3eec1760bf69946625c2d4fb8e44e2c806345041960b434674fb9ab3976cf"
     // Creates a new DataDao
@@ -34,7 +35,8 @@ export const useContract = () => {
 
     //  Returns all the info from all the DataDAOs that the factory has created (address, name ,groupID)
     const getDataDaos = async () => {
-        return await contract.getAllDAOs()
+        const res = await contract.getAllDAOs()
+        console.log(res)
     }
 
     // Get a list of all possible files on hyperspace by using 
@@ -43,7 +45,9 @@ export const useContract = () => {
     // Check first if that commP is already proposed
     // you can do that by calling isCommpProposed(commP) 
     // Create a proposal Post on the groupID of that DAO with info about the commP (commP , description, size)
-    const createProposal = async(DAOaddress:string, commP:string, proposalMetadata: string, durationInBlocks: number) => {
+
+    // proposal metadata is the hardcoded ipfs cid
+    const createProposal = async(DAOaddress: string, commP:string, proposalMetadata: string, durationInBlocks: number) => {
         const DaoContract = new ethers.Contract(DAOaddress, DAO_abi, signer!)
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw

@@ -2,7 +2,6 @@ import {Button, Container, Grid, Skeleton, Text, Title} from "@mantine/core";
 import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useContext, useEffect, useState} from "react";
-import getAllSpaces from "../utils/getAllSpaces";
 import SpaceCard from "../components/SpaceCard";
 import {useAccount, useSigner} from "wagmi";
 import {GlobalContext} from "../contexts/GlobalContext";
@@ -11,12 +10,12 @@ export default function ExploreSpaces() {
     const [data, setData] = useState<any>(null)
     const {data: signer} = useSigner()
     const {isDisconnected} = useAccount()
-    useEffect(() => {
-        getAllSpaces().then(res => {
-            // console.log(res)
-            setData(res)
-        })
-    }, [])
+    // useEffect(() => {
+    //     getAllSpaces().then(res => {
+    //         // console.log(res)
+    //         setData(res)
+    //     })
+    // }, [])
 
     // @ts-ignore
     const {orbis, user, setUser} = useContext(GlobalContext)

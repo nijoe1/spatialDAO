@@ -9,7 +9,7 @@ import {showNotification, updateNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
-import {tcsContractAddress} from "../constants";
+import {daoFactoryAddress} from "../constants";
 import {getNfts} from "../utils/getNfts";
 import {getOwnersForNft} from "../utils/getOwnersForNft";
 
@@ -74,7 +74,7 @@ export default function PostCard(props: any) {
     function getTokenGatedConditions(tokenid: any) {
         return [
             {
-                contractAddress: tcsContractAddress["the-crypto-studio"],
+                contractAddress: daoFactoryAddress["dao-factory"],
                 functionName: "balanceOf",
                 functionParams: [":userAddress", tokenid],
                 functionAbi: {
@@ -113,7 +113,7 @@ export default function PostCard(props: any) {
 
     let evmContractConditions = [
         {
-            contractAddress: tcsContractAddress["the-crypto-studio"],
+            contractAddress: daoFactoryAddress["dao-factory"],
             functionName: "isSpaceMember",
             functionParams: [props.spaceName, ":userAddress"],
             functionAbi: {

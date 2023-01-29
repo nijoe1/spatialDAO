@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useIsMounted} from "../hooks/useIsMounted";
-import getCreatedNfts from "../utils/getCreatedNfts";
+// import getCreatedNfts from "../utils/getCreatedNfts";
 import {Center, createStyles, Grid, Modal, Title} from "@mantine/core";
 import SpaceNftCard from "./SpaceNftCard";
 import {UpdateAudio} from "./UpdateAudio";
@@ -26,9 +26,6 @@ export default function CreatedNfts({address}: CreatedNftsProps) {
     useEffect(() => {
         if(!mounted) return
         if(!address) return
-        getCreatedNfts(address.toLowerCase()).then((nfts: any) => {
-            setNfts(nfts)
-        })
     }, [mounted, address])
 
     const handleClick = (tokenId: string) => {

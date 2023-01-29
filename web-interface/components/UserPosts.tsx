@@ -6,7 +6,7 @@ import {useIsMounted} from "../hooks/useIsMounted";
 import {GlobalContext} from "../contexts/GlobalContext";
 import PostCard from "./PostCard";
 import {useAccount} from "wagmi";
-import getCreatedNfts from "../utils/getCreatedNfts";
+// import getCreatedNfts from "../utils/getCreatedNfts";
 
 
 export default function UserPosts() {
@@ -20,7 +20,7 @@ export default function UserPosts() {
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
     const getPosts = async (address: string) => {
-        const res = await orbis.getPosts({context: address.toLowerCase(), tag: address.toLowerCase()})
+        const res = await orbis.getPosts({context: address?.toLowerCase(), tag: address?.toLowerCase()})
         if (res.status === 200) {
             setData(res.data)
             console.log(res.data)
@@ -47,14 +47,14 @@ export default function UserPosts() {
     const getTokenId = async () => {
         if (router.pathname === "/my-nft") {
             let tokenIds: any = []
-            getCreatedNfts(address!.toLowerCase()).then((nfts) => {
-                nfts.forEach((nft: any) => {
-                    tokenIds.push(nft.tokenID)
-                });
-                // console.log(tokenIds)
-                setTokenIds(tokenIds)
-                setSelectedToken(tokenIds[0])
-            })
+            // getCreatedNfts(address!.toLowerCase()).then((nfts) => {
+            //     nfts.forEach((nft: any) => {
+            //         tokenIds.push(nft.tokenID)
+            //     });
+            //     // console.log(tokenIds)
+            //     setTokenIds(tokenIds)
+            //     setSelectedToken(tokenIds[0])
+            // })
         }
     }
 

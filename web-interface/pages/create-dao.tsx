@@ -1,27 +1,12 @@
 import Head from 'next/head'
 import {Layout} from "../components/Layout";
-import {
-    Button,
-    Container,
-    FileInput,
-    Textarea,
-    TextInput,
-    Text,
-    Loader,
-    Group,
-    Title,
-    Divider,
-    NativeSelect,
-    Accordion, HoverCard, ActionIcon, NumberInput, Checkbox
-} from "@mantine/core";
-import {IconQuestionMark, IconUpload} from "@tabler/icons";
+import {Button, Container, FileInput, Textarea, TextInput, Text, Title,} from "@mantine/core";
+import {IconUpload} from "@tabler/icons";
 import {useContext, useEffect, useState} from "react";
 import useNftStorage from "../hooks/useNftStorage";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import {useRouter} from "next/router"
-import {nftImages} from "../constants";
 import {useAccount} from "wagmi";
-import getSpaces from "../utils/getSpaces";
 // @ts-ignore
 import {Orbis} from "@orbisclub/orbis-sdk";
 import {GlobalContext} from "../contexts/GlobalContext";
@@ -36,9 +21,9 @@ export default function CreateDao() {
     const [proposers, proposersHandlers] = useListState<string>([]);
     const [voters, votersHandlers] = useListState<string>([]);
     const [loading, setLoading] = useState(false)
-    const [spaceDescription, setSpaceDescription] = useState<String>("")
+    const [daoDescription, setDaoDescription] = useState<String>("")
     const {upload, uploadImage} = useNftStorage()
-    const {spaceExists, mintSpace} = useContract()
+    const {createDataDao, getDataDaos} = useContract()
     const router = useRouter()
     const mounted = useIsMounted()
     const {address, isDisconnected} = useAccount()
@@ -62,7 +47,7 @@ export default function CreateDao() {
         logout()
     }, [isDisconnected])
 
-    const handleMintSpace = async () => {
+    const handleCreateDAO = async () => {
         setLoading(true)
         showNotification({
             id: "space",
@@ -72,41 +57,18 @@ export default function CreateDao() {
             disallowClose: true,
             autoClose: false
         })
+        const res = await getDataDaos()
+        console.log("res", res)
         if (daoName && spacePfp) {
-            const isSpace = await spaceExists(daoName)
-            if (isSpace) {
-                updateNotification({
-                    id: "space",
-                    title: "Error",
-                    message: "Space already exists",
-                    color: "red",
-                    autoClose: 5000
-                })
-                setLoading(false)
-                return
-            }
             const cid = await uploadImage(spacePfp!)
             const res = await orbis.createGroup({
                 pfp: `https://ipfs.io/ipfs/${cid}`,
                 name: daoName,
-                description: spaceDescription
+                description: daoDescription
             })
             const groupId = res.doc
-            console.log(groupId)
-            try{
-                const groupRes = await orbis.createChannel(groupId, {
-                    group_id: groupId,
-                    name: "General",
-                    description: "General channel for the " + daoName + " space",
-                    type: "feed"
-                })
-                console.log(groupRes)
-            } catch (e) {
-                console.log(e)
-            }
-
             try {
-                await mintSpace(daoName, groupId, cid)
+                await createDataDao(proposers, voters, daoName, groupId)
                 updateNotification({
                     id: "space",
                     title: "Success",
@@ -168,7 +130,7 @@ export default function CreateDao() {
                     <TextInput m={"md"} label={"DAO Name"} value={daoName as string}
                                onChange={(event) => setDaoName(event.currentTarget.value)}
                                placeholder="Name" required/>
-                    <Textarea m={"md"} label={"DAO Description"} value={spaceDescription as string} onChange={(event) => setSpaceDescription(event.currentTarget.value)}
+                    <Textarea m={"md"} label={"DAO Description"} value={daoDescription as string} onChange={(event) => setDaoDescription(event.currentTarget.value)}
                               placeholder="Description" required/>
                     <FileInput m={"md"} required label={"Upload your space image"} placeholder={"Upload image file"}
                                accept={"image/*"} icon={<IconUpload size={14}/>} value={spacePfp as any}
@@ -189,7 +151,7 @@ export default function CreateDao() {
                         editable={true}
                         onRemove={removeVoter}
                     />
-                    <Button color={"indigo"} disabled={loading} m={"md"} onClick={async () => await handleMintSpace()}>Create Space </Button>
+                    <Button color={"pink"} disabled={loading} m={"md"} onClick={getDataDaos}>Create DAO </Button>
                 </Container>
 
             </Layout>

@@ -135,9 +135,7 @@ export function HeaderSimple() {
 
     const items = links.map((link) => (
         <Link href={link.link} passHref={true} key={link.label} className={classes.link}>
-            <a href={link.link}>
             {link.label}
-            </a>
         </Link>
     ));
 
@@ -146,7 +144,7 @@ export function HeaderSimple() {
             <Group position="apart" p={"md"} sx={{height: '100%'}}>
                 <Group>
                     <Center>
-                        <Image src="/logo.webp" width={80} height={80} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
+                        <Image src="/logo.webp" width={50} height={50} mr={"sm"} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
                                onClick={() => router.push('/')}/>
                         <Title onClick={() => router.push("/")} className={classes.title}>
                             spatial.DAO

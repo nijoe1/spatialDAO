@@ -5,12 +5,10 @@ import {useContext, useEffect, useState} from "react";
 import {getNfts} from "../utils/getNfts";
 import NftCard from "../components/NftCard"
 import {Button, Center, Container, createStyles, Grid, Modal, Skeleton, Tabs, Text, Title} from "@mantine/core";
-import {UpdateAudio} from "../components/UpdateAudio";
 import {UpdateProfile} from "../components/UpdateProfile";
 import {GlobalContext} from "../contexts/GlobalContext";
 import CreatorCard from "../components/CreatorCard";
 import {useRouter} from "next/router";
-import {AddAttribute} from "../components/AddAttribute";
 import StyledTabs from "../components/StyledTabs";
 import {IconAlbum, IconCreditCard, IconGeometry, IconMessageChatbot} from "@tabler/icons";
 import UserPosts from "../components/UserPosts";
@@ -44,9 +42,7 @@ export default function MyNft() {
     const {classes} = useStyles();
     const {address, isDisconnected} = useAccount()
     const [nfts, setNfts] = useState<Array<any>>()
-    const [isAttributeModalOpen, setIsAttributeModalOpen] = useState(false)
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
-    const [attributes, setAttributes] = useState([])
     const router = useRouter()
     // @ts-ignore
     const {user, setUser, orbis, group_id} = useContext(GlobalContext)

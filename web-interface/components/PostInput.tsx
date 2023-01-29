@@ -4,7 +4,7 @@ import {IconSend} from "@tabler/icons";
 import {useContext, useEffect, useState} from "react";
 import {GlobalContext} from "../contexts/GlobalContext";
 import {showNotification, updateNotification} from "@mantine/notifications";
-import {tcsContractAddress} from "../constants";
+import {daoFactoryAddress} from "../constants";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
 import {useRouter} from "next/router";
@@ -29,7 +29,7 @@ export default function PostInput({groupId, tag, tokenId, spaceName, encrypted}:
     function getTokenGatedConditions(tokenid:any){
         const accessControlConditions = [
             {
-                contractAddress: tcsContractAddress["the-crypto-studio"],
+                contractAddress: daoFactoryAddress["dao-factory"],
                 functionName: "balanceOf",
                 functionParams: [":userAddress", tokenid],
                 functionAbi: {
@@ -68,7 +68,7 @@ export default function PostInput({groupId, tag, tokenId, spaceName, encrypted}:
 
     var evmContractConditions = [
         {
-            contractAddress: tcsContractAddress["the-crypto-studio"],
+            contractAddress: daoFactoryAddress["dao-factory"],
             functionName: "isSpaceMember",
             functionParams: [spaceName, ":userAddress"],
             functionAbi: {

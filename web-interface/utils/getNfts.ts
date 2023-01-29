@@ -1,5 +1,5 @@
 import {Alchemy, Network} from "alchemy-sdk"
-import {tcsContractAddress} from "../constants"
+import {daoFactoryAddress} from "../constants"
 
 const config = {
     apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
@@ -10,7 +10,7 @@ const alchemy = new Alchemy(config)
 
 export async function getNfts(address: `0x${string}`) {
     const nfts = await alchemy.nft.getNftsForOwner(address, {
-        contractAddresses: [tcsContractAddress["the-crypto-studio"].toLowerCase()]
+        contractAddresses: [daoFactoryAddress["dao-factory"].toLowerCase()]
     })
     let nftsData = []
     for (const nft of nfts.ownedNfts) {
