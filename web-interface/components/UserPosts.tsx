@@ -20,7 +20,7 @@ export default function UserPosts() {
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
     const getPosts = async (address: string) => {
-        const res = await orbis.getPosts({context: address?.toLowerCase(), tag: address?.toLowerCase()})
+        const res = await orbis.getPosts({context: address.toLowerCase(), tag: address.toLowerCase()})
         if (res.status === 200) {
             setData(res.data)
             console.log(res.data)
@@ -28,41 +28,7 @@ export default function UserPosts() {
             setData([])
         }
     }
-    useEffect(() => {
-        if (!isMounted) return
-        if (router.pathname === "/my-nft") {
-            setIsDashboard(true)
-            getPosts(address as string)
-        }
-        if (router.pathname === "/user") {
-            if (!router.query.address) return
-            getPosts(router.query.address as string)
-            return;
-        }
-    }, [isMounted, address, router.isReady])
-
-    const [tokenIds, setTokenIds] = useState([])
     const [checked, setChecked] = useState(false)
-
-    const getTokenId = async () => {
-        if (router.pathname === "/Profile") {
-            let tokenIds: any = []
-            // getCreatedNfts(address!.toLowerCase()).then((nfts) => {
-            //     nfts.forEach((nft: any) => {
-            //         tokenIds.push(nft.tokenID)
-            //     });
-            //     // console.log(tokenIds)
-            //     setTokenIds(tokenIds)
-            //     setSelectedToken(tokenIds[0])
-            // })
-        }
-    }
-
-    useEffect(() => {
-        if (!address) return
-        if (!checked) return
-        getTokenId()
-    }, [address, checked])
 
     return (
         <Container>

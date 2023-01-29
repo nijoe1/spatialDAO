@@ -29,27 +29,26 @@
         "inputs": [],
         "name": "getAllDAOs",
         "outputs": [{
-                "internalType": "contract spatialDAO[]",
-                "name": "",
-                "type": "address[]"
-            },
-            {
-                "components": [{
-                        "internalType": "string",
-                        "name": "name",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "groupID",
-                        "type": "string"
-                    }
-                ],
-                "internalType": "struct daoFactory.DAO_INFO[]",
-                "name": "",
-                "type": "tuple[]"
-            }
-        ],
+            "components": [{
+                    "internalType": "address",
+                    "name": "DAO_address",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "groupID",
+                    "type": "string"
+                }
+            ],
+            "internalType": "struct daoFactory.DAO_INFO[]",
+            "name": "",
+            "type": "tuple[]"
+        }],
         "stateMutability": "view",
         "type": "function"
     }

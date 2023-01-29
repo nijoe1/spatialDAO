@@ -36,6 +36,7 @@ export const useContract = () => {
     const getDataDaos = async () => {
         const res = await contract.getAllDAOs()
         console.log(res)
+        return res
     }
 
     // Get a list of all possible files on hyperspace by using 

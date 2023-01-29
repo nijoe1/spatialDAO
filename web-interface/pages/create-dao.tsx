@@ -51,7 +51,7 @@ export default function CreateDao() {
         setLoading(true)
         showNotification({
             id: "space",
-            title: "Creating Space",
+            title: "Creating your dataDAO",
             message: "Please wait while we create your space",
             loading: true,
             disallowClose: true,
@@ -72,7 +72,7 @@ export default function CreateDao() {
                 updateNotification({
                     id: "space",
                     title: "Success",
-                    message: "Space has been created",
+                    message: "dataDAO has been created",
                     color: "green",
                     autoClose: 5000
                 })
