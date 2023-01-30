@@ -238,9 +238,7 @@ export default function Space() {
                             </Grid.Col>
                         </Grid>
                     </Stack>}
-                    {!isGroupMember &&
-                        <Text sx={{fontStyle: "italic", color: "red"}} mb={"md"}>Join space to make collaboration
-                            requests and give your opinions on the polls.</Text>}
+
                     <Text m={"xl"} mb={"md"}>{groupDesc}</Text>
                     <Stack>
                         <StyledTabs defaultValue={"nfts"}>

@@ -13,7 +13,7 @@ import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 
 export default function Proposals() {
-    const {createProposal, isCommpProposed} = useContract()
+    const {createProposal, isCommpProposed, getCommpProposal} = useContract()
     const router = useRouter()
     const {data: signer} = useSigner()
 
@@ -36,14 +36,6 @@ export default function Proposals() {
             <Center sx={{minWidth: 250, maxWidth: 900, width: "70%"}} mx={"auto"}>
                 <Container mx={"lg"} my={"md"} sx={{minWidth: 250, maxWidth: 900, width: "70%"}}>
                     <form onSubmit={form.onSubmit(async (values: any) => {
-                        showNotification({
-                            id: "proposal",
-                            title: "Proposal Creating...",
-                            message: "Please wait while your proposal is being created",
-                            autoClose: false,
-                            loading: true,
-                            disallowClose: true,
-                        })
                         const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
                         const commP = marketDeals.find((deal) => deal.value === values.proposalId)?.label.slice(-64)
                         let address = ""
@@ -52,15 +44,25 @@ export default function Proposals() {
                         const groupId = router.query.groupId
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
                         const isProposedCommp = await isCommpProposed(contract, commP!)
-                        console.log(address)
-                        if (isProposedCommp) {
+                        console.log(isProposedCommp)
+                        if (!isProposedCommp) {
+                            showNotification({
+                                id: "proposal",
+                                title: "Proposal Creating...",
+                                message: "Please wait while your proposal is being created",
+                                autoClose: false,
+                                loading: true,
+                                disallowClose: true,
+                            })
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
-                                let fileSize: number
-                                const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
-                                const fRes = await filesizeFetch.json()
-                                const fData = fRes[values.proposalId];
-                                fileSize = fData.Proposal.PieceSize
+                                var array = await getCommpProposal(contract,commP!)
+
+                                // let fileSize: number
+                                // const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
+                                // const fRes = await filesizeFetch.json()
+                                // const fData = fRes[values.proposalId];
+                                // fileSize = fData.Proposal.PieceSize
                                 const res = await orbis.createPost(
                                     {
                                         context: `${groupId}`,
@@ -72,10 +74,11 @@ export default function Proposals() {
                                             {
                                                 slug: "commpValue",
                                                 title: commP
-                                            },
+                                            }
+                                            ,
                                             {
-                                                slug: "filesize",
-                                                title: fileSize.toString()
+                                                slug: "id",
+                                                title: array[0]
                                             }
                                         ],
                                     }

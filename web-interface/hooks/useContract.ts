@@ -50,7 +50,7 @@ export const useContract = () => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
         console.log(cidHex)
-        const tx = await DaoContract.createProposal(cidHex,proposalMetadata,durationInBlocks,{gasLimit:15437117,maxPriorityFeePerGas: 252,maxFeePerGas: 257})
+        const tx = await DaoContract.createProposal(cidHex,proposalMetadata,durationInBlocks,{gasLimit:10000000000})
         return tx.wait()
     }
 
