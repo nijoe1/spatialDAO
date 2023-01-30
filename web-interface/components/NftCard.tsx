@@ -76,7 +76,7 @@ export default function NftCard({
     const contract = new ethers.Contract(address, DAO_abi, signer!)
     const {isProposalEnded, isBountyCreated, isValidProposedFile, isBountyEnabled, vote, executeProposal, getCommpProposal} = useContract()
 
-    let buttons = <Button color={"yellow"} fullWidth>Fetching information</Button>
+    const [buttons, setButtons] = useState(<Button color={"yellow"} fullWidth>Fetching information</Button>)
     useEffect(() => {
         if (commP && router.query.address && signer) {
             getState()
@@ -90,9 +90,15 @@ export default function NftCard({
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isValid = await isValidProposedFile(contract, commP)
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
+        console.log("isProposalEnded", isEnded)
+        console.log("isBountyCreated", isBounty)
+        console.log("isValidProposedFile", isValid)
+        console.log("isBountyEnabled", isBountyEnabled_)
+        console.log("activeState", activeState)
         if (isEnded === false) {
             // voting
-            buttons = <Button.Group sx={{width: "100%"}}>
+            setButtons(
+            <Button.Group sx={{width: "100%"}}>
                 <Button color={"green"} onClick={async () => {
                     showNotification({
                         id: "bounty",
@@ -140,9 +146,9 @@ export default function NftCard({
                         })
                     }
                 }}>Downvote</Button>
-            </Button.Group>
+            </Button.Group>)
         } else if (isEnded && activeState) {
-            buttons = <Button color={"grape"} fullWidth onClick={async () => {
+            setButtons(<Button color={"grape"} fullWidth onClick={async () => {
                 showNotification({
                     id: "bounty",
                     title: "Creating bounty",
@@ -173,13 +179,13 @@ export default function NftCard({
                         autoClose: true,
                     })
                 }
-            }} >Execute Proposal</Button>
+            }} >Execute Proposal</Button>)
         } else if (isEnded && !isValid) {
-            buttons = <Button color={"red"} fullWidth>Proposal Declined</Button>
+            setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
         } else if(isEnded && isValid) {
-            buttons = <Button color={"green"} fullWidth>Proposal Passed</Button>
+            setButtons(<Button color={"green"} fullWidth>Proposal Passed</Button>)
         } else if (!isBountyEnabled_) {
-            buttons = <Button color={"red"} fullWidth>Bounty disabled</Button>
+            setButtons(<Button color={"red"} fullWidth>Bounty disabled</Button>)
         }
     }
 
