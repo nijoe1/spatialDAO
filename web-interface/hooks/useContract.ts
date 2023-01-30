@@ -18,6 +18,7 @@ import CID from 'cids';
     // If isBountyCreated == true and isBountyEnabled == false {Funding Phase}
     // if isBountyEnabled == true {Claiming Phase}
     // If isBountyCreated == false and isBountyEnabled == false {Fully claimed Phase}
+    // if isProposalEnded == true && isValidProposedFile == true && !isBountyEnabled {you can create bounty}
 
 
 export const useContract = () => {
@@ -56,10 +57,10 @@ export const useContract = () => {
     // Check first checkVoterRole || checkProposerRole to the caller
     // Voting happens in the Proposal post if the proposal is not ended
     // you can check that by calling isProposalEnded(commP)
-    const vote = async(DaoContract:ethers.Contract, commP:string, desition: boolean) => {
+    const vote = async(DaoContract:ethers.Contract, commP:string, decision: boolean) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        const tx = await DaoContract.vote(cidHex,desition)
+        const tx = await DaoContract.vote(cidHex,decision)
         return await tx.wait()
     }
 
@@ -155,14 +156,14 @@ export const useContract = () => {
     }
 
     // returns the Proposal details of a CBOR commP
-    const getCommpProposal = async (DaoContract:ethers.Contract, commP:string) => {
+    const getCommpProposal = async (DaoContract: ethers.Contract, commP:string) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
         return await DaoContract.commpToProposal(cidHex)
     }
 
     // Returns of a commP has been already proposed
-    const isCommpProposed = async (DaoContract:ethers.Contract, commP:string) => {
+    const isCommpProposed = async (DaoContract: ethers.Contract, commP:string) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
         return await DaoContract.isCommpProposed(cidHex)

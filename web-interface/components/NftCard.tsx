@@ -1,12 +1,12 @@
-import {IconCirclePlus, IconPencil} from "@tabler/icons";
+import {useContract} from "../hooks/useContract";
 
 interface NftCardProps {
     title: string;
-    description: string;
+    description?: string;
     tokenId: string;
-    animationUrl: string;
+    animationUrl?: string;
     spaceName?: string;
-    image: any;
+    image?: any;
     setModalOpen?: any;
     setAddAttribute?: any;
     remaining?: string;
@@ -21,9 +21,11 @@ import {
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
-import getSpaceDetails from "../utils/getSpaceDetails";
 import {useIsMounted} from "../hooks/useIsMounted";
 import {ethers} from "ethers";
+import {DAO_abi} from "../constants";
+import {useSigner} from "wagmi";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -58,53 +60,141 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function NftCard({
-                                    title,
+                                    title: commP,
+                                    tokenId: filesize,
                                     animationUrl,
-                                    description,
-                                    tokenId,
-                                    image,
-                                    setModalOpen,
-                                    spaceName,
+                                    description
                                 }: NftCardProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof NftCardProps>) {
     const {classes, cx, theme} = useStyles();
     const gatewayUrl = animationUrl?.replace('ipfs://', 'https://ipfs.io/ipfs/');
     const mounted = useIsMounted()
-    const [spaceLink, setSpaceLink] = useState("")
+    const {data: signer} = useSigner()
+    const router = useRouter()
+    let address = ""
+    if (typeof router.query.address === "string")
+        address = router.query.address
+    const contract = new ethers.Contract(address, DAO_abi, signer!)
+    const {isProposalEnded, isBountyCreated, isValidProposedFile, isBountyEnabled, vote, executeProposal, getCommpProposal} = useContract()
 
-    const linkProps = {href: gatewayUrl, target: '_blank', rel: 'noopener noreferrer'};
-
-    const getSpaceLink = async () => {
-        const res = await getSpaceDetails(spaceName!)
-        setSpaceLink(`/space?id=${spaceName}&address=${res[0].space_owner}&groupId=${res[0].groupID}`)
-    }
-
+    let buttons = <Button color={"yellow"} fullWidth>Fetching information</Button>
     useEffect(() => {
-        if (!mounted) return
-        if (!spaceName) return
-        getSpaceLink()
-    }, [spaceName, mounted])
+        if (commP && router.query.address && signer) {
+            getState()
+        }
+    }, [commP, router.query.address, signer])
+
+    const getState = async () => {
+        const isEnded = await isProposalEnded(contract, commP)
+        const commP_ = await getCommpProposal(contract, commP)
+        const activeState = commP_[5]
+        const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
+        const isValid = await isValidProposedFile(contract, commP)
+        const isBountyEnabled_ = await isBountyEnabled(contract, commP)
+        if (isEnded === false) {
+            // voting
+            buttons = <Button.Group sx={{width: "100%"}}>
+                <Button color={"green"} onClick={async () => {
+                    showNotification({
+                        id: "bounty",
+                        title: "Creating bounty",
+                        message: "Please wait",
+                        loading: true,
+                        disallowClose: true,
+                        autoClose: false,
+                    })
+                    try {
+                        await vote(contract, commP, true)
+                        updateNotification({
+                            id: "bounty",
+                            title: "Success",
+                            message: "You voted for this proposal",
+                            loading: false,
+                            disallowClose: false,
+                            autoClose: true,
+                        })
+                    } catch (e) {
+                        console.log(e)
+                        updateNotification({
+                            id: "bounty",
+                            title: "Error",
+                            message: "Something went wrong",
+                            loading: false,
+                            disallowClose: false,
+                            autoClose: true,
+                            color: "red"
+                        })
+                    }
+                }}>Upvote</Button>
+                <Button color={"red"} onClick={async () => {
+                    try {
+                        await vote(contract, commP, false)
+                        showNotification({
+                            title: "Success",
+                            message: "You voted against this proposal",
+                        })
+                    } catch (e) {
+                        console.log(e)
+                        showNotification({
+                            title: "Error",
+                            message: "Something went wrong",
+                        })
+                    }
+                }}>Downvote</Button>
+            </Button.Group>
+        } else if (isEnded && activeState) {
+            buttons = <Button color={"grape"} fullWidth onClick={async () => {
+                showNotification({
+                    id: "bounty",
+                    title: "Creating bounty",
+                    message: "Please wait",
+                    loading: true,
+                    disallowClose: true,
+                    autoClose: false,
+                })
+                try {
+                    await executeProposal(contract, commP)
+                    updateNotification({
+                        id: "bounty",
+                        title: "Success",
+                        message: "You executed the proposal",
+                        loading: false,
+                        disallowClose: false,
+                        autoClose: true,
+                    })
+                } catch (e) {
+                    console.log(e)
+                    updateNotification({
+                        id: "bounty",
+                        color: "red",
+                        title: "Failed",
+                        message: "Something went wrong",
+                        loading: false,
+                        disallowClose: false,
+                        autoClose: true,
+                    })
+                }
+            }} >Execute Proposal</Button>
+        } else if (isEnded && !isValid) {
+            buttons = <Button color={"red"} fullWidth>Proposal Declined</Button>
+        } else if(isEnded && isValid) {
+            buttons = <Button color={"green"} fullWidth>Proposal Passed</Button>
+        } else if (!isBountyEnabled_) {
+            buttons = <Button color={"red"} fullWidth>Bounty disabled</Button>
+        }
+    }
 
 
     return (
         <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
-            <Card.Section>
-                <a {...linkProps}>
-                    <Image height={350} width={350} src={image} alt={title}/>
-                </a>
-            </Card.Section>
-
-            <Tooltip label={"View NFT Visualisation"}>
-                <Text className={classes.title} weight={500} component="a" {...linkProps}>
-                    {title} <span className={classes.rating}>#{tokenId}</span>
-                </Text>
-            </Tooltip>
-            <Text size="sm" color="dimmed" lineClamp={4} component={"a"} href={spaceLink}>
-                {spaceName}
+            <Text className={classes.title} lineClamp={4} weight={500}>
+                {commP}
             </Text>
             <Text size="sm" color="dimmed" lineClamp={4}>
                 {description}
             </Text>
-
+            <Card.Section mt={"md"}>
+                {buttons}
+            </Card.Section>
         </Card>
     );
 }

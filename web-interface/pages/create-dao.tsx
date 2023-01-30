@@ -57,8 +57,8 @@ export default function CreateDao() {
             disallowClose: true,
             autoClose: false
         })
-        const res = await getDataDaos()
-        console.log("res", res)
+        // const res = await getDataDaos()
+        // console.log("res", res)
         if (daoName && spacePfp) {
             const cid = await uploadImage(spacePfp!)
             const res = await orbis.createGroup({

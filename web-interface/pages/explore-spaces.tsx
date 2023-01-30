@@ -21,8 +21,6 @@ export default function ExploreSpaces() {
     console.log(isMounted)
     if(!isMounted) return
     getDAOs()
-
-
   }, [isMounted,signer]);
 
   // @ts-ignore

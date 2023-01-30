@@ -3,13 +3,14 @@ import {Box, Button, Center, Container, NativeSelect, Textarea, TextInput} from 
 import {DatePicker} from "@mantine/dates";
 import dayjs from "dayjs";
 import {marketDeals} from "../constants";
-import { useContract } from './../hooks/useContract';
-import { useRouter } from 'next/router';
-import { GlobalContext } from "../contexts/GlobalContext";
-import { useContext } from "react";
+import {useContract} from './../hooks/useContract';
+import {useRouter} from 'next/router';
+import {GlobalContext} from "../contexts/GlobalContext";
+import {useContext} from "react";
 import {BigNumber, ethers} from "ethers";
 import {DAO_abi} from "../constants"
 import {useSigner} from "wagmi";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 export default function Proposals() {
     const {createProposal, isCommpProposed} = useContract()
@@ -34,35 +35,70 @@ export default function Proposals() {
             <h1>Proposals</h1>
             <Center sx={{minWidth: 250, maxWidth: 900, width: "70%"}} mx={"auto"}>
                 <Container mx={"lg"} my={"md"} sx={{minWidth: 250, maxWidth: 900, width: "70%"}}>
-                    <form onSubmit={form.onSubmit(async(values: any) => {
-                        console.log(values.details)
+                    <form onSubmit={form.onSubmit(async (values: any) => {
+                        showNotification({
+                            id: "proposal",
+                            title: "Proposal Creating...",
+                            message: "Please wait while your proposal is being created",
+                            autoClose: false,
+                            loading: true,
+                            disallowClose: true,
+                        })
                         const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
-                        console.log(durationInBlocks)
-                        console.log(values.proposalId)
-                        // console log the label corresponding to the value
                         const commP = marketDeals.find((deal) => deal.value === values.proposalId)?.label.slice(-64)
-                        console.log(form.values)
-                        const address = router.query.address
+                        let address = ""
+                        if (typeof router.query.address === "string")
+                            address = router.query.address
                         const groupId = router.query.groupId
-                        // const isProposedCommp = await isCommpProposed(address,commP)
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
+                        const isProposedCommp = await isCommpProposed(contract, commP!)
                         console.log(address)
-                        if(true){
-                            await createProposal(contract,commP,"baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii",durationInBlocks)
-                            const res = await orbis.createPost(
-                                {
-                                    context: `${groupId}`,
-                                    body: `${form.values.details}`,
-                                    tags: [{
-                                        slug: "spatialDAOProposal",
-                                        title: "spatialDAOProposal"
-                                    },
+                        if (isProposedCommp) {
+                            try {
+                                await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
+                                let fileSize: number
+                                const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
+                                const fRes = await filesizeFetch.json()
+                                const fData = fRes[values.proposalId];
+                                fileSize = fData.Proposal.PieceSize
+                                const res = await orbis.createPost(
                                     {
-                                        slug: "commpValue",
-                                        title: commP
-                                    }],
-                                }
-                            )
+                                        context: `${groupId}`,
+                                        body: `${form.values.details}`,
+                                        tags: [{
+                                            slug: "spatialDAOProposal",
+                                            title: "spatialDAOProposal"
+                                        },
+                                            {
+                                                slug: "commpValue",
+                                                title: commP
+                                            },
+                                            {
+                                                slug: "filesize",
+                                                title: fileSize.toString()
+                                            }
+                                        ],
+                                    }
+                                )
+                                updateNotification({
+                                    id: "proposal",
+                                    title: "Proposal Created",
+                                    message: "Your proposal has been created successfully",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                })
+                            } catch (e) {
+                                console.log(e)
+                                updateNotification({
+                                    id: "proposal",
+                                    title: "Proposal Creation Failed",
+                                    message: "Your proposal could not be created",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                })
+                            }
                         }
                     })}>
                         <Textarea
@@ -75,7 +111,7 @@ export default function Proposals() {
                             required
                             label="Details IPFS CID"
                             value="baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii"
-                            disabled />
+                            disabled/>
                         <DatePicker
                             placeholder={"End date"}
                             minDate={dayjs(new Date()).toDate()}
@@ -88,7 +124,7 @@ export default function Proposals() {
                             data={marketDeals}
                             onChange={(event) => form.setFieldValue('proposalId', event.currentTarget.value)}
                             label={"Select the piece CID to create the proposal."}
-                            required />
+                            required/>
                         <Button color={"pink"} my={"sm"} type={"submit"}>
                             Submit proposal
                         </Button>

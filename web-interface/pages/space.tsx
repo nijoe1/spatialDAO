@@ -8,25 +8,15 @@ import CreatorCard from "../components/CreatorCard";
 import StyledTabs from "../components/StyledTabs";
 import {
     IconAlbum,
-    IconCash,
-    IconFilePencil,
     IconMessageChatbot,
-    IconMoneybag,
-    IconTallymarks,
     IconUnlink
 } from "@tabler/icons";
 import {useAccount} from "wagmi";
 import {GlobalContext} from "../contexts/GlobalContext";
 import {showNotification} from "@mantine/notifications"
 import GroupPosts from "../components/GroupPosts";
-import SpaceNftCard from "../components/SpaceNftCard";
-import MonetizeSpace from "../components/MonetizeSpace";
-import {useContract} from "../hooks/useContract";
 import CollaborationRequests from "../components/CollaborationRequests";
 import Proposals from "../components/Proposals";
-import Bounty from "../components/Bounty";
-
-let query = "https://testnets.opensea.io/collection/thecryptostudio?search[sortAscending]=true&search[sortBy]=UNIT_PRICE&search[stringTraits][0][name]=spaceName&search[stringTraits][0][values][0]="
 
 let orbisGroup = "https://app.orbis.club/group/"
 
@@ -65,12 +55,12 @@ export default function Space() {
     const {classes} = useStyles()
     const router = useRouter()
     const {isConnected, isConnecting, isDisconnected, address} = useAccount()
+    const [proposalPosts, setProposalPosts] = useState<any>([])
     const [spaceName, setSpaceName] = useState("")
     const [mounted, setMounted] = useState(false)
     const [isOwner, setIsOwner] = useState<boolean>(false)
     const [isGroupMember, setIsGroupMember] = useState(false)
     const [groupDesc, setGroupDesc] = useState("")
-    const {} = useContract()
     const [spaceMember, setSpaceMember] = useState(false)
     const [renderCreator, setRenderCreator] = useState(<>
         <Skeleton height={50} circle mb="xl"/>
@@ -143,20 +133,26 @@ export default function Space() {
     useEffect(() => {
         if (!router.isReady) return;
         const {id, groupId} = router.query
-        query = query + id
-        if (orbisGroup.length < 92) {
-            orbisGroup = orbisGroup + groupId
-        }
+        orbis.getPosts({
+            context: groupId,
+            tag: "spatialDAOProposal"
+        }).then((res: { data: any; }) => {
+            console.log("Proposal posts: ", res);
+            setProposalPosts(res.data)
+        })
         // @ts-ignore
         setSpaceName(id)
-        // @ts-ignore
-        // getSpaceNfts(id).then(res => {
-        //     setNfts(res)
-        // })
         setMounted(true)
     }, [router.isReady])
 
     let renderNfts
+    if(proposalPosts.length > 0) {
+        renderNfts = proposalPosts.map((post: any) => {
+            const commP = post.content.tags[1].title
+            const filesize = post.content?.tags[2]?.id
+            return <NftCard title={commP} tokenId={filesize} description={post.content.body} />
+        })
+    }
     
 
     const handleJoin = async () => {
@@ -250,12 +246,11 @@ export default function Space() {
                         <StyledTabs defaultValue={"nfts"}>
                             <Center>
                                 <Tabs.List mb={"sm"}>
-                                    <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Space NFTs</Tabs.Tab>
+                                    <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Proposals and Bounties</Tabs.Tab>
                                     <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}
                                              >Group Chat</Tabs.Tab>
                                     <Tabs.Tab value={"collab"} icon={<IconUnlink size={16}/>}>Collaboration Requests</Tabs.Tab>
-                                    <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Proposals</Tabs.Tab>
-                                    <Tabs.Tab value={"bounty"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
+                                    <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
                                 </Tabs.List>
                             </Center>
                             <Tabs.Panel value={"nfts"}>
@@ -271,9 +266,6 @@ export default function Space() {
                             </Tabs.Panel>
                             <Tabs.Panel value={"proposal"}>
                                 <Proposals/>
-                            </Tabs.Panel>
-                            <Tabs.Panel value={"bounty"}>
-                                <Bounty />
                             </Tabs.Panel>
                         </StyledTabs>
                     </Stack>
