@@ -17,8 +17,6 @@ interface PostInputProps {
 export default function PostInput({groupId, tag, tokenId}: PostInputProps) {
     const [content, setContent] = useInputState("")
     const {address} = useAccount()
-    console.log(tokenId)
-
     const router = useRouter()
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
