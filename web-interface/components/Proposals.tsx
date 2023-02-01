@@ -16,9 +16,9 @@ export default function Proposals() {
     const {createProposal, isCommpProposed, getCommpProposal} = useContract()
     const router = useRouter()
     const {data: signer} = useSigner()
-
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
+
     const form: any = useForm({
         initialValues: {
             details: '',
@@ -44,6 +44,13 @@ export default function Proposals() {
                         const groupId = router.query.groupId
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
                         const isProposedCommp = await isCommpProposed(contract, commP!)
+                        var array = await getCommpProposal(contract,commP!)
+                        var commPID = parseInt(array.proposalID._hex, 16).toString()
+						let fileSize: number
+                        const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
+                        const fRes = await filesizeFetch.json()
+                        const fData = fRes[values.proposalId];
+                        fileSize = fData.Proposal.PieceSize
                         console.log(isProposedCommp)
                         if (!isProposedCommp) {
                             showNotification({
@@ -56,32 +63,33 @@ export default function Proposals() {
                             })
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
-                                var array = await getCommpProposal(contract,commP!)
-
-                                let fileSize: number
-                                const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
-                                const fRes = await filesizeFetch.json()
-                                const fData = fRes[values.proposalId];
-                                fileSize = fData.Proposal.PieceSize
-                                const res = await orbis.createPost(
+                                // let fileSize: number
+                                // const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
+                                // const fRes = await filesizeFetch.json()
+                                // const fData = fRes[values.proposalId];
+                                // fileSize = fData.Proposal.PieceSize
+                                await orbis.createPost(
                                     {
-                                        context: `${groupId}`,
-                                        body: `${form.values.details}`,
+                                        // @ts-ignore
+                                        context: groupId?.toLowerCase(),
+                                        body: form.values.details,
                                         tags: [{
                                             slug: "spatialDAOProposal",
                                             title: "spatialDAOProposal"
-                                        },
+                                            },
                                             {
                                                 slug: "commpValue",
                                                 title: commP
-                                            },
+                                            }
+                                            ,
+                                            {
+                                                slug: "id",
+                                                title: commPID
+                                            }
+											,
                                             {
                                                 slug: "fileSize",
                                                 title: fileSize.toString()
-                                            },
-                                            {
-                                                slug: "id",
-                                                title: array[0]
                                             }
                                         ],
                                     }
@@ -105,6 +113,7 @@ export default function Proposals() {
                                     autoClose: true,
                                 })
                             }
+                            
                         }
                     })}>
                         <Textarea
