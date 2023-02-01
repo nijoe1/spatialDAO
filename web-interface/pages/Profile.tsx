@@ -39,7 +39,6 @@ const useStyles = createStyles((theme) => ({
 export default function MyNft() {
     const {classes} = useStyles();
     const {address, isDisconnected} = useAccount()
-    const [nfts, setNfts] = useState<Array<any>>()
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
     const router = useRouter()
     // @ts-ignore
@@ -143,7 +142,7 @@ export default function MyNft() {
                                     </Button.Group>
                                 </Grid.Col>
                             </Grid>
-                            <StyledTabs defaultValue={"nfts"}>
+                            <StyledTabs defaultValue={"chat"}>
                                 <Center>
                                     <Tabs.List>
                                         <Tabs.Tab value={"chat"} icon={<IconMessageChatbot size={16}/>}>Your Posts</Tabs.Tab>

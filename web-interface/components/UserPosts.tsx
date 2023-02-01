@@ -27,10 +27,23 @@ export default function UserPosts() {
             setData([])
         }
     }
+
+    useEffect(() => {
+        if (!isMounted) return
+        if (router.pathname === "/Profile") {
+            setIsDashboard(true)
+            getPosts(address as string)
+        }
+        if (router.pathname === "/user") {
+            if (!router.query.address) return
+            getPosts(router.query.address as string)
+            return;
+        }
+    }, [isMounted, address, router.isReady])
     return (
         <Container>
             {isDashboard &&
-                <PostInput spaceName={""} groupId={address as string} tag={address as string} tokenId={selectedToken}/>}
+                <PostInput spaceName={""} groupId={address as string} tag={address as string}/>}
             {isDashboard && <div style={{
                 marginTop: -60
             }}></div>}

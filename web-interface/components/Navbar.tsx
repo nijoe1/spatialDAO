@@ -10,7 +10,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
     return {
         navbar: {
-            backgroundColor: "#364FC7",
+            backgroundColor: "#40107a",
             // backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.colors.indigo[8] })
             //     .background,
             [theme.fn.smallerThan('md')]: {

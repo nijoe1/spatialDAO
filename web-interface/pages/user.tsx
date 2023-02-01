@@ -20,8 +20,6 @@ import UserPosts from "../components/UserPosts";
 import {useAccount} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import UserVcs from "../components/UserVcs";
-import CreatedNfts from "../components/CreatedNfts";
-
 const useStyles = createStyles((theme) => ({
     container: {
         [theme.fn.smallerThan('md')]: {
@@ -99,7 +97,6 @@ export default function User() {
     }
 
     useEffect(() => {
-        logout()
     }, [isDisconnected])
 
     const getIsFollowing = async (address: `0x${string}`) => {
@@ -173,7 +170,7 @@ export default function User() {
             const res = await orbis.createConversation({
                 recipients: [userDid, user.did],
                 title: `Chat with ${username}`,
-                description: `Chat created from The Crypto Studio`,
+                description: `Chat created from spatialDAO`,
                 context: "tcs-init-conversation"
             })
             if (res.status === 200) {
@@ -205,40 +202,23 @@ export default function User() {
             })
         }
     }
+    useEffect(() => {
+        if (!mounted) return
+        if (router.query.address) {
+            const address = router.query.address as `0x${string}`
+            setUserAddress(address)
+            getProfile(address)
+            getIsFollowing(address)
+        }
+    }, [mounted, router.isReady])
 
 
-    let renderNfts
-    // @ts-ignore
-    if (nfts?.length > 0) {
-        renderNfts = nfts?.map(nft => {
-            const spaceName = nft.attributes.filter((trait: any) => trait.trait_type === "spaceName")[0].value
-            return (
-                <Grid.Col key={nft.tokenID} lg={4} md={6}>
-                    <NftCard title={nft.name} tokenId={nft.tokenID}
-                             animationUrl={nft.animation_url} description={nft.description}
-                             image={nft.image} spaceName={spaceName}
-                    />
-                </Grid.Col>
-            )
-        })
-    } else if (nfts?.length === 0) {
-        renderNfts = <Container mt={50}><Center><Title order={3}>User has 0 NFTs</Title></Center></Container>
-    } else {
-        renderNfts = <>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-            <Skeleton height={350} width={350} m={"xl"} radius={"xl"}/>
-        </>
-    }
-
+   
 
     return (
         <>
             <Head>
-                <title>{username}'s Profile - The Crypto Studio</title>
+                <title>{username}'s Profile - spatialDAO</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <Layout>
@@ -262,24 +242,14 @@ export default function User() {
                             </Grid.Col>
                         </Grid>
                         <Stack>
-                            <StyledTabs defaultValue={"nfts"}>
+                            <StyledTabs defaultValue={"chat"}>
                                 <Center>
                                     <Tabs.List>
-                                        <Tabs.Tab value={"nfts"} icon={<IconAlbum size={16}/>}>NFTs</Tabs.Tab>
-                                        <Tabs.Tab value={"created-nfts"} icon={<IconGeometry size={16}/>}>Created NFTs</Tabs.Tab>
                                         <Tabs.Tab value={"chat"} icon={<IconMessageChatbot size={16}/>}>User
                                             Posts</Tabs.Tab>
                                         <Tabs.Tab value={"vcs"} icon={<IconCreditCard size={16}/>}>User VCs</Tabs.Tab>
                                     </Tabs.List>
                                 </Center>
-                                <Tabs.Panel value={"nfts"}>
-                                    <Grid gutter={"xl"}>
-                                        {renderNfts}
-                                    </Grid>
-                                </Tabs.Panel>
-                                <Tabs.Panel value={"created-nfts"}>
-                                    <CreatedNfts address={userAddress!}/>
-                                </Tabs.Panel>
                                 <Tabs.Panel value={"chat"}>
                                     <UserPosts/>
                                 </Tabs.Panel>

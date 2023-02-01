@@ -61,6 +61,7 @@ export default function Space() {
     const [isOwner, setIsOwner] = useState<boolean>(false)
     const [isGroupMember, setIsGroupMember] = useState(false)
     const [groupDesc, setGroupDesc] = useState("")
+    const [groupId, setGroupId] = useState("")
     const [spaceMember, setSpaceMember] = useState(false)
     const [renderCreator, setRenderCreator] = useState(<>
         <Skeleton height={50} circle mb="xl"/>
@@ -97,6 +98,7 @@ export default function Space() {
     useEffect(() => {
         if (!router.isReady) return
         const {groupId , address} = router.query
+        setGroupId(groupId)
         // @ts-ignore
         getProfile(groupId).then(res => {
             if (!res) return
@@ -207,7 +209,7 @@ export default function Space() {
                         className={classes.btn}>
                     Join Space
                 </Button>}
-            <Button variant={"subtle"} component={"a"} href={orbisGroup} target={"_blank"}
+            <Button variant={"subtle"} component={"a"} href={`${orbisGroup}`+"/"+`${groupId}`} target={"_blank"}
                     color={"indigo"} className={classes.btn}>
                 Go to Space Chat
             </Button>
