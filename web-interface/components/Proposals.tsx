@@ -46,11 +46,6 @@ export default function Proposals() {
                         const isProposedCommp = await isCommpProposed(contract, commP!)
                         var array = await getCommpProposal(contract,commP!)
                         var commPID = parseInt(array.proposalID._hex, 16).toString()
-						let fileSize: number
-                        const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
-                        const fRes = await filesizeFetch.json()
-                        const fData = fRes[values.proposalId];
-                        fileSize = fData.Proposal.PieceSize
                         console.log(isProposedCommp)
                         if (!isProposedCommp) {
                             showNotification({
@@ -85,11 +80,6 @@ export default function Proposals() {
                                             {
                                                 slug: "id",
                                                 title: commPID
-                                            }
-											,
-                                            {
-                                                slug: "fileSize",
-                                                title: fileSize.toString()
                                             }
                                         ],
                                     }
