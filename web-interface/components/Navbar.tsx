@@ -87,10 +87,11 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 
 const data = [
-    { link: '/create-dao', label: 'Create DAO', icon: IconHammer },
-    { link: '/Profile', label: 'Your Profile', icon: IconArtboard },
-    { link: '/discussions', label: 'Group Chat', icon: IconMessageDots },
-    { link: '/explore-spaces', label: "Explore Spaces", icon: IconMapSearch },
+    { link: '/create-dao', label: 'create dataDAO', icon: IconHammer },
+    { link: '/explore-daos', label: "explore DAOs", icon: IconMapSearch },
+    { link: '/Profile', label: 'profile', icon: IconArtboard },
+    { link: '/discussions', label: 'spatialDAO Chat', icon: IconMessageDots },
+    
 ];
 
 export function NavbarSide() {

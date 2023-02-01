@@ -10,7 +10,9 @@ import {useDisclosure} from '@mantine/hooks';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
 import {useRouter} from "next/router";
-import {IconMoonStars, IconSun} from "@tabler/icons";
+import {IconMoonStars, IconSun,    IconArtboard,
+    IconHammer, IconMapSearch,
+    IconMessageDots} from "@tabler/icons";
 
 const HEADER_HEIGHT = 60;
 
@@ -104,22 +106,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const links = [
-    {
-        "link": "/discussions",
-        "label": "Discussions"
-    },
-    {
-        "link": "/create-dao",
-        "label": "Create DAO"
-    },
-    {
-        "link": `/Profile`,
-        "label": "Your Profile"
-    },
-    {
-        "link": "/explore-spaces",
-        "label": "Explore Spaces"
-    }
+    { link: '/create-dao', label: 'create dataDAO', icon: IconHammer },
+    { link: '/explore-daos', label: "explore DAOs", icon: IconMapSearch },
+    { link: '/Profile', label: 'profile', icon: IconArtboard },
+    { link: '/discussions', label: 'spatialDAO Chat', icon: IconMessageDots },
+    
 
 ]
 

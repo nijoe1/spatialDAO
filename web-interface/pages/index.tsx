@@ -83,12 +83,12 @@ Decentralized social layer with one click
                     <Container m={"xl"} mt={100} size={1000}>
                         <Grid>
                             <Grid.Col lg={6}>
-                                <ComingSoon title={"Documentation"}
-                                            description={"We also want to make it so that digital artists can come and build cool things by providing a guide of how to use our native Dynamic features written natively inside the CryptoStudio smart contract."}/>
+                                <ComingSoon title={"Proxy pattern Factory"}
+                                            description={"We have plans to mitigate to a proxy pattern factory to save gas to our Users."}/>
                             </Grid.Col>
                             <Grid.Col lg={6}>
-                                <ComingSoon1 title={"Playground"}
-                                             description={"The future of CryptoStudio is to make it more accessible to the public. We want to make it so that anyone can create their own Dynamic NFTs with zero coding experience by creating a free and open to use web-based tool for designing and developing dynamic 2D & 3D NFT models. "}/>
+                                <ComingSoon1 title={"Utialize open Zeppelin governor for more safety"}
+                                             description={"We also have plans to use the Audited Governor from OpenZeppelin and combine it with Tableland once they implement their features on Filecoin that way we are going to gain our Actor( Smart Contract ) state and save fees for our users . "}/>
                             </Grid.Col>
                         </Grid>
                     </Container>
