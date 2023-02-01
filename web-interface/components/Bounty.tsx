@@ -1,9 +1,6 @@
 import {useForm} from "@mantine/form";
-import {Box, Button, Center, Container, NativeSelect, Textarea, TextInput} from "@mantine/core";
-import {DatePicker} from "@mantine/dates";
-import dayjs from "dayjs";
-import {marketDeals} from "../constants";
-import {useContract} from './../hooks/useContract';
+import {Box, Button, Center, Container, NumberInput, TextInput} from "@mantine/core";
+import {useContract} from '../hooks/useContract';
 import {useRouter} from 'next/router';
 import {GlobalContext} from "../contexts/GlobalContext";
 import {useContext} from "react";
@@ -14,12 +11,18 @@ import {showNotification, updateNotification} from "@mantine/notifications";
 
 interface BountyProps {
     commP: string
+    fileSize: string
+    streamId: string
 }
 
-export default function Bounty({commP}: BountyProps) {
+export default function Bounty({commP, fileSize, streamId}: BountyProps) {
     const {createBounty} = useContract()
     const router = useRouter()
     const {data: signer} = useSigner()
+    let address = ""
+    if (typeof router.query.address === "string")
+        address = router.query.address
+    const contract = new ethers.Contract(address, DAO_abi, signer!)
 
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
@@ -27,108 +30,92 @@ export default function Bounty({commP}: BountyProps) {
         initialValues: {
             numberOfBounties: 0,
             bountyReward: 0,
-
-            details: '',
-            endDateTime: '',
-            proposalId: 0,
+            minBlocks: 0,
         },
         validate: {
-            // endDateTime: (value) => value < form.values.startDateTime ? "End date must be after start date" : null
+            minBlocks: (value) => value <= 0 ? "Minimum blocks is at least 1" : null,
+            numberOfBounties: (value) => value <= 0 ? "Number of bounties is at least 1" : null,
+            bountyReward: (value) => value <= 0 ? "Bounty reward has to be greater than 0" : null,
         }
     })
 
     return (
         <div>
-            <h1>Proposals</h1>
             <Center sx={{minWidth: 250, maxWidth: 900, width: "70%"}} mx={"auto"}>
                 <Container mx={"lg"} my={"md"} sx={{minWidth: 250, maxWidth: 900, width: "70%"}}>
                     <form onSubmit={form.onSubmit(async (values: any) => {
                         showNotification({
                             id: "proposal",
-                            title: "Proposal Creating...",
-                            message: "Please wait while your proposal is being created",
+                            title: "Bounty Creating...",
+                            message: "Please wait while your bounty is being created",
                             autoClose: false,
                             loading: true,
                             disallowClose: true,
                         })
-                        const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
-                        const commP = marketDeals.find((deal) => deal.value === values.proposalId)?.label.slice(-64)
-                        let address = ""
-                        if (typeof router.query.address === "string")
-                            address = router.query.address
-                        const groupId = router.query.groupId
-                        const contract = new ethers.Contract(address, DAO_abi, signer!)
-                        const isProposedCommp = await isCommpProposed(contract, commP!)
-                        console.log(address)
-                        if (isProposedCommp) {
-                            try {
-                                await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
-                                const res = await orbis.createPost(
-                                    {
-                                        context: `${groupId}`,
-                                        body: `${form.values.details}`,
-                                        tags: [{
-                                            slug: "spatialDAOProposal",
-                                            title: "spatialDAOProposal"
+                        try {
+                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.minBlocks, fileSize)
+                            const res = await orbis.createPost(
+                                {
+                                    context: `${streamId}`,
+                                    body: `${form.values.details}`,
+                                    tags: [{
+                                        slug: "spatialDAOProposal",
+                                        title: "spatialDAOProposal"
+                                    },
+                                        {
+                                            slug: "commpValue",
+                                            title: commP
                                         },
-                                            {
-                                                slug: "commpValue",
-                                                title: commP
-                                            },
-                                            {
-                                                slug: "proposalId",
-                                                title: values.proposalId
-                                            }
-                                        ],
-                                    }
-                                )
-                                updateNotification({
-                                    id: "proposal",
-                                    title: "Proposal Created",
-                                    message: "Your proposal has been created successfully",
-                                    loading: false,
-                                    disallowClose: false,
-                                    autoClose: true,
-                                })
-                            } catch (e) {
-                                console.log(e)
-                                updateNotification({
-                                    id: "proposal",
-                                    title: "Proposal Creation Failed",
-                                    message: "Your proposal could not be created",
-                                    loading: false,
-                                    disallowClose: false,
-                                    autoClose: true,
-                                })
-                            }
+                                        {
+                                            slug: "proposalId",
+                                            title: values.proposalId
+                                        }
+                                    ],
+                                }
+                            )
+                            updateNotification({
+                                id: "proposal",
+                                title: "Proposal Created",
+                                message: "Your proposal has been created successfully",
+                                loading: false,
+                                disallowClose: false,
+                                autoClose: true,
+                            })
+                        } catch (e) {
+                            console.log(e)
+                            updateNotification({
+                                id: "proposal",
+                                title: "Proposal Creation Failed",
+                                message: "Your proposal could not be created",
+                                loading: false,
+                                disallowClose: false,
+                                autoClose: true,
+                            })
                         }
                     })}>
-                        <Textarea
+                        <TextInput value={commP} label={"CommP Value"} required disabled />
+                        <NumberInput
                             required
-                            label="Details"
-                            placeholder="Enter details for the proposal"
+                            label="Number of Bounties"
+                            placeholder="Enter the Number of Bounties"
                             my={"sm"}
-                            {...form.getInputProps('details')} />
-                        <TextInput
+                            {...form.getInputProps('numberOfBounties')} />
+                        <NumberInput
                             required
-                            label="Details IPFS CID"
-                            value="baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii"
-                            disabled/>
-                        <DatePicker
-                            placeholder={"End date"}
-                            minDate={dayjs(new Date()).toDate()}
-                            required
+                            label="Bounty Reward"
+                            precision={2}
+                            placeholder="Enter the bounty reward"
                             my={"sm"}
-                            label={"Choose when to end the voting"}
-                            {...form.getInputProps('endDateTime')}
-                        />
-                        <NativeSelect
-                            data={marketDeals}
-                            onChange={(event) => form.setFieldValue('proposalId', event.currentTarget.value)}
-                            label={"Select the piece CID to create the proposal."}
-                            required/>
+                            {...form.getInputProps('bountyReward')} />
+                        <NumberInput
+                            required
+                            label="Minimum Blocks"
+                            description={"The minimum number of blocks that the bounty will be active for. 1 block stays active for 30 seconds"}
+                            placeholder="Enter the number of blocks"
+                            my={"sm"}
+                            {...form.getInputProps('minBlocks')} />
                         <Button color={"pink"} my={"sm"} type={"submit"}>
-                            Submit proposal
+                            Submit bounty
                         </Button>
                     </form>
                 </Container>

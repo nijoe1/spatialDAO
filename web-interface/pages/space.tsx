@@ -98,7 +98,7 @@ export default function Space() {
     useEffect(() => {
         if (!router.isReady) return
         const {groupId , address} = router.query
-        setGroupId(groupId)
+        setGroupId(groupId as string)
         // @ts-ignore
         getProfile(groupId).then(res => {
             if (!res) return
@@ -149,10 +149,12 @@ export default function Space() {
 
     let renderNfts
     if(proposalPosts.length > 0) {
-        renderNfts = proposalPosts.map((post: any) => {
+        console.log("Proposal posts: ", proposalPosts)
+        renderNfts = proposalPosts.map((post: any, index: number) => {
             const commP = post.content.tags[1].title
             const filesize = post.content?.tags[2]?.id
-            return <NftCard title={commP} tokenId={filesize} description={post.content.body} />
+            const streamId = post.stream_id
+            return <NftCard key={index} streamId={streamId} title={commP} tokenId={filesize} description={post.content.body} />
         })
     }
     
@@ -246,10 +248,8 @@ export default function Space() {
                         <StyledTabs defaultValue={"nfts"}>
                             <Center>
                                 <Tabs.List mb={"sm"}>
-                                    <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Proposals and Bounties</Tabs.Tab>
-                                    <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}
-                                             >Group Chat</Tabs.Tab>
-                                    <Tabs.Tab value={"collab"} icon={<IconUnlink size={16}/>}>Collaboration Requests</Tabs.Tab>
+                                    <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Proposals</Tabs.Tab>
+                                    <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}>Group Chat</Tabs.Tab>
                                     <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
                                 </Tabs.List>
                             </Center>
@@ -260,9 +260,6 @@ export default function Space() {
                             </Tabs.Panel>
                             <Tabs.Panel value={"chat"}>
                                 <GroupPosts spaceMember={spaceMember}/>
-                            </Tabs.Panel>
-                            <Tabs.Panel value={"collab"}>
-                                <CollaborationRequests/>
                             </Tabs.Panel>
                             <Tabs.Panel value={"proposal"}>
                                 <Proposals/>

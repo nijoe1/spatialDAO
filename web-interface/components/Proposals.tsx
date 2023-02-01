@@ -58,11 +58,11 @@ export default function Proposals() {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
                                 var array = await getCommpProposal(contract,commP!)
 
-                                // let fileSize: number
-                                // const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
-                                // const fRes = await filesizeFetch.json()
-                                // const fData = fRes[values.proposalId];
-                                // fileSize = fData.Proposal.PieceSize
+                                let fileSize: number
+                                const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
+                                const fRes = await filesizeFetch.json()
+                                const fData = fRes[values.proposalId];
+                                fileSize = fData.Proposal.PieceSize
                                 const res = await orbis.createPost(
                                     {
                                         context: `${groupId}`,
@@ -74,8 +74,11 @@ export default function Proposals() {
                                             {
                                                 slug: "commpValue",
                                                 title: commP
-                                            }
-                                            ,
+                                            },
+                                            {
+                                                slug: "fileSize",
+                                                title: fileSize.toString()
+                                            },
                                             {
                                                 slug: "id",
                                                 title: array[0]
