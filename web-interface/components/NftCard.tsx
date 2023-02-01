@@ -193,8 +193,8 @@ export default function NftCard({
             setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
         } else if (isEnded && isValid) {
             setButtons(<Button color={"green"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
-        // } else if (isEnded && isValid) {
-        //     setButtons(<Button color={"green"} fullWidth>Proposal Passed</Button>)
+        } else if (isEnded && isValid) {
+            setButtons(<Button color={"green"} fullWidth>Proposal Passed</Button>)
         } else if (!isBountyEnabled_) {
             setButtons(<Button color={"red"} fullWidth>Bounty disabled</Button>)
         }

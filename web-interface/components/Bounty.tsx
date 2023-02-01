@@ -24,6 +24,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
         address = router.query.address
     const contract = new ethers.Contract(address, DAO_abi, signer!)
 
+
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
     const form: any = useForm({
@@ -53,7 +54,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             disallowClose: true,
                         })
                         try {
-                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.minBlocks, fileSize)
+                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.minBlocks, parseInt(fileSize))
                             const res = await orbis.createPost(
                                 {
                                     context: `${streamId}`,

@@ -2,7 +2,7 @@ import {useForm} from "@mantine/form";
 import {Box, Button, Center, Container, NativeSelect, Textarea, TextInput} from "@mantine/core";
 import {DatePicker} from "@mantine/dates";
 import dayjs from "dayjs";
-import {marketDeals} from "../constants";
+import {marketDeals, stateMarketDeals} from "../constants";
 import {useContract} from './../hooks/useContract';
 import {useRouter} from 'next/router';
 import {GlobalContext} from "../contexts/GlobalContext";
@@ -58,11 +58,10 @@ export default function Proposals() {
                             })
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
-                                // let fileSize: number
-                                // const filesizeFetch = await fetch("https://marketdeals-hyperspace.s3.amazonaws.com/StateMarketDeals.json")
-                                // const fRes = await filesizeFetch.json()
-                                // const fData = fRes[values.proposalId];
-                                // fileSize = fData.Proposal.PieceSize
+                                let fileSize: number
+                                // @ts-ignore
+                                const fData = stateMarketDeals[values.proposalId];
+                                fileSize = fData.Proposal.PieceSize
                                 await orbis.createPost(
                                     {
                                         // @ts-ignore
@@ -75,8 +74,11 @@ export default function Proposals() {
                                             {
                                                 slug: "commpValue",
                                                 title: commP
-                                            }
-                                            ,
+                                            },
+                                            {
+                                                slug: "fileSize",
+                                                title: fileSize.toString()
+                                            },
                                             {
                                                 slug: "id",
                                                 title: commPID
