@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
         width: 160,
         top: 0,
         left: 0,
-        backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+        backgroundColor: theme.fn.variant({ variant: 'light', color: theme.colors.violet[1] }).background,
         zIndex: 1,
     },
 
@@ -54,7 +54,7 @@ function Feature({ icon: Icon, title, description, className, ...others }: Featu
             <div className={classes.overlay} />
 
             <div className={classes.content}>
-                <Icon size={38} className={classes.icon} stroke={1.5} />
+                <Icon color={"violet"} size={38} className={classes.icon} stroke={1.5} />
                 <Text weight={700} size="lg" mb="xs" mt={5} className={classes.title}>
                     {title}
                 </Text>

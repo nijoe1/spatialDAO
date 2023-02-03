@@ -84,15 +84,16 @@ export const useContract = () => {
     // Everyone can Fund
     // Dont fund more that the remaining needed fnding you can get the remaining needed funding
     // by getting the bunty details using getCommpBounty(commP) and find the requiredTokens - donatedTokens
-    const fundBounty = async(DaoContract:ethers.Contract, commP:string, fundAmount:number) => {
+    const fundBounty = async(DaoContract:ethers.Contract, commP:string, fundAmount:string) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        const amount = fundAmount.toString()
-        const tx = await DaoContract.vote(cidHex, {value: ethers.utils.parseEther(amount)})
+        const amount = ethers.utils.parseEther(fundAmount)
+        console.log(amount)
+        const tx = await DaoContract.vote(cidHex, {value: amount})
         return await tx.wait()
     }
 
-    // Anyone can call but is builded to get called by the dealler to get the reward
+    // Anyone can call but is built to get called by the dealer to get the reward
     // but whoever calls it if that dealID corresponds to a commP that has an enabled bounty
     // the function will reward the dealMaker 
     const claim_bounty = async(DaoContract:ethers.Contract, dealID: number) => {

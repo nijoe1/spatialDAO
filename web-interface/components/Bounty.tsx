@@ -8,6 +8,8 @@ import {BigNumber, ethers} from "ethers";
 import {DAO_abi} from "../constants"
 import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
+import dayjs from "dayjs";
+import {DatePicker} from "@mantine/dates";
 
 interface BountyProps {
     commP: string
@@ -23,18 +25,19 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
     if (typeof router.query.address === "string")
         address = router.query.address
     const contract = new ethers.Contract(address, DAO_abi, signer!)
+    const groupId = router.query.groupId
 
 
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
     const form: any = useForm({
         initialValues: {
+            details: '',
             numberOfBounties: 0,
             bountyReward: 0,
-            minBlocks: 0,
+            endDateTime: ''
         },
         validate: {
-            minBlocks: (value) => value <= 0 ? "Minimum blocks is at least 1" : null,
             numberOfBounties: (value) => value <= 0 ? "Number of bounties is at least 1" : null,
             bountyReward: (value) => value <= 0 ? "Bounty reward has to be greater than 0" : null,
         }
@@ -53,31 +56,56 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             loading: true,
                             disallowClose: true,
                         })
+                        console.log(values)
+                        orbis.isConnected().then((res: any) => {
+                            if (res === false){
+                                alert("Please connect to orbis first")
+                                updateNotification({
+                                    title: "Bounty Creation Failed",
+                                    message: "Please connect to orbis first",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                    color: "red",
+                                    id: "proposal"
+                                })
+                                return
+                            }
+                        })
+                        const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
                         try {
-                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.minBlocks, parseInt(fileSize))
+                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, durationInBlocks, parseInt(fileSize))
                             const res = await orbis.createPost(
                                 {
-                                    context: `${streamId}`,
+                                    context: `${groupId}`,
                                     body: `${form.values.details}`,
                                     tags: [{
-                                        slug: "spatialDAOProposal",
-                                        title: "spatialDAOProposal"
+                                        slug: "spatialDAOBounty",
+                                        title: "spatialDAOBounty"
                                     },
                                         {
                                             slug: "commpValue",
                                             title: commP
                                         },
                                         {
-                                            slug: "proposalId",
-                                            title: values.proposalId
+                                            slug: "bountyReward",
+                                            title: values.bountyReward.toString()
+                                        },
+                                        {
+                                            slug: "numberOfBounties",
+                                            title: values.numberOfBounties.toString()
+                                        },
+                                        {
+                                            slug: "endDateTime",
+                                            title: values.endDateTime.toString()
                                         }
                                     ],
                                 }
                             )
                             updateNotification({
                                 id: "proposal",
-                                title: "Proposal Created",
-                                message: "Your proposal has been created successfully",
+                                title: "Bounty Created",
+                                message: "Your bounty has been created successfully",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
@@ -86,14 +114,20 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             console.log(e)
                             updateNotification({
                                 id: "proposal",
-                                title: "Proposal Creation Failed",
-                                message: "Your proposal could not be created",
+                                title: "Bounty Creation Failed",
+                                message: "Your bounty could not be created",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
                             })
                         }
                     })}>
+                        <TextInput
+                            required
+                            label="Details"
+                            placeholder="Enter the details of the bounty"
+                            my={"sm"}
+                            {...form.getInputProps('details')} />
                         <TextInput value={commP} label={"CommP Value"} required disabled />
                         <NumberInput
                             required
@@ -104,17 +138,17 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                         <NumberInput
                             required
                             label="Bounty Reward"
-                            precision={2}
                             placeholder="Enter the bounty reward"
                             my={"sm"}
                             {...form.getInputProps('bountyReward')} />
-                        <NumberInput
+                        <DatePicker
+                            placeholder={"End date"}
+                            minDate={dayjs(new Date()).toDate()}
                             required
-                            label="Minimum Blocks"
-                            description={"The minimum number of blocks that the bounty will be active for. 1 block stays active for 30 seconds"}
-                            placeholder="Enter the number of blocks"
                             my={"sm"}
-                            {...form.getInputProps('minBlocks')} />
+                            label={"Choose when to end the bounty"}
+                            {...form.getInputProps('endDateTime')}
+                        />
                         <Button color={"pink"} my={"sm"} type={"submit"}>
                             Submit bounty
                         </Button>

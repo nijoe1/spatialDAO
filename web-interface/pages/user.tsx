@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import {Layout} from "../components/Layout";
 import {useContext, useEffect, useState} from "react";
-import NftCard from "../components/NftCard"
+import ProposalCard from "../components/ProposalCard"
 import {Button, Center, Container, createStyles, Grid, Skeleton, Stack, Tabs, Text, Title} from "@mantine/core";
 import {GlobalContext} from "../contexts/GlobalContext";
 import CreatorCard from "../components/CreatorCard";

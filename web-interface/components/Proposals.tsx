@@ -36,6 +36,29 @@ export default function Proposals() {
             <Center sx={{minWidth: 250, maxWidth: 900, width: "70%"}} mx={"auto"}>
                 <Container mx={"lg"} my={"md"} sx={{minWidth: 250, maxWidth: 900, width: "70%"}}>
                     <form onSubmit={form.onSubmit(async (values: any) => {
+                        showNotification({
+                            id: "proposal",
+                            title: "Proposal Creating...",
+                            message: "Please wait while your proposal is being created",
+                            autoClose: false,
+                            loading: true,
+                            disallowClose: true,
+                        })
+                        orbis.isConnected().then((res: any) => {
+                            if (res === false){
+                                alert("Please connect to orbis first")
+                                updateNotification({
+                                    title: "Bounty Creation Failed",
+                                    message: "Please connect to orbis first",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                    color: "red",
+                                    id: "proposal"
+                                })
+                                return
+                            }
+                        })
                         const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
                         const commP = marketDeals.find((deal) => deal.value === values.proposalId)?.label.slice(-64)
                         let address = ""
@@ -48,14 +71,6 @@ export default function Proposals() {
                         var commPID = parseInt(array.proposalID._hex, 16).toString()
                         console.log(isProposedCommp)
                         if (!isProposedCommp) {
-                            showNotification({
-                                id: "proposal",
-                                title: "Proposal Creating...",
-                                message: "Please wait while your proposal is being created",
-                                autoClose: false,
-                                loading: true,
-                                disallowClose: true,
-                            })
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
                                 let fileSize: number
@@ -82,6 +97,10 @@ export default function Proposals() {
                                             {
                                                 slug: "id",
                                                 title: commPID
+                                            },
+                                            {
+                                                slug: "endDate",
+                                                title: values.endDateTime.toString()
                                             }
                                         ],
                                     }

@@ -7,7 +7,7 @@ import {IconCheck} from "@tabler/icons";
 import {useContext, useEffect, useState} from "react";
 import ComingSoon1 from "../components/ComingSoon1";
 import ComingSoon from "../components/ComingSoon";
-import { GlobalContext } from '../contexts/GlobalContext';
+import {GlobalContext} from '../contexts/GlobalContext';
 import {useAccount} from "wagmi";
 
 
@@ -55,14 +55,13 @@ export default function Home() {
                             spacing="xl"
                             size="xl"
                             icon={
-                                <ThemeIcon size={20} radius="xl">
+                                <ThemeIcon color={"violet"} size={20} radius="xl">
                                     <IconCheck size={12} stroke={1.5}/>
                                 </ThemeIcon>
-                            }
-                        >
+                            }>
                             <List.Item>
                                 <b>Create your dataDAO</b> – choose the DAO proposers and Voters create you
-Decentralized social layer with one click
+                                Decentralized social layer with one click
                             </List.Item>
                             <List.Item>
                                 <b>Propose Files</b> – choose a file that your DAO wants it permanent
@@ -93,7 +92,7 @@ Decentralized social layer with one click
                         </Grid>
                     </Container>
                 </Center>
-                
+
             </Layout>
         </>
     )

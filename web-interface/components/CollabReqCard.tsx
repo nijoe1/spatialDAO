@@ -9,7 +9,6 @@ import {showNotification, updateNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
-import {tcsContractAddress} from "../constants";
 
 dayjs.extend(relativeTime)
 

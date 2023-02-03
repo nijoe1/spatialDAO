@@ -8,26 +8,27 @@ interface NftCardProps {
     spaceName?: string;
     image?: any;
     setModalOpen?: any;
-    setAddAttribute?: any;
-    remaining?: string;
-    total?: string;
-    price?: string;
     streamId: string
+    timestamp: number
+    endDate: string
 }
 
 import {
     Card,
     Text,
-    createStyles, Image, ActionIcon, Tooltip, Group, Button, Modal, Center,
+    createStyles, Button, Modal, Center, Badge,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
-import {useIsMounted} from "../hooks/useIsMounted";
+import * as dayjs from "dayjs"
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {ethers} from "ethers";
 import {DAO_abi} from "../constants";
 import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import Bounty from "./Bounty";
+
+dayjs.extend(relativeTime)
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -61,15 +62,16 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-export default function NftCard({
+export default function ProposalCard({
                                     title: commP,
                                     tokenId: filesize,
                                     animationUrl,
-                                    description, streamId
+                                    description, streamId, timestamp, endDate
                                 }: NftCardProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof NftCardProps>) {
     const {classes, cx, theme} = useStyles();
     const {data: signer} = useSigner()
     const router = useRouter()
+
     let address = ""
     if (typeof router.query.address === "string")
         address = router.query.address
@@ -86,6 +88,12 @@ export default function NftCard({
 
     const [modalOpen, setModalOpen] = useState(false)
     const [buttons, setButtons] = useState(<Button color={"yellow"} fullWidth>Fetching information</Button>)
+    const [badgeText, setBadgeText] = useState("Fetching data")
+    const [badgeColor, setBadgeColor] = useState("yellow")
+
+    const time = dayjs.unix(timestamp)
+    const ending = Math.floor(new Date(endDate).getTime() / 1000)
+    const end = dayjs.unix(ending)
     useEffect(() => {
         if (commP && router.query.address && signer) {
             getState()
@@ -156,6 +164,8 @@ export default function NftCard({
                         }
                     }}>Downvote</Button>
                 </Button.Group>)
+            setBadgeText("Ends " + end.fromNow())
+            setBadgeColor("yellow")
         } else if (isEnded && activeState) {
             setButtons(<Button color={"grape"} fullWidth onClick={async () => {
                 showNotification({
@@ -189,14 +199,19 @@ export default function NftCard({
                     })
                 }
             }}>Execute Proposal</Button>)
+            setBadgeText("Waiting for execution")
+            setBadgeColor("purple")
         } else if (isEnded && !isValid) {
             setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
-        } else if (isEnded && isValid) {
-            setButtons(<Button color={"green"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
-        } else if (isEnded && isValid) {
-            setButtons(<Button color={"green"} fullWidth>Proposal Passed</Button>)
+            setBadgeText("Proposal Declined")
+            setBadgeColor("red")
+        } else if (isEnded && isValid && !isBountyEnabled_) {
+            setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
+            setBadgeText("Proposal Accepted")
+            setBadgeColor("green")
         } else if (!isBountyEnabled_) {
             setButtons(<Button color={"red"} fullWidth>Bounty disabled</Button>)
+            setBadgeText("Bounty disabled")
         }
     }
 
@@ -217,12 +232,18 @@ export default function NftCard({
     return (
         <>
             <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
-                <Text className={classes.title} lineClamp={4} weight={500}>
-                    {commP}
-                </Text>
-                <Text size="sm" color="dimmed" lineClamp={4}>
-                    {description}
-                </Text>
+                <Card.Section p={"sm"}>
+                    <Badge color={badgeColor}>{badgeText}</Badge>
+                    <Text className={classes.title} lineClamp={4} weight={500}>
+                        {commP}
+                    </Text>
+                    <Text size="xs" color="dimmed" lineClamp={4}>
+                        {time.fromNow()}
+                    </Text>
+                    <Text size="sm" color="dimmed" lineClamp={4}>
+                        {description}
+                    </Text>
+                </Card.Section>
                 <Card.Section mt={"md"}>
                     {buttons}
                 </Card.Section>

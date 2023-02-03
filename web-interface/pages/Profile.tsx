@@ -2,7 +2,7 @@ import Head from 'next/head'
 import {Layout} from "../components/Layout";
 import {useAccount} from "wagmi";
 import {useContext, useEffect, useState} from "react";
-import NftCard from "../components/NftCard"
+import ProposalCard from "../components/ProposalCard"
 import {Button, Center, Container, createStyles, Grid, Modal, Skeleton, Tabs, Text, Title} from "@mantine/core";
 import {UpdateProfile} from "../components/UpdateProfile";
 import {GlobalContext} from "../contexts/GlobalContext";

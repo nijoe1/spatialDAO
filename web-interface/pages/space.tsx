@@ -3,12 +3,12 @@ import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
-import NftCard from "../components/NftCard";
+import ProposalCard from "../components/ProposalCard";
 import CreatorCard from "../components/CreatorCard";
 import StyledTabs from "../components/StyledTabs";
 import {
     IconAlbum,
-    IconMessageChatbot,
+    IconMessageChatbot, IconMoneybag,
     IconUnlink
 } from "@tabler/icons";
 import {useAccount} from "wagmi";
@@ -17,6 +17,7 @@ import {showNotification} from "@mantine/notifications"
 import GroupPosts from "../components/GroupPosts";
 import CollaborationRequests from "../components/CollaborationRequests";
 import Proposals from "../components/Proposals";
+import BountyCard from "../components/BountyCard";
 
 let orbisGroup = "https://app.orbis.club/group/"
 
@@ -56,6 +57,7 @@ export default function Space() {
     const router = useRouter()
     const {isConnected, isConnecting, isDisconnected, address} = useAccount()
     const [proposalPosts, setProposalPosts] = useState<any>([])
+    const [bountyPosts, setBountyPosts] = useState<any>([])
     const [spaceName, setSpaceName] = useState("")
     const [mounted, setMounted] = useState(false)
     const [isOwner, setIsOwner] = useState<boolean>(false)
@@ -115,10 +117,6 @@ export default function Space() {
     useEffect(() => {
         (async () => {
             if (!router.isReady) return
-            if (router.query.address == address?.toLowerCase()) setIsOwner(true)
-            // const spaceMember = await isSpaceMember(router.query.id as string, address)
-            console.log("Space member: ", spaceMember);
-            setSpaceMember(spaceMember)
             let {data: dids} = await orbis.getDids(address)
             const user = dids[0].did
             const {groupId} = router.query
@@ -139,8 +137,15 @@ export default function Space() {
             context: groupId,
             tag: "spatialDAOProposal"
         }).then((res: { data: any; }) => {
-            console.log("Proposal posts: ", res);
+            // console.log("Proposal posts: ", res);
             setProposalPosts(res.data)
+        })
+        orbis.getPosts({
+            context: groupId,
+            tag: "spatialDAOBounty"
+        }).then((res: { data: any; }) => {
+            // console.log("Bounty posts: ", res);
+            setBountyPosts(res.data)
         })
         // @ts-ignore
         setSpaceName(id)
@@ -152,9 +157,22 @@ export default function Space() {
         console.log("Proposal posts: ", proposalPosts)
         renderNfts = proposalPosts.map((post: any, index: number) => {
             const commP = post.content.tags[1].title
-            const filesize = post.content?.tags[2]?.id
+            const filesize = post.content?.tags[2]?.title
             const streamId = post.stream_id
-            return <NftCard key={index} streamId={streamId} title={commP} tokenId={filesize} description={post.content.body} />
+            const endDate = post.content?.tags[4]?.title
+            return <ProposalCard key={index + 99999} timestamp={post.timestamp} streamId={streamId} endDate={endDate} title={commP} tokenId={filesize} description={post.content.body} />
+        })
+    }
+
+    let renderBounties
+    if(bountyPosts.length > 0) {
+        console.log("Bounty posts: ", bountyPosts)
+        renderBounties = bountyPosts.map((post: any, index: number) => {
+            const commP = post.content.tags[1].title
+            const bountyReward = post.content?.tags[2]?.title
+            const numberOfBounties = post.content?.tags[3]?.title
+            const endDate = post.content?.tags[4]?.title
+            return <BountyCard key={index + 9999} streamId={post.streamId} numBounties={numberOfBounties} timestamp={post.timestamp} endDate={endDate} title={commP} tokenId={bountyReward} description={post.content.body} />
         })
     }
     
@@ -249,6 +267,7 @@ export default function Space() {
                             <Center>
                                 <Tabs.List mb={"sm"}>
                                     <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Proposals</Tabs.Tab>
+                                    <Tabs.Tab key={1} value={"bounties"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
                                     <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}>Group Chat</Tabs.Tab>
                                     <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
                                 </Tabs.List>
@@ -256,6 +275,11 @@ export default function Space() {
                             <Tabs.Panel value={"nfts"}>
                                 <Grid gutter={"xl"}>
                                     {renderNfts}
+                                </Grid>
+                            </Tabs.Panel>
+                            <Tabs.Panel value={"bounties"}>
+                                <Grid gutter={"xl"}>
+                                    {renderBounties}
                                 </Grid>
                             </Tabs.Panel>
                             <Tabs.Panel value={"chat"}>

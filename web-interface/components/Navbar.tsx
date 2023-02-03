@@ -57,10 +57,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
             fontWeight: 500,
 
             '&:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.colors.gray[4] }).background!,
-                    0.1
-                ),
+                backgroundColor: "#9c5beb",
             },
         },
 
