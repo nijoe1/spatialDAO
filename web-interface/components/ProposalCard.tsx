@@ -106,7 +106,7 @@ export default function ProposalCard({
         const commP_ = await getCommpProposal(contract, commP)
         const getBounty = await getCommpBounty(contract, commP)
         const numBounties = getBounty.numberOfBounties._hex
-        console.log("numBounties", numBounties)
+        console.log("numBounties", commP_)
         const activeState = commP_[5]
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isValid = await isValidProposedFile(contract, commP)

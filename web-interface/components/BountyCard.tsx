@@ -106,8 +106,10 @@ export default function BountyCard({
         const res = await getCommpBounty(contract, commP)
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
-        const remainingTokensHex = parseInt(res.requiredTokens._hex, 16).toString()
-        const remainingTokens = ethers.utils.formatEther(remainingTokensHex)
+        const remainingTokensHex = parseInt(res.requiredTokens._hex, 16)
+        const tokensDonated =  parseInt(res.donatedTokens._hex, 16)
+
+        const remainingTokens = ethers.utils.formatEther((remainingTokensHex - tokensDonated).toString())
         if (!isBountyEnabled_ && isBounty) {
             setButtons(
                 <>
