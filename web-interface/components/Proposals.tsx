@@ -9,13 +9,14 @@ import {GlobalContext} from "../contexts/GlobalContext";
 import {useContext} from "react";
 import {BigNumber, ethers} from "ethers";
 import {DAO_abi} from "../constants"
-import {useSigner} from "wagmi";
+import {useSigner, useAccount} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 
 export default function Proposals() {
-    const {createProposal, isCommpProposed, getCommpProposal} = useContract()
+    const {createProposal, isCommpProposed, getCommpProposal, checkProposerRole} = useContract()
     const router = useRouter()
     const {data: signer} = useSigner()
+    const { address } = useAccount()
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
 
@@ -67,10 +68,11 @@ export default function Proposals() {
                         const groupId = router.query.groupId
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
                         const isProposedCommp = await isCommpProposed(contract, commP!)
+                        const isProposer = await checkProposerRole(contract, address.toLowerCase())
                         var array = await getCommpProposal(contract,commP!)
                         var commPID = parseInt(array.proposalID._hex, 16).toString()
                         console.log(isProposedCommp)
-                        if (!isProposedCommp) {
+                        if (!isProposedCommp && isProposer) {
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
                                 let fileSize: number

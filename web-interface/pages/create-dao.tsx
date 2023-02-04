@@ -136,7 +136,7 @@ export default function CreateDao() {
                                accept={"image/*"} icon={<IconUpload size={14}/>} value={spacePfp as any}
                                onChange={setSpacePfp as any}/>
                     <Text m={"md"} size={"md"}>Add Proposers</Text>
-                    <AddressInput onSubmit={addProposer} />
+                    <AddressInput display={"Add"} onSubmit={addProposer} />
                     <MemberList
                         label="Proposers"
                         members={proposers}
@@ -144,7 +144,7 @@ export default function CreateDao() {
                         onRemove={removeProposer}
                     />
                     <Text m={"md"} size={"md"}>Add Voter</Text>
-                    <AddressInput onSubmit={addVoter} />
+                    <AddressInput display={"Add"} onSubmit={addVoter} />
                     <MemberList
                         label="Voters"
                         members={voters}

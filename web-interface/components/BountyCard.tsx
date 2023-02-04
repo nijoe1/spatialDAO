@@ -16,7 +16,18 @@ interface NftCardProps {
 import {
     Card,
     Text,
-    createStyles, Button, Modal, Center, Badge, Input, NumberInput, NativeSelect, Image,
+    createStyles,
+    Button,
+    Modal,
+    Center,
+    Badge,
+    Input,
+    NumberInput,
+    NativeSelect,
+    Image,
+    BackgroundImage,
+    ActionIcon,
+    Tooltip,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
@@ -28,6 +39,8 @@ import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import Bounty from "./Bounty";
 import {GlobalContext} from "../contexts/GlobalContext";
+import {IconPlus} from "@tabler/icons";
+import DealTable from "./DealTable";
 
 dayjs.extend(relativeTime)
 
@@ -82,7 +95,7 @@ export default function BountyCard({
     const {
         getCommpBounty,
         isBountyCreated,
-        isValidProposedFile,
+        getCommpDeals,
         isBountyEnabled,
         getCommpProposal,
         claim_bounty,
@@ -92,6 +105,8 @@ export default function BountyCard({
     const [buttons, setButtons] = useState(<Button color={"yellow"} fullWidth>Fetching information</Button>)
     const [badgeText, setBadgeText] = useState("Fetching data")
     const [badgeColor, setBadgeColor] = useState("yellow")
+    const [deals, setDeals] = useState<number[]>()
+    const [modalOpen, setModalOpen] = useState(false)
     let amt: number | undefined
 
     const time = dayjs.unix(timestamp)
@@ -108,6 +123,9 @@ export default function BountyCard({
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
         const remainingTokensHex = parseInt(res.requiredTokens._hex, 16)
         const tokensDonated = parseInt(res.donatedTokens._hex, 16)
+
+        const commPDeals = await getCommpDeals(contract, commP)
+        setDeals(commPDeals)
 
         const remainingTokens = ethers.utils.formatEther((remainingTokensHex - tokensDonated).toString())
         if (!isBountyEnabled_ && isBounty) {
@@ -179,15 +197,19 @@ export default function BountyCard({
                 </>)
             setBadgeText("Remaining tokens: " + remainingTokens)
             setBadgeColor("orange")
-        } else if (isBountyEnabled_) {
+        }
+        else if (isBountyEnabled_) {
             // get the key for the stateMarket deals for which the cid is the commP
             const keys = [{value: "", label: "Select the deal ID"}];
             console.log(commP)
             for (const key in stateMarketDeals) {
                 // @ts-ignore
                 if (stateMarketDeals[key]["Proposal"]["PieceCID"]["/"] === commP) {
-                    // @ts-ignore
-                    keys.push({value: key, label: "Deal ID: " + key + " - Client ID: " + stateMarketDeals[key]["Proposal"]["Client"]})
+                    keys.push({
+                        value: key,
+                        // @ts-ignore
+                        label: "Deal ID: " + key + " - Client ID: " + stateMarketDeals[key]["Proposal"]["Client"]
+                    })
                 }
             }
             let dealId: string
@@ -195,75 +217,100 @@ export default function BountyCard({
 
             setButtons(
                 <>
-                    <NativeSelect data={keys} onChange={(e) => {dealId = e.currentTarget.value}} required />
-                <Button color={"grape"} fullWidth onClick={async () => {
-                    showNotification({
-                        id: "bounty",
-                        title: "Claiming bounty",
-                        message: "Please wait",
-                        loading: true,
-                        disallowClose: true,
-                        autoClose: false,
-                    })
-                    orbis.isConnected().then((res: any) => {
-                        if (res === false) {
-                            alert("Please connect to orbis first")
+                    <NativeSelect data={keys} onChange={(e) => {
+                        dealId = e.currentTarget.value
+                    }} required/>
+                    <Button color={"grape"} fullWidth onClick={async () => {
+                        showNotification({
+                            id: "bounty",
+                            title: "Claiming bounty",
+                            message: "Please wait",
+                            loading: true,
+                            disallowClose: true,
+                            autoClose: false,
+                        })
+                        orbis.isConnected().then((res: any) => {
+                            if (res === false) {
+                                alert("Please connect to orbis first")
+                                updateNotification({
+                                    title: "Bounty Funding Failed",
+                                    message: "Please connect to orbis first",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                    color: "red",
+                                    id: "bounty"
+                                })
+                                return
+                            }
+                        })
+                        try {
+                            console.log(commP, dealId)
+                            await claim_bounty(contract, parseInt(dealId))
+                            await orbis.createPost({
+                                context: streamId,
+                                body: "Claimed bounty for " + commP
+                            })
                             updateNotification({
-                                title: "Bounty Funding Failed",
-                                message: "Please connect to orbis first",
+                                id: "bounty",
+                                title: "Success",
+                                message: "You executed the proposal",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
-                                color: "red",
-                                id: "bounty"
                             })
-                            return
+                        } catch (e) {
+                            console.log(e)
+                            updateNotification({
+                                id: "bounty",
+                                color: "red",
+                                title: "Failed",
+                                message: "Something went wrong",
+                                loading: false,
+                                disallowClose: false,
+                                autoClose: true,
+                            })
                         }
-                    })
-                    try {
-                        console.log(commP, dealId)
-                        await claim_bounty(contract, parseInt(dealId))
-                        await orbis.createPost({
-                            context: streamId,
-                            body: "Claimed bounty for " + commP
-                        })
-                        updateNotification({
-                            id: "bounty",
-                            title: "Success",
-                            message: "You executed the proposal",
-                            loading: false,
-                            disallowClose: false,
-                            autoClose: true,
-                        })
-                    } catch (e) {
-                        console.log(e)
-                        updateNotification({
-                            id: "bounty",
-                            color: "red",
-                            title: "Failed",
-                            message: "Something went wrong",
-                            loading: false,
-                            disallowClose: false,
-                            autoClose: true,
-                        })
-                    }
-                }}>Claim Bounty</Button>
+                    }}>Claim Bounty</Button>
                 </>
             )
             setBadgeText("Waiting for execution")
             setBadgeColor("purple")
         } else if (!isBountyEnabled_ && !isBounty) {
-            setButtons(<Button color={"red"} fullWidth>Bounty Fully Funded</Button>)
-            setBadgeText("Proposal Declined")
-            setBadgeColor("red")
+            setButtons(<Button color={"lime"} fullWidth>Bounty Fully Claimed</Button>)
+            setBadgeText("Bounty Fully Claimed")
+            setBadgeColor("lime")
         }
     }
 
+    const dealsModal = (
+        <Modal
+            opened={modalOpen}
+            size={"auto"}
+            transition="fade"
+            transitionDuration={500}
+            transitionTimingFunction="ease"
+            onClose={() => setModalOpen(false)}
+        >
+            <Center>
+                <DealTable deals={deals!} />
+            </Center>
+        </Modal>
+    )
+
     return (
         <>
-            <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
+            <Card withBorder radius="md" className={cx(classes.card)} m={"md"} p={0}>
                 <Card.Section>
-                    <Image src={"/bounty.webp"} height={180} />
+                    <BackgroundImage src={"/bounty.webp"}>
+                        <div style={{height: 180, position: "relative"}}>
+                            <Tooltip label={"View all bounty deals"} position={"top"}>
+                            <ActionIcon variant={"filled"} color={"pink"} onClick={() => setModalOpen(true)} sx={{position: "absolute", top: 0, right: 0, bottom: 0}}>
+                                <IconPlus />
+                            </ActionIcon>
+                            </Tooltip>
+                        </div>
+                    </BackgroundImage>
                 </Card.Section>
                 <Card.Section pb={0} p={"sm"}>
                     <Badge color={badgeColor}>{badgeText}</Badge>
@@ -281,6 +328,7 @@ export default function BountyCard({
                     {buttons}
                 </Card.Section>
             </Card>
+            {dealsModal}
         </>
     );
 }

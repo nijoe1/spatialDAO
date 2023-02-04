@@ -25,7 +25,7 @@ export default function CollaborationRequests() {
     }, [router.query, mounted])
 
     const getPosts = async () => {
-        const res = await orbis.getPosts({context: router.query.groupId, tag: "tcs-request"})
+        const res = await orbis.getPosts({context: router.query.groupId, tag: "spatial-dao-request"})
         if(res.status === 200) {
             setData(res.data)
             console.log(res.data)
@@ -46,8 +46,8 @@ export default function CollaborationRequests() {
             body: content,
             context: groupId.toLowerCase(),
             tags: [{
-                slug: "tcs-request",
-                title: "TCS Post",
+                slug: "spatial-dao-request",
+                title: "Spatial DAO Request",
             }],
         })
 
@@ -76,7 +76,7 @@ export default function CollaborationRequests() {
             <Grid mt={"lg"}>
                 <Grid.Col span={11}>
                     <Textarea
-                        placeholder="Want to join the space as an artist? Let us know!"
+                        placeholder="Want to collaborate on this DAO? Let us know!"
                         value={content}
                         onChange={setContent}
                         minRows={4}

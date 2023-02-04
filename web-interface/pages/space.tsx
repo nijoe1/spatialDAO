@@ -7,7 +7,7 @@ import ProposalCard from "../components/ProposalCard";
 import CreatorCard from "../components/CreatorCard";
 import StyledTabs from "../components/StyledTabs";
 import {
-    IconAlbum,
+    IconAlbum, IconHeartHandshake,
     IconMessageChatbot, IconMoneybag,
     IconUnlink
 } from "@tabler/icons";
@@ -18,6 +18,7 @@ import GroupPosts from "../components/GroupPosts";
 import CollaborationRequests from "../components/CollaborationRequests";
 import Proposals from "../components/Proposals";
 import BountyCard from "../components/BountyCard";
+import MonetizeDAO from "../components/MonetizeDAO";
 
 let orbisGroup = "https://app.orbis.club/group/"
 
@@ -274,10 +275,11 @@ export default function Space() {
                             <Center>
                                 <Tabs.List mb={"sm"}>
                                     <Tabs.Tab key={1} value={"nfts"} icon={<IconAlbum size={16}/>}>Proposals</Tabs.Tab>
-                                    <Tabs.Tab key={1} value={"bounties"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
+                                    <Tabs.Tab key={2} value={"bounties"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
                                     <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}>Group Chat</Tabs.Tab>
-                                    <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
-                                    <Tabs.Tab value={"monetize"} icon={<IconUnlink size={16}/>}>Monetize</Tabs.Tab>
+                                    <Tabs.Tab key={5} value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
+                                    <Tabs.Tab key={3} value={"collab"} icon={<IconHeartHandshake size={16}/>}>Collab Request</Tabs.Tab>
+                                    <Tabs.Tab key={6} value={"monetize"} icon={<IconMoneybag size={16}/>}>Monetize</Tabs.Tab>
                                 </Tabs.List>
                             </Center>
                             <Tabs.Panel value={"nfts"}>
@@ -295,6 +297,12 @@ export default function Space() {
                             </Tabs.Panel>
                             <Tabs.Panel value={"proposal"}>
                                 <Proposals/>
+                            </Tabs.Panel>
+                            <Tabs.Panel value={"collab"}>
+                                <CollaborationRequests />
+                            </Tabs.Panel>
+                            <Tabs.Panel value={"monetize"}>
+                                <MonetizeDAO />
                             </Tabs.Panel>
                         </StyledTabs>
                     </Stack>

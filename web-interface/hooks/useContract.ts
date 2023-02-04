@@ -49,8 +49,7 @@ export const useContract = () => {
     const createProposal = async (DaoContract: ethers.Contract, commP: string, proposalMetadata: string, durationInBlocks: number) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        console.log(cidHex)
-        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, durationInBlocks, {gasLimit: 10000000000})
+        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, 5, {gasLimit: 10000000000})
         return tx.wait()
     }
 
@@ -107,7 +106,7 @@ export const useContract = () => {
     const getCommpDeals = async (DaoContract: ethers.Contract, commP: string) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        return await DaoContract.isBountyEnabled(cidHex)
+        return await DaoContract.getDeals(cidHex)
     }
 
     // Returns a bool if the bounty has successfully funded and has more claims to give returns true

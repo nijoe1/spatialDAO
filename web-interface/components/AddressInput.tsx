@@ -12,6 +12,7 @@ const isAddress = (address: string) => ethers.utils.isAddress(address);
 export interface AddressProps {
     onSubmit: (address: string) => void;
     disabled?: boolean;
+    display: string
 }
 
 export function AddressInput(props: AddressProps) {
@@ -49,7 +50,6 @@ export function AddressInput(props: AddressProps) {
     return (
         <Group mx={"md"} my={"sm"}>
             <AsyncInput
-                label={"Add member"}
                 placeholder="Address or ENS"
                 value={value}
                 error={error}
@@ -64,7 +64,7 @@ export function AddressInput(props: AddressProps) {
                 props.onSubmit(data ?? value);
                 setValue("");
             }}>
-                Add
+                {props.display}
             </Button>
         </Group>
     );

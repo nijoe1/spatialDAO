@@ -24,7 +24,7 @@ import * as dayjs from "dayjs"
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {ethers} from "ethers";
 import {DAO_abi} from "../constants";
-import {useSigner} from "wagmi";
+import {useAccount, useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import Bounty from "./Bounty";
 
@@ -71,6 +71,7 @@ export default function ProposalCard({
     const {classes, cx, theme} = useStyles();
     const {data: signer} = useSigner()
     const router = useRouter()
+    const {address: userWalletAddress} = useAccount()
 
     let address = ""
     if (typeof router.query.address === "string")
@@ -78,7 +79,8 @@ export default function ProposalCard({
     const contract = new ethers.Contract(address, DAO_abi, signer!)
     const {
         isProposalEnded,
-        isBountyCreated,
+        checkVoterRole,
+        checkProposerRole,
         isValidProposedFile,
         isBountyEnabled,
         vote,
@@ -107,10 +109,11 @@ export default function ProposalCard({
         const getBounty = await getCommpBounty(contract, commP)
         const numBounties = getBounty.numberOfBounties._hex
         const activeState = commP_[5]
-        const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isValid = await isValidProposedFile(contract, commP)
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
         if (isEnded === false) {
+            const isVoter = await checkVoterRole(contract, userWalletAddress!.toLowerCase())
+            const isProposer = await checkProposerRole(contract, userWalletAddress!.toLowerCase())
             // voting
             setButtons(
                 <Button.Group sx={{width: "100%"}}>
@@ -124,6 +127,8 @@ export default function ProposalCard({
                             autoClose: false,
                         })
                         try {
+                            if(!isVoter || !isProposer)
+                                throw new Error("You are not a voter or proposer")
                             await vote(contract, commP, true)
                             updateNotification({
                                 id: "bounty",
@@ -148,6 +153,8 @@ export default function ProposalCard({
                     }}>Upvote</Button>
                     <Button fullWidth color={"red"} onClick={async () => {
                         try {
+                            if(!isVoter || !isProposer)
+                                throw new Error("You are not a voter or proposer")
                             await vote(contract, commP, false)
                             showNotification({
                                 title: "Success",
@@ -164,7 +171,8 @@ export default function ProposalCard({
                 </Button.Group>)
             setBadgeText("Ends " + end.fromNow())
             setBadgeColor("yellow")
-        } else if (isEnded && activeState) {
+        }
+        else if (isEnded && activeState) {
             setButtons(<Button color={"grape"} fullWidth onClick={async () => {
                 showNotification({
                     id: "bounty",
@@ -207,7 +215,7 @@ export default function ProposalCard({
             setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
             setBadgeColor("green")
-        } else if (!isBountyEnabled_) {
+        } else if (isBountyEnabled_) {
             setButtons(<Button color={"gray"} fullWidth>Bounty already created</Button>)
             setBadgeText("Bounty already created")
             setBadgeColor("gray")
