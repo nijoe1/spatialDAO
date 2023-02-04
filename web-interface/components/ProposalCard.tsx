@@ -16,7 +16,7 @@ interface NftCardProps {
 import {
     Card,
     Text,
-    createStyles, Button, Modal, Center, Badge,
+    createStyles, Button, Modal, Center, Badge, Image,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
@@ -232,6 +232,9 @@ export default function ProposalCard({
     return (
         <>
             <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
+                <Card.Section>
+                    <Image src={"/proposal.webp"} height={180} />
+                </Card.Section>
                 <Card.Section p={"sm"}>
                     <Badge color={badgeColor}>{badgeText}</Badge>
                     <Text className={classes.title} lineClamp={4} weight={500}>

@@ -16,7 +16,7 @@ interface NftCardProps {
 import {
     Card,
     Text,
-    createStyles, Button, Modal, Center, Badge, Input, NumberInput, NativeSelect,
+    createStyles, Button, Modal, Center, Badge, Input, NumberInput, NativeSelect, Image,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
@@ -186,7 +186,8 @@ export default function BountyCard({
             for (const key in stateMarketDeals) {
                 // @ts-ignore
                 if (stateMarketDeals[key]["Proposal"]["PieceCID"]["/"] === commP) {
-                    keys.push({value: key, label: key})
+                    // @ts-ignore
+                    keys.push({value: key, label: "Deal ID: " + key + " - Client ID: " + stateMarketDeals[key]["Proposal"]["Client"]})
                 }
             }
             let dealId: string
@@ -261,6 +262,9 @@ export default function BountyCard({
     return (
         <>
             <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
+                <Card.Section>
+                    <Image src={"/bounty.webp"} height={180} />
+                </Card.Section>
                 <Card.Section pb={0} p={"sm"}>
                     <Badge color={badgeColor}>{badgeText}</Badge>
                     <Text className={classes.title} lineClamp={4} weight={500}>
@@ -273,7 +277,7 @@ export default function BountyCard({
                         {description}
                     </Text>
                 </Card.Section>
-                <Card.Section mb={0} mt={"md"}>
+                <Card.Section mt={"md"}>
                     {buttons}
                 </Card.Section>
             </Card>
