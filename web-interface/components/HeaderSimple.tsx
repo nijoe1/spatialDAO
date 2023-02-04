@@ -11,6 +11,7 @@ import {ConnectButton} from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
 import {useRouter} from "next/router";
 import {IconArtboard, IconHammer, IconMapSearch, IconMessageDots} from "@tabler/icons";
+import {useState} from "react";
 
 const HEADER_HEIGHT = 60;
 
@@ -52,6 +53,36 @@ const useStyles = createStyles((theme) => ({
         ...theme.fn.hover({
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         }),
+    },
+
+    headerLink: {
+        display: 'flex',
+        alignItems: 'center',
+        height: '100%',
+        padding: theme.spacing.md,
+        borderRadius: theme.radius.md,
+        textDecoration: "none",
+        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        fontWeight: 500,
+        fontSize: theme.fontSizes.md,
+
+        [theme.fn.smallerThan('sm')]: {
+            height: 42,
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+        },
+
+        ...theme.fn.hover({
+            backgroundColor: theme.colors.pink[0],
+        }),
+    },
+
+    linkActive: {
+        '&, &:hover': {
+            backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+        },
     },
 
     subLink: {
@@ -104,10 +135,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const links = [
-    { link: '/create-dao', label: 'create dataDAO', icon: IconHammer },
-    { link: '/explore-daos', label: "explore DAOs", icon: IconMapSearch },
-    { link: '/Profile', label: 'profile', icon: IconArtboard },
-    { link: '/discussions', label: 'spatialDAO Chat', icon: IconMessageDots },
+    { link: '/create-dao', label: 'Create DataDAO', icon: IconHammer },
+    { link: '/explore-daos', label: "Explore DAOs", icon: IconMapSearch },
+    { link: '/Profile', label: 'Profile', icon: IconArtboard },
+    { link: '/discussions', label: 'SpatialDAO Chat', icon: IconMessageDots },
     
 
 ]
@@ -115,8 +146,9 @@ const links = [
 
 export function HeaderSimple() {
     const [drawerOpened, {toggle: toggleDrawer, close: closeDrawer}] = useDisclosure(false);
-    const {classes, theme} = useStyles();
+    const {classes, cx} = useStyles();
     const [opened, {toggle, close}] = useDisclosure(false)
+    const [active, setActive] = useState();
     const router = useRouter()
 
     const items = links.map((link) => (
@@ -125,21 +157,28 @@ export function HeaderSimple() {
         </Link>
     ));
 
+    const desktopItems = links.map((link) => (
+        <Link href={link.link} passHref key={link.label} className={cx(classes.headerLink, { [classes.linkActive]: active === link.link })}>
+            {link.label}
+        </Link>
+    ));
+
     return (
         <Header height={120} p="md">
             <Group position="apart" p={"md"} sx={{height: '100%'}}>
                 <Group>
-                    <Center>
-                        <Image src="/logo.webp" width={50} height={50} mr={"sm"} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
+                    <Center sx={{marginTop: -12}}>
+                        <Image src="/logo.webp" width={70} height={70} mr={"sm"} alt="logo" radius={"xl"} style={{cursor: "pointer"}}
                                onClick={() => router.push('/')}/>
                         <Title onClick={() => router.push("/")} className={classes.title}>
                             spatial.DAO
                         </Title>
                     </Center>
                 </Group>
-                <Group className={classes.hiddenMobile}>
-                    <Group position="center" mb={15}>
-                    </Group>
+                <Group className={classes.hiddenMobile} position="center" mb={15}>
+                    {desktopItems}
+                </Group>
+                <Group className={classes.hiddenMobile} sx={{marginTop: -12}}>
                     <ConnectButton
                         accountStatus={{
                             smallScreen: 'avatar',

@@ -60,7 +60,6 @@ export default function Space() {
     const [bountyPosts, setBountyPosts] = useState<any>([])
     const [spaceName, setSpaceName] = useState("")
     const [mounted, setMounted] = useState(false)
-    const [isOwner, setIsOwner] = useState<boolean>(false)
     const [isGroupMember, setIsGroupMember] = useState(false)
     const [groupDesc, setGroupDesc] = useState("")
     const [groupId, setGroupId] = useState("")
@@ -109,8 +108,7 @@ export default function Space() {
         if (!router.isReady) return
         const {groupId , address} = router.query
         setGroupId(groupId as string)
-        // @ts-ignore
-        getProfile(groupId).then(res => {
+        getProfile(groupId! as string).then(res => {
             if (!res) return
             if (typeof res["details"] === "string") {
                 // @ts-ignore
@@ -162,7 +160,7 @@ export default function Space() {
 
     let renderNfts
     if(proposalPosts.length > 0) {
-        // console.log("Proposal posts: ", proposalPosts)
+        console.log("Proposal posts: ", proposalPosts)
         renderNfts = proposalPosts.map((post: any, index: number) => {
             const commP = post.content.tags[1].title
             const filesize = post.content?.tags[2]?.title
@@ -279,6 +277,7 @@ export default function Space() {
                                     <Tabs.Tab key={1} value={"bounties"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
                                     <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}>Group Chat</Tabs.Tab>
                                     <Tabs.Tab value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposals</Tabs.Tab>
+                                    <Tabs.Tab value={"monetize"} icon={<IconUnlink size={16}/>}>Monetize</Tabs.Tab>
                                 </Tabs.List>
                             </Center>
                             <Tabs.Panel value={"nfts"}>

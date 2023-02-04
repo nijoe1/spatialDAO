@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
         width: 160,
         top: 0,
         left: 0,
-        backgroundColor: theme.fn.variant({ variant: 'light', color: theme.colors.violet[1] }).background,
+        backgroundColor: theme.colors.violet[0],
         zIndex: 1,
     },
 
@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     icon: {
-        color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+        color: theme.colors.violet[3]
     },
 
     title: {

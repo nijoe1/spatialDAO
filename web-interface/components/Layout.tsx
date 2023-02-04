@@ -13,7 +13,6 @@ export function Layout({ children }: Props) {
         <AppShell
             padding="md"
             header={<HeaderSimple />}
-            navbar={<NavbarSide />}
             footer={<Footer height={60} p={"md"}> All rights reserved. </Footer>}
             styles={(theme) => ({
                 main: {
