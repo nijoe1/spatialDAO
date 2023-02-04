@@ -16,14 +16,14 @@ interface NftCardProps {
 import {
     Card,
     Text,
-    createStyles, Button, Modal, Center, Badge, Input, NumberInput,
+    createStyles, Button, Modal, Center, Badge, Input, NumberInput, NativeSelect,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
 import * as dayjs from "dayjs"
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {ethers} from "ethers";
-import {DAO_abi} from "../constants";
+import {DAO_abi, stateMarketDeals} from "../constants";
 import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import Bounty from "./Bounty";
@@ -107,7 +107,7 @@ export default function BountyCard({
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
         const remainingTokensHex = parseInt(res.requiredTokens._hex, 16)
-        const tokensDonated =  parseInt(res.donatedTokens._hex, 16)
+        const tokensDonated = parseInt(res.donatedTokens._hex, 16)
 
         const remainingTokens = ethers.utils.formatEther((remainingTokensHex - tokensDonated).toString())
         if (!isBountyEnabled_ && isBounty) {
@@ -180,59 +180,75 @@ export default function BountyCard({
             setBadgeText("Remaining tokens: " + remainingTokens)
             setBadgeColor("orange")
         } else if (isBountyEnabled_) {
-            setButtons(<Button color={"grape"} fullWidth onClick={async () => {
-                showNotification({
-                    id: "bounty",
-                    title: "Claiming bounty",
-                    message: "Please wait",
-                    loading: true,
-                    disallowClose: true,
-                    autoClose: false,
-                })
-                orbis.isConnected().then((res: any) => {
-                    if (res === false) {
-                        alert("Please connect to orbis first")
+            // get the key for the stateMarket deals for which the cid is the commP
+            const keys = [{value: "", label: "Select the deal ID"}];
+            console.log(commP)
+            for (const key in stateMarketDeals) {
+                // @ts-ignore
+                if (stateMarketDeals[key]["Proposal"]["PieceCID"]["/"] === commP) {
+                    keys.push({value: key, label: key})
+                }
+            }
+            let dealId: string
+
+
+            setButtons(
+                <>
+                    <NativeSelect data={keys} onChange={(e) => {dealId = e.currentTarget.value}} required />
+                <Button color={"grape"} fullWidth onClick={async () => {
+                    showNotification({
+                        id: "bounty",
+                        title: "Claiming bounty",
+                        message: "Please wait",
+                        loading: true,
+                        disallowClose: true,
+                        autoClose: false,
+                    })
+                    orbis.isConnected().then((res: any) => {
+                        if (res === false) {
+                            alert("Please connect to orbis first")
+                            updateNotification({
+                                title: "Bounty Funding Failed",
+                                message: "Please connect to orbis first",
+                                loading: false,
+                                disallowClose: false,
+                                autoClose: true,
+                                color: "red",
+                                id: "bounty"
+                            })
+                            return
+                        }
+                    })
+                    try {
+                        console.log(commP, dealId)
+                        await claim_bounty(contract, parseInt(dealId))
+                        await orbis.createPost({
+                            context: streamId,
+                            body: "Claimed bounty for " + commP
+                        })
                         updateNotification({
-                            title: "Bounty Funding Failed",
-                            message: "Please connect to orbis first",
+                            id: "bounty",
+                            title: "Success",
+                            message: "You executed the proposal",
                             loading: false,
                             disallowClose: false,
                             autoClose: true,
-                            color: "red",
-                            id: "bounty"
                         })
-                        return
+                    } catch (e) {
+                        console.log(e)
+                        updateNotification({
+                            id: "bounty",
+                            color: "red",
+                            title: "Failed",
+                            message: "Something went wrong",
+                            loading: false,
+                            disallowClose: false,
+                            autoClose: true,
+                        })
                     }
-                })
-                try {
-                    // TODO: Fix this
-                    // @ts-ignore
-                    await claim_bounty(contract, commP)
-                    await orbis.createPost({
-                        context: streamId,
-                        body: "Claimed bounty for " + commP
-                    })
-                    updateNotification({
-                        id: "bounty",
-                        title: "Success",
-                        message: "You executed the proposal",
-                        loading: false,
-                        disallowClose: false,
-                        autoClose: true,
-                    })
-                } catch (e) {
-                    console.log(e)
-                    updateNotification({
-                        id: "bounty",
-                        color: "red",
-                        title: "Failed",
-                        message: "Something went wrong",
-                        loading: false,
-                        disallowClose: false,
-                        autoClose: true,
-                    })
-                }
-            }}>Claim Bounty</Button>)
+                }}>Claim Bounty</Button>
+                </>
+            )
             setBadgeText("Waiting for execution")
             setBadgeColor("purple")
         } else if (!isBountyEnabled_ && !isBounty) {

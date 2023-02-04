@@ -98,7 +98,7 @@ export const useContract = () => {
     // but whoever calls it if that dealID corresponds to a commP that has an enabled bounty
     // the function will reward the dealMaker 
     const claim_bounty = async (DaoContract: ethers.Contract, dealID: number) => {
-        const tx = await DaoContract.claim_bounty(dealID)
+        const tx = await DaoContract.claim_bounty(dealID, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
