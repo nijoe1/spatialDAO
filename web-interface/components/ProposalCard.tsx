@@ -173,42 +173,7 @@ export default function ProposalCard({
                 </Button.Group>)
             setBadgeText("Ends " + end.fromNow())
             setBadgeColor("yellow")
-        }
-        else if (isEnded && activeState) {
-            setButtons(<Button color={"grape"} fullWidth onClick={async () => {
-                showNotification({
-                    id: "bounty",
-                    title: "Creating bounty",
-                    message: "Please wait",
-                    loading: true,
-                    disallowClose: true,
-                    autoClose: false,
-                })
-                try {
-                    await executeProposal(contract, commP)
-                    updateNotification({
-                        id: "bounty",
-                        title: "Success",
-                        message: "You executed the proposal",
-                        loading: false,
-                        disallowClose: false,
-                        autoClose: true,
-                    })
-                } catch (e) {
-                    console.log(e)
-                    updateNotification({
-                        id: "bounty",
-                        color: "red",
-                        title: "Failed",
-                        message: "Something went wrong",
-                        loading: false,
-                        disallowClose: false,
-                        autoClose: true,
-                    })
-                }
-            }}>Execute Proposal</Button>)
-            setBadgeText("Waiting for execution")
-            setBadgeColor("purple")
+        
         } else if (isEnded && !isValid) {
             setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
             setBadgeText("Proposal Declined")
@@ -217,11 +182,11 @@ export default function ProposalCard({
             setButtons(<Button color={"pink.3"} fullWidth>Commp is already persisted on the network</Button>)
             setBadgeText("Proposal Already Persisted")
             setBadgeColor("pink")
-        }  else if (isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
+        }  else if (isEnded && activeState && isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
             setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
             setBadgeColor("green")
-        } else if (isBountyEnabled_) {
+        } else {
             setButtons(<Button color={"gray"} fullWidth>Bounty already created</Button>)
             setBadgeText("Bounty already created")
             setBadgeColor("gray")

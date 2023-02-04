@@ -218,6 +218,7 @@ export default function Space() {
             })
         }
     }
+    
 
     const buttons =
         <>
@@ -230,16 +231,16 @@ export default function Space() {
             {user && isGroupMember &&
                 <Button variant={"light"} onClick={handleLeave} color={"indigo"} sx={{height: "-webkit-fill-available"}}
                         className={classes.btn}>
-                    Leave Space
+                    unfollow
                 </Button>}
             {user && !isGroupMember &&
                 <Button variant={"light"} onClick={handleJoin} color={"indigo"}
                         className={classes.btn}>
-                    Join Space
+                    follow
                 </Button>}
             <Button variant={"subtle"} component={"a"} href={`${orbisGroup}`+"/"+`${groupId}`} target={"_blank"}
                     color={"indigo"} className={classes.btn}>
-                Go to Space Chat
+                Go to DAO groupChat
             </Button>
         </>
 

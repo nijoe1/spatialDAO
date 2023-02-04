@@ -78,7 +78,7 @@ export const useContract = () => {
         const cidHex = "0x00" + cidHexRaw
         const amount = ethers.utils.parseEther(bountyReward.toString())
         console.log("cidHex", cidHex, "numberOfBounties", numberOfBounties, "amount", amount, "minDealDays", minDealDays, "fileSize", fileSize)
-        const tx = await DaoContract.createBounty(cidHex, numberOfBounties, amount, minDealDays, fileSize)
+        const tx = await DaoContract.createBounty(cidHex, numberOfBounties, amount, minDealDays, fileSize, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
@@ -179,25 +179,25 @@ export const useContract = () => {
 
     // Only the creator of the DAO can do that the ADMIN
     const addVoter = async (DaoContract: ethers.Contract, newVoterAddress: string) => {
-        const tx = await DaoContract.grantRole(VOTER_ROLE, newVoterAddress)
+        const tx = await DaoContract.grantRole(VOTER_ROLE, newVoterAddress,{gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const removeVoter = async (DaoContract: ethers.Contract, VoterAddress: string) => {
-        const tx = await DaoContract.revokeRole(VOTER_ROLE, VoterAddress)
+        const tx = await DaoContract.revokeRole(VOTER_ROLE, VoterAddress,{gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const addProposer = async (DaoContract: ethers.Contract, newProposerAddress: string) => {
-        const tx = await DaoContract.grantRole(PROPOSER_ROLE, newProposerAddress)
+        const tx = await DaoContract.grantRole(PROPOSER_ROLE, newProposerAddress,{gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const removeProposer = async (DaoContract: ethers.Contract, newProposerAddress: string) => {
-        const tx = await DaoContract.revokeRole(PROPOSER_ROLE, newProposerAddress)
+        const tx = await DaoContract.revokeRole(PROPOSER_ROLE, newProposerAddress,{gasLimit: 10000000000})
         return await tx.wait()
     }
 

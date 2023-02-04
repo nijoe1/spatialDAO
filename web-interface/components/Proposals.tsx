@@ -68,11 +68,14 @@ export default function Proposals() {
                         const groupId = router.query.groupId
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
                         const isProposedCommp = await isCommpProposed(contract, commP!)
-                        const isProposer = await checkProposerRole(contract, address.toLowerCase())
+                        const isProposer = await checkProposerRole(contract, address)
                         var array = await getCommpProposal(contract,commP!)
                         var commPID = parseInt(array.proposalID._hex, 16).toString()
                         console.log(isProposedCommp)
-                        if (!isProposedCommp && isProposer) {
+                        console.log(isProposer)
+                        // if (!isProposedCommp && isProposer) {
+                        if (!isProposedCommp) {
+
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
                                 let fileSize: number
