@@ -35,7 +35,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
             details: '',
             numberOfBounties: 0,
             bountyReward: 0,
-            endDateTime: ''
+            numberOfDealDays: ''
         },
         validate: {
             numberOfBounties: (value) => value <= 0 ? "Number of bounties is at least 1" : null,
@@ -72,9 +72,8 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                                 return
                             }
                         })
-                        const durationInBlocks = dayjs(values.endDateTime).diff(dayjs(new Date()), 'day') * 24 * 60 * 2
                         try {
-                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, durationInBlocks, parseInt(fileSize))
+                            await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.numberOfDealDays, parseInt(fileSize))
                             const res = await orbis.createPost(
                                 {
                                     context: `${groupId}`,
@@ -97,7 +96,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                                         },
                                         {
                                             slug: "endDateTime",
-                                            title: values.endDateTime.toString()
+                                            title: values.numberOfDealDays.toString()
                                         }
                                     ],
                                 }
@@ -139,16 +138,17 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             required
                             label="Bounty Reward"
                             placeholder="Enter the bounty reward"
+                            precision={2}
                             my={"sm"}
                             {...form.getInputProps('bountyReward')} />
-                        <DatePicker
-                            placeholder={"End date"}
-                            minDate={dayjs(new Date()).toDate()}
+                        <NumberInput
                             required
+                            label="Number of Deal Days"
+                            description={"The number of days the bounty will be active for"}
+                            placeholder="Enter the number of deal days"
+                            min={160}
                             my={"sm"}
-                            label={"Choose when to end the bounty"}
-                            {...form.getInputProps('endDateTime')}
-                        />
+                            {...form.getInputProps('numberOfDealDays')} />
                         <Button color={"pink"} my={"sm"} type={"submit"}>
                             Submit bounty
                         </Button>

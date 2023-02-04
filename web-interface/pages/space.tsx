@@ -154,7 +154,7 @@ export default function Space() {
 
     let renderNfts
     if(proposalPosts.length > 0) {
-        console.log("Proposal posts: ", proposalPosts)
+        // console.log("Proposal posts: ", proposalPosts)
         renderNfts = proposalPosts.map((post: any, index: number) => {
             const commP = post.content.tags[1].title
             const filesize = post.content?.tags[2]?.title
@@ -166,8 +166,9 @@ export default function Space() {
 
     let renderBounties
     if(bountyPosts.length > 0) {
-        console.log("Bounty posts: ", bountyPosts)
+        // console.log("Bounty posts: ", bountyPosts)
         renderBounties = bountyPosts.map((post: any, index: number) => {
+            // console.log("Bounty post: ", post)
             const commP = post.content.tags[1].title
             const bountyReward = post.content?.tags[2]?.title
             const numberOfBounties = post.content?.tags[3]?.title

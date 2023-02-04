@@ -16,7 +16,7 @@ interface NftCardProps {
 import {
     Card,
     Text,
-    createStyles, Button, Modal, Center, Badge,
+    createStyles, Button, Modal, Center, Badge, Input, NumberInput,
 } from '@mantine/core';
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
@@ -92,10 +92,9 @@ export default function BountyCard({
     const [buttons, setButtons] = useState(<Button color={"yellow"} fullWidth>Fetching information</Button>)
     const [badgeText, setBadgeText] = useState("Fetching data")
     const [badgeColor, setBadgeColor] = useState("yellow")
+    let amt: number | undefined
 
     const time = dayjs.unix(timestamp)
-    const ending = Math.floor(new Date(endDate).getTime() / 1000)
-    const end = dayjs.unix(ending)
     useEffect(() => {
         if (commP && router.query.address && signer) {
             getState()
@@ -106,67 +105,78 @@ export default function BountyCard({
         const commP_ = await getCommpProposal(contract, commP)
         const res = await getCommpBounty(contract, commP)
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
-        const isValid = await isValidProposedFile(contract, commP)
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
-        console.log("isBountyCreated", isBounty)
-        console.log("isValidProposedFile", isValid)
-        console.log("isBountyEnabled", isBountyEnabled_)
+        const remainingTokensHex = parseInt(res.requiredTokens._hex, 16).toString()
+        const remainingTokens = ethers.utils.formatEther(remainingTokensHex)
         if (!isBountyEnabled_ && isBounty) {
             setButtons(
-                <Button fullWidth color={"green"} onClick={async () => {
-                    showNotification({
-                        id: "bounty",
-                        title: "Creating bounty",
-                        message: "Please wait",
-                        loading: true,
-                        disallowClose: true,
-                        autoClose: false,
-                    })
-                    orbis.isConnected().then((res: any) => {
-                        if (res === false){
-                            alert("Please connect to orbis first")
+                <>
+                    {/*take amount from user to fund bounty*/}
+                    <NumberInput
+                        placeholder={"Amount to fund"}
+                        precision={2}
+                        value={amt}
+                        onChange={(e) => {
+                            amt = e!
+                        }}
+                    />
+                    <Button fullWidth color={"green"} onClick={async () => {
+                        showNotification({
+                            id: "bounty",
+                            title: "Creating bounty",
+                            message: "Please wait",
+                            loading: true,
+                            disallowClose: true,
+                            autoClose: false,
+                        })
+                        orbis.isConnected().then((res: any) => {
+                            if (res === false) {
+                                alert("Please connect to orbis first")
+                                updateNotification({
+                                    title: "Bounty Funding Failed",
+                                    message: "Please connect to orbis first",
+                                    loading: false,
+                                    disallowClose: false,
+                                    autoClose: true,
+                                    color: "red",
+                                    id: "bounty"
+                                })
+                                return
+                            }
+                        })
+                        try {
+                            if (!amt)
+                                throw new Error("No amount specified")
+                            console.log(commP, amt)
+                            await fundBounty(contract, commP, amt!.toString())
+                            await orbis.createPost({
+                                context: streamId,
+                                body: "Funded bounty for " + commP
+                            })
                             updateNotification({
-                                title: "Bounty Funding Failed",
-                                message: "Please connect to orbis first",
+                                id: "bounty",
+                                title: "Success",
+                                message: "You voted for this proposal",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
-                                color: "red",
-                                id: "bounty"
                             })
-                            return
+                        } catch (e) {
+                            console.log(e)
+                            updateNotification({
+                                id: "bounty",
+                                title: "Error",
+                                message: "Something went wrong",
+                                loading: false,
+                                disallowClose: false,
+                                autoClose: true,
+                                color: "red"
+                            })
                         }
-                    })
-                    try {
-                        console.log(commP, bountyReward)
-                        await fundBounty(contract, commP, bountyReward)
-                        await orbis.createPost({
-                            context: streamId,
-                            body: "Funded bounty for " + commP
-                        })
-                        updateNotification({
-                            id: "bounty",
-                            title: "Success",
-                            message: "You voted for this proposal",
-                            loading: false,
-                            disallowClose: false,
-                            autoClose: true,
-                        })
-                    } catch (e) {
-                        console.log(e)
-                        updateNotification({
-                            id: "bounty",
-                            title: "Error",
-                            message: "Something went wrong",
-                            loading: false,
-                            disallowClose: false,
-                            autoClose: true,
-                            color: "red"
-                        })
-                    }
-                }}>Fund Bounty</Button>)
-            setBadgeText("Ends " + end.fromNow())
-            setBadgeColor("yellow")
+                    }}>Fund Bounty</Button>
+                </>)
+            setBadgeText("Remaining tokens: " + remainingTokens)
+            setBadgeColor("orange")
         } else if (isBountyEnabled_) {
             setButtons(<Button color={"grape"} fullWidth onClick={async () => {
                 showNotification({
@@ -178,7 +188,7 @@ export default function BountyCard({
                     autoClose: false,
                 })
                 orbis.isConnected().then((res: any) => {
-                    if (res === false){
+                    if (res === false) {
                         alert("Please connect to orbis first")
                         updateNotification({
                             title: "Bounty Funding Failed",
@@ -233,7 +243,7 @@ export default function BountyCard({
     return (
         <>
             <Card withBorder radius="md" className={cx(classes.card)} m={"md"}>
-                <Card.Section p={"sm"}>
+                <Card.Section pb={0} p={"sm"}>
                     <Badge color={badgeColor}>{badgeText}</Badge>
                     <Text className={classes.title} lineClamp={4} weight={500}>
                         {commP}
@@ -245,7 +255,7 @@ export default function BountyCard({
                         {description}
                     </Text>
                 </Card.Section>
-                <Card.Section mt={"md"}>
+                <Card.Section mb={0} mt={"md"}>
                     {buttons}
                 </Card.Section>
             </Card>

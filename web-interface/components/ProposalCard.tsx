@@ -83,7 +83,8 @@ export default function ProposalCard({
         isBountyEnabled,
         vote,
         executeProposal,
-        getCommpProposal
+        getCommpProposal,
+        getCommpBounty
     } = useContract()
 
     const [modalOpen, setModalOpen] = useState(false)
@@ -103,15 +104,13 @@ export default function ProposalCard({
     const getState = async () => {
         const isEnded = await isProposalEnded(contract, commP)
         const commP_ = await getCommpProposal(contract, commP)
+        const getBounty = await getCommpBounty(contract, commP)
+        const numBounties = getBounty.numberOfBounties._hex
+        console.log("numBounties", numBounties)
         const activeState = commP_[5]
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
         const isValid = await isValidProposedFile(contract, commP)
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
-        console.log("isProposalEnded", isEnded)
-        console.log("isBountyCreated", isBounty)
-        console.log("isValidProposedFile", isValid)
-        console.log("isBountyEnabled", isBountyEnabled_)
-        console.log("activeState", activeState)
         if (isEnded === false) {
             // voting
             setButtons(
@@ -205,13 +204,14 @@ export default function ProposalCard({
             setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
             setBadgeText("Proposal Declined")
             setBadgeColor("red")
-        } else if (isEnded && isValid && !isBountyEnabled_) {
+        }  else if (isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
             setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
             setBadgeColor("green")
         } else if (!isBountyEnabled_) {
-            setButtons(<Button color={"red"} fullWidth>Bounty disabled</Button>)
-            setBadgeText("Bounty disabled")
+            setButtons(<Button color={"gray"} fullWidth>Bounty already created</Button>)
+            setBadgeText("Bounty already created")
+            setBadgeColor("gray")
         }
     }
 

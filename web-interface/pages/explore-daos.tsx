@@ -7,14 +7,23 @@ import { useAccount, useSigner } from "wagmi";
 import { GlobalContext } from "../contexts/GlobalContext";
 import {useContract} from "../hooks/useContract";
 import { useIsMounted } from '../hooks/useIsMounted';
-
+import {useRouter} from "next/router";
 
 export default function ExploreSpaces() {
   const [data, setData] = useState<any>(null)
   const { data: signer } = useSigner()
-  const { isDisconnected } = useAccount()
+  const { isDisconnected, isConnecting, isConnected } = useAccount()
   const {getDataDaos} = useContract()
   const isMounted = useIsMounted()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isDisconnected) {
+      alert("Please connect your wallet")
+      router.back()
+      return
+    }
+  }, [isConnected, isConnecting, isDisconnected])
 
   useEffect(() => {
     if(!signer) return
