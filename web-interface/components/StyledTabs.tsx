@@ -7,9 +7,9 @@ export default function StyledTabs(props: TabsProps) {
             styles={(theme) => ({
                 tab: {
                     ...theme.fn.focusStyles(),
-                    backgroundColor: theme.colorScheme === 'dark' ? "#40107a" : "#40107a",
+                    backgroundColor: theme.colorScheme === 'dark' ? "#40107a" : "#DA77F2",
                     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.white,
-                    border: `2px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[4]}`,
+                    border: `2px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : "#DA77F2"}`,
                     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
                     cursor: 'pointer',
                     fontSize: theme.fontSizes.sm,
@@ -37,7 +37,7 @@ export default function StyledTabs(props: TabsProps) {
 
                     '&[data-active]': {
                         backgroundColor: theme.colors.black,
-                        borderColor: theme.colors.indigo[7],
+                        borderColor: theme.colors.grape[4],
                         color: theme.white,
                     },
                 },

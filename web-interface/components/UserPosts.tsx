@@ -13,7 +13,6 @@ export default function UserPosts() {
     const [isDashboard, setIsDashboard] = useState(true)
     const {address} = useAccount()
     const [data, setData] = useState<any>()
-    const [selectedToken, setSelectedToken] = useState("")
     const isMounted = useIsMounted()
 
     // @ts-ignore

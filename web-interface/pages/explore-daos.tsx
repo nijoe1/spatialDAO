@@ -20,7 +20,7 @@ export default function ExploreSpaces() {
   useEffect(() => {
     if (isDisconnected) {
       alert("Please connect your wallet")
-      router.back()
+      router.push("/")
       return
     }
   }, [isConnected, isConnecting, isDisconnected])

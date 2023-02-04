@@ -117,11 +117,11 @@ export function Hero() {
 
                 <div className={classes.controls}>
                     <Button target={"_blank"}  href={"https://github.com/nijoe1/spatialDAO"} component={"a"}
-                            className={classes.control} size="lg" variant="default" color="indigo">
+                            className={classes.control} size="lg" variant="default">
                         Source Code
                     </Button>
                     <Button href={"/create-dao"} component={"a"} className={classes.control}
-                            size="lg" color={"violet"}>
+                            size="lg" color={"violet.5"}>
                         Create your DAO
                     </Button>
                 </div>

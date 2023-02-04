@@ -4,15 +4,13 @@ import {
     Group,
     Center,
     Image,
-    Burger, Title, Transition, Paper, Stack, useMantineColorScheme, useMantineTheme, Switch,
+    Burger, Title, Transition, Paper, Stack
 } from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
 import {useRouter} from "next/router";
-import {IconMoonStars, IconSun,    IconArtboard,
-    IconHammer, IconMapSearch,
-    IconMessageDots} from "@tabler/icons";
+import {IconArtboard, IconHammer, IconMapSearch, IconMessageDots} from "@tabler/icons";
 
 const HEADER_HEIGHT = 60;
 
@@ -121,9 +119,6 @@ export function HeaderSimple() {
     const [opened, {toggle, close}] = useDisclosure(false)
     const router = useRouter()
 
-    const {colorScheme, toggleColorScheme} = useMantineColorScheme();
-    const darkTheme = useMantineTheme();
-
     const items = links.map((link) => (
         <Link href={link.link} passHref={true} key={link.label} className={classes.link}>
             {link.label}
@@ -144,14 +139,6 @@ export function HeaderSimple() {
                 </Group>
                 <Group className={classes.hiddenMobile}>
                     <Group position="center" mb={15}>
-                        <Switch
-                            checked={colorScheme === 'dark'}
-                            onChange={() => toggleColorScheme()}
-                            color={"indigo"}
-                            size="lg"
-                            onLabel={<IconSun color={darkTheme.white} size={20} stroke={1.5}/>}
-                            offLabel={<IconMoonStars color={darkTheme.colors.gray[6]} size={20} stroke={1.5}/>}
-                        />
                     </Group>
                     <ConnectButton
                         accountStatus={{
@@ -167,16 +154,6 @@ export function HeaderSimple() {
                         <Paper className={classes.dropdown} withBorder style={styles}>
                             <Stack pl={"2%"} align={"flex-start"} justify={"flex-start"}>
                                 {items}
-                                <Group position="center" mb={15} px={10}>
-                                    <Switch
-                                        checked={colorScheme === 'dark'}
-                                        onChange={() => toggleColorScheme()}
-                                        size="lg"
-                                        onLabel={<IconSun color={darkTheme.white} size={20} stroke={1.5}/>}
-                                        offLabel={<IconMoonStars color={darkTheme.colors.gray[6]} size={20}
-                                                                 stroke={1.5}/>}
-                                    />
-                                </Group>
                                 <div style={{padding: 10}}>
                                     <ConnectButton showBalance={false}/>
                                 </div>

@@ -98,6 +98,14 @@ export default function Space() {
     }
 
     useEffect(() => {
+        if (isDisconnected) {
+            alert("Please connect your wallet")
+            router.push("/")
+            return
+        }
+    }, [isConnected, isConnecting, isDisconnected])
+
+    useEffect(() => {
         if (!router.isReady) return
         const {groupId , address} = router.query
         setGroupId(groupId as string)

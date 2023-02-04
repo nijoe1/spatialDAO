@@ -5,7 +5,6 @@ import '@rainbow-me/rainbowkit/styles.css';
 import {
     getDefaultWallets,
     RainbowKitProvider,
-    darkTheme
 } from '@rainbow-me/rainbowkit';
 import {
     chain,
@@ -26,8 +25,8 @@ import {Orbis} from "@orbisclub/orbis-sdk";
 import {useHotkeys, useLocalStorage} from "@mantine/hooks";
 
 let orbis = new Orbis();
-const GROUP_ID = "kjzl6cwe1jw14axp80vka5y7ca38y09datmcu4bz0tz8xzntvn9la91292wfnhb";
-const CHANNEL_ID = "kjzl6cwe1jw14b9kogz1as83u05pswa5fs4pzbejlr55f8njn108punvyyrymk5"
+const GROUP_ID = "kjzl6cwe1jw147ejay7obncpboor17bot0zlafks49juo31fgx3mt0nt7vw29vd";
+const CHANNEL_ID = "kjzl6cwe1jw14bc9pa9i4zy7w2j0t2hjnkdeuem980jay0n02vtmabtvn7jvoji"
 
 const hyperspace = {
     id: 3_141,
@@ -84,15 +83,6 @@ export default function App(props: AppProps) {
         }
     }
 
-    const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-        key: 'mantine-color-scheme',
-        defaultValue: 'dark',
-        getInitialValueInEffect: true,
-    });
-    const toggleColorScheme = (value?: ColorScheme) =>
-        setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
-    useHotkeys([['mod+J', () => toggleColorScheme()]]);
-
 
     return (
         <>
@@ -103,13 +93,12 @@ export default function App(props: AppProps) {
             </Head>
             <GlobalContext.Provider value={{user, setUser, group_id, channel_id, orbis} as any}>
                 <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider chains={chains} theme={darkTheme()}>
-                        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+                    <RainbowKitProvider chains={chains}>
                             <MantineProvider
                                 withGlobalStyles
                                 withNormalizeCSS
                                 theme={{
-                                    colorScheme,
+                                    colorScheme: "light",
                                     fontFamily: 'Helvetica, sans-serif',
                                     fontFamilyMonospace: 'Monaco, Courier, monospace',
                                     headings: { fontFamily: 'Helvetica, sans-serif' },
@@ -119,7 +108,6 @@ export default function App(props: AppProps) {
                                     <Component {...pageProps} wagmiClient={wagmiClient} />
                                 </NotificationsProvider>
                             </MantineProvider>
-                        </ColorSchemeProvider>
                     </RainbowKitProvider>
                 </WagmiConfig>
             </GlobalContext.Provider>

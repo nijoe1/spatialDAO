@@ -10,7 +10,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
     return {
         navbar: {
-            backgroundColor: "#40107a",
+            backgroundColor: "#4DABF7",
             // backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.colors.indigo[8] })
             //     .background,
             [theme.fn.smallerThan('md')]: {
@@ -57,7 +57,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
             fontWeight: 500,
 
             '&:hover': {
-                backgroundColor: "#9c5beb",
+                backgroundColor: "#228BE6",
             },
         },
 
@@ -103,7 +103,7 @@ export function NavbarSide() {
             href={item.link}
         >
             <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span style={{color: "#CED4DA"}}>{item.label}</span>
+            <span style={{color: "#E9ECEF"}}>{item.label}</span>
         </Text>
     ));
 

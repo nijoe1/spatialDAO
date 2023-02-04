@@ -4,6 +4,10 @@ import {Avatar, Text} from "@mantine/core"
 import {useClipboard} from "@mantine/hooks";
 import {showNotification} from "@mantine/notifications"
 import {useEffect, useRef} from 'react'
+import * as dayjs from "dayjs"
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export default function ChatContent(props: any) {
     const viewport = useRef<HTMLDivElement>(null)
@@ -25,7 +29,8 @@ export default function ChatContent(props: any) {
                     <div>
                         <Group>
                             {post.creator_details.profile &&
-                                <Text size={"xs"} weight={500} sx={{cursor: "pointer"}} color={"dimmed"} component={"a"} href={`/user/?address=${post.creator_details.metadata.address}`}>{post.creator_details.profile.username}</Text>}
+                                <Text size={"xs"} weight={500} sx={{cursor: "pointer"}} color={"dimmed"} component={"a"}
+                                      href={`/user/?address=${post.creator_details.metadata.address}`}>{post.creator_details.profile.username}</Text>}
                             <Badge onClick={() => {
                                 clipboard.copy(post.creator_details.metadata.address)
                                 showNotification({
@@ -34,6 +39,7 @@ export default function ChatContent(props: any) {
                                 })
                             }} size={"xs"} color={"indigo"} variant={"filled"}
                                    sx={{cursor: "pointer"}}>{post.creator_details.metadata.address.slice(0, 4) + "-" + post.creator_details.metadata.address.slice(-4)}</Badge>
+                            <Text size={"xs"} color={"dimmed"}>{dayjs.unix(post.timestamp).fromNow()}</Text>
                         </Group>
                         <Text sx={{maxWidth: "100%"}}>{post.content.body}</Text>
                     </div>
