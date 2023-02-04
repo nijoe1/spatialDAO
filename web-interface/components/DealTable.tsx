@@ -15,7 +15,7 @@ export default function DealTable(props: { deals: number[] }) {
         deals.forEach((dealId) => {
             // @ts-ignore
             const data = stateMarketDeals[dealId]
-            const remainDays = Math.floor(((new Date(2023, 0, 20).getSeconds() + (data.Proposal.EndEpoch * 24 * 60 * 2)) - new Date().getSeconds()) / (24 * 60 * 60))
+            const remainDays = Math.floor(((new Date("2023-01-20").getSeconds() + (data.Proposal.EndEpoch * 30)) - new Date().getSeconds()) / (24 * 60 * 60))
             dealData.push({
                 dealId: dealId,
                 clientId: data.Proposal.Client,

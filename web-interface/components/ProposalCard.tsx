@@ -86,7 +86,8 @@ export default function ProposalCard({
         vote,
         executeProposal,
         getCommpProposal,
-        getCommpBounty
+        getCommpBounty,
+        getCommpDeals
     } = useContract()
 
     const [modalOpen, setModalOpen] = useState(false)
@@ -107,6 +108,7 @@ export default function ProposalCard({
         const isEnded = await isProposalEnded(contract, commP)
         const commP_ = await getCommpProposal(contract, commP)
         const getBounty = await getCommpBounty(contract, commP)
+        const commpDeals = await getCommpDeals(contract, commP)
         const numBounties = getBounty.numberOfBounties._hex
         const activeState = commP_[5]
         const isValid = await isValidProposedFile(contract, commP)
@@ -211,6 +213,10 @@ export default function ProposalCard({
             setButtons(<Button color={"red"} fullWidth>Proposal Declined</Button>)
             setBadgeText("Proposal Declined")
             setBadgeColor("red")
+        } else if (isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00" && commpDeals.length > 0) {
+            setButtons(<Button color={"pink.3"} fullWidth>Commp is already persisted on the network</Button>)
+            setBadgeText("Proposal Already Persisted")
+            setBadgeColor("pink")
         }  else if (isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
             setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
