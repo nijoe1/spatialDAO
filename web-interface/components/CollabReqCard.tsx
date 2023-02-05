@@ -1,4 +1,4 @@
-import {ActionIcon, Avatar, Badge, Group, Paper, Stack, Text} from "@mantine/core";
+import {ActionIcon, Avatar, Badge, CopyButton, Group, Paper, Stack, Text, Tooltip} from "@mantine/core";
 import makeBlockie from "ethereum-blockies-base64"
 import * as dayjs from "dayjs"
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -31,9 +31,15 @@ export default function PostCard(props: any) {
                             <Text size={"sm"}>
                                 {props.post?.creator_details?.profile?.username}
                             </Text>
-                            <Badge color={"teal"} variant={"outline"} size={"sm"}>
-                                {props.post.creator_details?.metadata?.ensName || props.post.creator_details?.metadata?.address.slice(0, 4) + "..." + props.post.creator_details?.metadata?.address.slice(-4)}
-                            </Badge>
+                            <CopyButton value={props.post.creator_details?.metadata?.address} timeout={2000}>
+                                {({ copied, copy }) => (
+                                    <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                                        <Badge onClick={copy} color={"teal"} variant={"outline"} size={"sm"}>
+                                            {props.post.creator_details?.metadata?.ensName || props.post.creator_details?.metadata?.address.slice(0, 4) + "..." + props.post.creator_details?.metadata?.address.slice(-4)}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
+                            </CopyButton>
                         </div>
                     </Group>
                     <Text size={"xs"} color={"dimmed"}>

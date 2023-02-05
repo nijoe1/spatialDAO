@@ -182,7 +182,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             min={160}
                             my={"sm"}
                             {...form.getInputProps('numberOfDealDays')} />
-                        <Button color={"pink"} my={"sm"} type={"submit"}>
+                        <Button variant={"gradient"} gradient={{from: "pink", to: "blue", deg: 110}} my={"sm"} type={"submit"}>
                             Submit bounty
                         </Button>
                     </form>
