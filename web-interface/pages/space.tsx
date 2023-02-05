@@ -231,12 +231,12 @@ export default function Space() {
             {user && isGroupMember &&
                 <Button variant={"light"} onClick={handleLeave} color={"indigo"} sx={{height: "-webkit-fill-available"}}
                         className={classes.btn}>
-                    unfollow
+                    Unfollow
                 </Button>}
             {user && !isGroupMember &&
                 <Button variant={"light"} onClick={handleJoin} color={"indigo"}
                         className={classes.btn}>
-                    follow
+                    Follow
                 </Button>}
             <Button variant={"subtle"} component={"a"} href={`${orbisGroup}`+"/"+`${groupId}`} target={"_blank"}
                     color={"indigo"} className={classes.btn}>

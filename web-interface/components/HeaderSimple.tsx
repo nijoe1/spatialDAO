@@ -74,7 +74,7 @@ const useStyles = createStyles((theme) => ({
         },
 
         ...theme.fn.hover({
-            backgroundColor: theme.colors.pink[0],
+            backgroundColor: theme.colors.pink[5],
         }),
     },
 

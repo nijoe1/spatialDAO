@@ -123,6 +123,7 @@ export default function BountyCard({
         const isBountyEnabled_ = await isBountyEnabled(contract, commP)
         const remainingTokensHex = parseInt(res.requiredTokens._hex, 16)
         const tokensDonated = parseInt(res.donatedTokens._hex, 16)
+        const numberOfBounties = parseInt(res.numberOfBounties._hex, 16)
 
         const commPDeals = await getCommpDeals(contract, commP)
         setDeals(commPDeals)
@@ -131,7 +132,6 @@ export default function BountyCard({
         if (!isBountyEnabled_ && isBounty) {
             setButtons(
                 <>
-                    {/*take amount from user to fund bounty*/}
                     <NumberInput
                         placeholder={"Amount to fund"}
                         precision={2}
@@ -166,7 +166,9 @@ export default function BountyCard({
                         })
                         try {
                             if (!amt)
-                                throw new Error("No amount specified")
+                                throw "No amount specified"
+                            if(amt > parseInt(remainingTokens))
+                                throw "Amount exceeds remaining tokens"
                             console.log(commP, amt)
                             await fundBounty(contract, commP, amt!.toString())
                             await orbis.createPost({
@@ -181,12 +183,12 @@ export default function BountyCard({
                                 disallowClose: false,
                                 autoClose: true,
                             })
-                        } catch (e) {
+                        } catch (e: any) {
                             console.log(e)
                             updateNotification({
                                 id: "bounty",
                                 title: "Error",
-                                message: "Something went wrong",
+                                message: e,
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
@@ -274,8 +276,8 @@ export default function BountyCard({
                     }}>Claim Bounty</Button>
                 </>
             )
-            setBadgeText("Waiting for execution")
-            setBadgeColor("purple")
+            setBadgeText("Number of bounties: " + numberOfBounties)
+            setBadgeColor("violet")
         } else if (!isBountyEnabled_ && !isBounty) {
             setButtons(<Button color={"lime"} fullWidth>Bounty Fully Claimed</Button>)
             setBadgeText("Bounty Fully Claimed")

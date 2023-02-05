@@ -16,7 +16,7 @@ export default function Proposals() {
     const {createProposal, isCommpProposed, getCommpProposal, checkProposerRole} = useContract()
     const router = useRouter()
     const {data: signer} = useSigner()
-    const { address } = useAccount()
+    const { address: userWalletAddress } = useAccount()
     // @ts-ignore
     const {orbis} = useContext(GlobalContext)
 
@@ -68,14 +68,12 @@ export default function Proposals() {
                         const groupId = router.query.groupId
                         const contract = new ethers.Contract(address, DAO_abi, signer!)
                         const isProposedCommp = await isCommpProposed(contract, commP!)
-                        const isProposer = await checkProposerRole(contract, address)
+                        const isProposer = await checkProposerRole(contract, userWalletAddress!)
                         var array = await getCommpProposal(contract,commP!)
                         var commPID = parseInt(array.proposalID._hex, 16).toString()
                         console.log(isProposedCommp)
                         console.log(isProposer)
-                        // if (!isProposedCommp && isProposer) {
-                        if (!isProposedCommp) {
-
+                        if (!isProposedCommp && isProposer) {
                             try {
                                 await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
                                 let fileSize: number

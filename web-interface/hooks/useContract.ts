@@ -49,7 +49,7 @@ export const useContract = () => {
     const createProposal = async (DaoContract: ethers.Contract, commP: string, proposalMetadata: string, durationInBlocks: number) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, durationInBlocks, {gasLimit: 10000000000})
+        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, durationInBlocks)
         return tx.wait()
     }
 

@@ -98,7 +98,7 @@ export default function App(props: AppProps) {
                                 withGlobalStyles
                                 withNormalizeCSS
                                 theme={{
-                                    colorScheme: "light",
+                                    colorScheme: "dark",
                                     fontFamily: 'Helvetica, sans-serif',
                                     fontFamilyMonospace: 'Monaco, Courier, monospace',
                                     headings: { fontFamily: 'Helvetica, sans-serif' },

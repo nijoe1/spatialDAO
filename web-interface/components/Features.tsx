@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
         width: 160,
         top: 0,
         left: 0,
-        backgroundColor: theme.colors.violet[0],
+        backgroundColor: theme.colors.violet[5],
         zIndex: 1,
     },
 
@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     icon: {
-        color: theme.colors.violet[3]
+        color: theme.colors.violet[7]
     },
 
     title: {

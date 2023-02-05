@@ -4,17 +4,15 @@ import {useContract} from '../hooks/useContract';
 import {useRouter} from 'next/router';
 import {GlobalContext} from "../contexts/GlobalContext";
 import {useContext} from "react";
-import {BigNumber, ethers} from "ethers";
+import {ethers} from "ethers";
 import {DAO_abi} from "../constants"
 import {useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
-import dayjs from "dayjs";
-import {DatePicker} from "@mantine/dates";
 
 interface BountyProps {
     commP: string
     fileSize: string
-    streamId: string
+    streamId?: string
 }
 
 export default function Bounty({commP, fileSize, streamId}: BountyProps) {
@@ -57,24 +55,24 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             disallowClose: true,
                         })
                         console.log(values)
-                        orbis.isConnected().then((res: any) => {
-                            if (res === false){
-                                alert("Please connect to orbis first")
-                                updateNotification({
-                                    title: "Bounty Creation Failed",
-                                    message: "Please connect to orbis first",
-                                    loading: false,
-                                    disallowClose: false,
-                                    autoClose: true,
-                                    color: "red",
-                                    id: "proposal"
-                                })
-                                return
-                            }
-                        })
                         try {
+                            orbis.isConnected().then((res: any) => {
+                                if (res === false){
+                                    alert("Please connect to orbis first")
+                                    updateNotification({
+                                        title: "Bounty Creation Failed",
+                                        message: "Please connect to orbis first",
+                                        loading: false,
+                                        disallowClose: false,
+                                        autoClose: true,
+                                        color: "red",
+                                        id: "proposal"
+                                    })
+                                    throw "Please connect to orbis first"
+                                }
+                            })
                             await createBounty(contract, commP, values.numberOfBounties, values.bountyReward, values.numberOfDealDays, parseInt(fileSize))
-                            const res = await orbis.createPost(
+                            await orbis.createPost(
                                 {
                                     context: `${groupId}`,
                                     body: `${form.values.details}`,
@@ -97,6 +95,37 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                                         {
                                             slug: "endDateTime",
                                             title: values.numberOfDealDays.toString()
+                                        }
+                                    ],
+                                }
+                            )
+                            await orbis.createPost(
+                                {
+                                    context: "kjzl6cwe1jw14bfjlshsudnd99ozw3zz7p2buayz9x8lmyc5blj6wiiuifcday1",
+                                    body: `${form.values.details}`,
+                                    tags: [{
+                                        slug: "spatialDaoAllBounties",
+                                        title: "spatialDAOBounty"
+                                    },
+                                        {
+                                            slug: "commpValue",
+                                            title: commP
+                                        },
+                                        {
+                                            slug: "bountyReward",
+                                            title: values.bountyReward.toString()
+                                        },
+                                        {
+                                            slug: "numberOfBounties",
+                                            title: values.numberOfBounties.toString()
+                                        },
+                                        {
+                                            slug: "endDateTime",
+                                            title: values.numberOfDealDays.toString()
+                                        },
+                                        {
+                                            slug: "address",
+                                            title: address.toLowerCase()
                                         }
                                     ],
                                 }
