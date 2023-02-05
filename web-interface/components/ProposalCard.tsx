@@ -112,7 +112,7 @@ export default function ProposalCard({
         const numBounties = getBounty.numberOfBounties._hex
         const activeState = commP_[5]
         const isValid = await isValidProposedFile(contract, commP)
-        const isBountyEnabled_ = await isBountyEnabled(contract, commP)
+        const isBountyEnabled_ = getBounty.enabled
         if (isEnded === false) {
             const isVoter = await checkVoterRole(contract, userWalletAddress!.toLowerCase())
             const isProposer = await checkProposerRole(contract, userWalletAddress!.toLowerCase())

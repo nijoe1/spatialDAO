@@ -2,45 +2,44 @@ import { Button, Container, Grid, Skeleton, Text, Title } from "@mantine/core";
 import Head from "next/head";
 import { Layout } from "../components/Layout";
 import { useContext, useEffect, useState } from "react";
-import SpaceCard from "../components/SpaceCard";
+import SpaceCard from "../components/daoCard";
 import { useAccount, useSigner } from "wagmi";
 import { GlobalContext } from "../contexts/GlobalContext";
-import {useContract} from "../hooks/useContract";
-import { useIsMounted } from '../hooks/useIsMounted';
-import {useRouter} from "next/router";
+import { useContract } from "../hooks/useContract";
+import { useIsMounted } from "../hooks/useIsMounted";
+import { useRouter } from "next/router";
 
 export default function ExploreSpaces() {
-  const [data, setData] = useState<any>(null)
-  const { data: signer } = useSigner()
-  const { isDisconnected, isConnecting, isConnected } = useAccount()
-  const {getDataDaos} = useContract()
-  const isMounted = useIsMounted()
-  const router = useRouter()
+  const [data, setData] = useState<any>(null);
+  const { data: signer } = useSigner();
+  const { isDisconnected, isConnecting, isConnected } = useAccount();
+  const { getDataDaos } = useContract();
+  const isMounted = useIsMounted();
+  const router = useRouter();
 
   useEffect(() => {
     if (isDisconnected) {
-      alert("Please connect your wallet")
-      router.push("/")
-      return
+      alert("Please connect your wallet");
+      router.push("/");
+      return;
     }
-  }, [isConnected, isConnecting, isDisconnected])
+  }, [isConnected, isConnecting, isDisconnected]);
 
   useEffect(() => {
-    if(!signer) return
-    console.log(isMounted)
-    if(!isMounted) return
-    getDAOs()
-  }, [isMounted,signer]);
+    if (!signer) return;
+    console.log(isMounted);
+    if (!isMounted) return;
+    getDAOs();
+  }, [isMounted, signer]);
 
   // @ts-ignore
   const { orbis, user, setUser } = useContext(GlobalContext);
 
-
-  const getDAOs =async () => {
-    var res = await getDataDaos()
-    console.log(res)
-    setData(res)
-  }
+  const getDAOs = async () => {
+    var res = await getDataDaos();
+    console.log(res);
+    setData(res);
+  };
   const logout = async () => {
     if (isDisconnected) {
       let res = await orbis.isConnected();
@@ -61,11 +60,7 @@ export default function ExploreSpaces() {
     renderSpaces = data?.map((nft: any, index: number) => {
       return (
         <Grid.Col key={index} lg={4} md={6}>
-          <SpaceCard
-            title={nft[1]}
-            address={nft[0]}
-            groupId={nft[2]}
-          />
+          <SpaceCard title={nft[1]} address={nft[0]} groupId={nft[2]} />
         </Grid.Col>
       );
     });
@@ -85,7 +80,7 @@ export default function ExploreSpaces() {
   return (
     <>
       <Head>
-        <title>Explore DataDAOa - spatialDAO</title>
+        <title>Explore DataDAOs - spatialDAO</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

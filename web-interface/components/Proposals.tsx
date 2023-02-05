@@ -75,7 +75,7 @@ export default function Proposals() {
                         console.log(isProposer)
                         if (!isProposedCommp && isProposer) {
                             try {
-                                await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", durationInBlocks)
+                                await createProposal(contract, commP!, "baga6ea4seaqhzv2fywhelzail4apq4xnlji6zty2ooespk2lnktolg5lse7qgii", 5)
                                 let fileSize: number
                                 // @ts-ignore
                                 const fData = stateMarketDeals[values.proposalId];

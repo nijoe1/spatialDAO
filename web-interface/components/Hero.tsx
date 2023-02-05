@@ -1,4 +1,4 @@
-import {createStyles, Title, Text, Button, Container} from '@mantine/core';
+import {createStyles, Title, Text, Button, Container, Center} from '@mantine/core';
 import {Dots} from './Dots';
 import Link from "next/link";
 
@@ -94,16 +94,17 @@ export function Hero() {
     const {classes} = useStyles();
 
     return (
+        <Center>
         <Container className={classes.wrapper} size={1400}>
             <Dots className={classes.dots} style={{left: 0, top: 0}}/>
             <Dots className={classes.dots} style={{left: 60, top: 0}}/>
-            <Dots className={classes.dots} style={{left: 0, top: 140}}/>
-            <Dots className={classes.dots} style={{right: 0, top: 60}}/>
+            <Dots className={classes.dots} style={{right: 60, top: 0}}/>
+            <Dots className={classes.dots} style={{right: 0, top: 0}}/>
 
             <div className={classes.inner}>
                 <Title className={classes.title}>
                     Create{' '}
-                    <Text component="span" className={classes.highlight} inherit>
+                    <Text component="span" color={"violet.5"} inherit>
                         & Monetize 
                     </Text>{' '}
                     your dataDAO
@@ -127,5 +128,6 @@ export function Hero() {
                 </div>
             </div>
         </Container>
+        </Center>
     );
 }
