@@ -3,14 +3,13 @@ import {useContract} from "../hooks/useContract";
 interface NftCardProps {
     title: string;
     description?: string;
-    tokenId: string;
-    numBounties: string;
     spaceName?: string;
     image?: any;
     setModalOpen?: any;
     streamId: string
     timestamp: number
-    endDate: string
+    daoAddress?: string,
+    query?: string
 }
 
 import {
@@ -78,9 +77,8 @@ const useStyles = createStyles((theme) => ({
 
 export default function BountyCard({
                                        title: commP,
-                                       tokenId: bountyReward,
-                                       streamId, numBounties,
-                                       description, timestamp, endDate
+                                       streamId, query,
+                                       description, timestamp, daoAddress
                                    }: NftCardProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof NftCardProps>) {
     const {classes, cx, theme} = useStyles();
     const {data: signer} = useSigner()
@@ -89,8 +87,10 @@ export default function BountyCard({
     const {orbis} = useContext(GlobalContext)
 
     let address = ""
-    if (typeof router.query.address === "string")
-        address = router.query.address
+    if(router.query.address)
+        address = router.query.address as string
+    else
+        address = daoAddress as string
     const contract = new ethers.Contract(address, DAO_abi, signer!)
     const {
         getCommpBounty,
@@ -107,14 +107,23 @@ export default function BountyCard({
     const [badgeColor, setBadgeColor] = useState("yellow")
     const [deals, setDeals] = useState<number[]>()
     const [modalOpen, setModalOpen] = useState(false)
+    const [name, setName] = useState<string | undefined>()
+    const [link, setLink] = useState<string | undefined>()
+
     let amt: number | undefined
 
     const time = dayjs.unix(timestamp)
     useEffect(() => {
-        if (commP && router.query.address && signer) {
+        if ( signer) {
             getState()
         }
     }, [commP, router.query.address, signer])
+
+    if(query){
+        const parsedQuery = JSON.parse(query)
+        setName(parsedQuery.id)
+        setLink(`/space/?id=${parsedQuery.id}&address=${parsedQuery.address}&groupId=${parsedQuery.groupId}`)
+    }
 
     const getState = async () => {
         const commP_ = await getCommpProposal(contract, commP)
@@ -322,9 +331,12 @@ export default function BountyCard({
                     <Text size="xs" color="dimmed" lineClamp={4}>
                         {time.fromNow()}
                     </Text>
-                    <Text size="sm" color="dimmed" lineClamp={4}>
+                    <Text size="md" lineClamp={4}>
                         {description}
                     </Text>
+                    {name && <Text size={"sm"} color={"dimmed"} component={"a"} href={link}>
+                        {name}
+                    </Text>}
                 </Card.Section>
                 <Card.Section mt={"md"}>
                     {buttons}

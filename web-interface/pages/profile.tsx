@@ -3,7 +3,19 @@ import {Layout} from "../components/Layout";
 import {useAccount} from "wagmi";
 import {useContext, useEffect, useState} from "react";
 import ProposalCard from "../components/ProposalCard"
-import {Button, Center, Container, createStyles, Grid, Modal, Skeleton, Tabs, Text, Title} from "@mantine/core";
+import {
+    Blockquote,
+    Button,
+    Center,
+    Container,
+    createStyles,
+    Grid,
+    Modal,
+    Skeleton,
+    Tabs,
+    Text,
+    Title
+} from "@mantine/core";
 import {UpdateProfile} from "../components/UpdateProfile";
 import {GlobalContext} from "../contexts/GlobalContext";
 import CreatorCard from "../components/CreatorCard";
@@ -135,25 +147,30 @@ export default function MyNft() {
                                                 onClick={() => setIsProfileModalOpen(true)}>
                                             Update Your Profile
                                         </Button>
-                                        <Button color={"indigo"} variant={"light"} sx={{height: "-webkit-fill-available"}}
+                                        <Button color={"indigo"} variant={"light"}
+                                                sx={{height: "-webkit-fill-available"}}
                                                 onClick={() => window.open("https://passport.gitcoin.co/", "_blank")}>
                                             Issue Gitcoin VC
                                         </Button>
                                     </Button.Group>
                                 </Grid.Col>
                             </Grid>
+                            <Blockquote>
+                                {user?.profile?.description}
+                            </Blockquote>
                             <StyledTabs defaultValue={"chat"}>
                                 <Center>
                                     <Tabs.List>
-                                        <Tabs.Tab value={"chat"} icon={<IconMessageChatbot size={16}/>}>Your Posts</Tabs.Tab>
+                                        <Tabs.Tab value={"chat"} icon={<IconMessageChatbot size={16}/>}>Your
+                                            Posts</Tabs.Tab>
                                         <Tabs.Tab value={"vcs"} icon={<IconCreditCard size={16}/>}>Your VCs</Tabs.Tab>
                                     </Tabs.List>
                                 </Center>
                                 <Tabs.Panel value={"chat"}>
-                                    <UserPosts />
+                                    <UserPosts/>
                                 </Tabs.Panel>
                                 <Tabs.Panel value={"vcs"}>
-                                    <UserVcs />
+                                    <UserVcs/>
                                 </Tabs.Panel>
                             </StyledTabs>
                         </Container>}

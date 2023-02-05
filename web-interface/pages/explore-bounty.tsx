@@ -7,6 +7,7 @@ import { useAccount, useSigner } from "wagmi";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { useIsMounted } from '../hooks/useIsMounted';
 import {useRouter} from "next/router";
+import BountyCard from "../components/BountyCard";
 
 export default function ExploreSpaces() {
     const [data, setData] = useState<any>(null)
@@ -35,8 +36,7 @@ export default function ExploreSpaces() {
 
     const getBounties = async () => {
         const res = await orbis.getPosts({context: "kjzl6cwe1jw14bfjlshsudnd99ozw3zz7p2buayz9x8lmyc5blj6wiiuifcday1", tag: "spatialDaoAllBounties"})
-        console.log(res)
-        setData(res)
+        setData(res.data)
     }
     const logout = async () => {
         if (isDisconnected) {
@@ -55,14 +55,11 @@ export default function ExploreSpaces() {
 
     let renderBounties;
     if (data?.length > 0) {
-        renderBounties = data?.map((nft: any, index: number) => {
+        renderBounties = data?.map((bounty: any, index: number) => {
+            console.log(bounty)
             return (
                 <Grid.Col key={index} lg={4} md={6}>
-                    <SpaceCard
-                        title={nft[1]}
-                        address={nft[0]}
-                        groupId={nft[2]}
-                    />
+                    <BountyCard query={bounty?.content?.tags[6]?.title} daoAddress={bounty.content.tags[5].title} streamId={bounty.streamId} title={bounty.content.tags[1].title} description={bounty.content.body} timestamp={bounty.timestamp} />
                 </Grid.Col>
             );
         });

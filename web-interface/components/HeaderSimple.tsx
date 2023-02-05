@@ -74,7 +74,7 @@ const useStyles = createStyles((theme) => ({
         },
 
         ...theme.fn.hover({
-            backgroundColor: theme.colors.pink[5],
+            backgroundImage: theme.fn.gradient({from: "pink", to: "blue", deg: 90}),
         }),
     },
 
@@ -137,10 +137,9 @@ const useStyles = createStyles((theme) => ({
 const links = [
     { link: '/create-dao', label: 'Create DataDAO', icon: IconHammer },
     { link: '/explore-daos', label: "Explore DAOs", icon: IconMapSearch },
-    { link: '/Profile', label: 'Profile', icon: IconArtboard },
+    { link: '/explore-bounty', label: 'Explore Bounties', icon: IconMessageDots},
+    { link: '/profile', label: 'Profile', icon: IconArtboard },
     { link: '/discussions', label: 'SpatialDAO Chat', icon: IconMessageDots },
-    
-
 ]
 
 

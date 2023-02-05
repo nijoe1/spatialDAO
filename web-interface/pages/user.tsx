@@ -2,7 +2,19 @@ import Head from 'next/head'
 import {Layout} from "../components/Layout";
 import {useContext, useEffect, useState} from "react";
 import ProposalCard from "../components/ProposalCard"
-import {Button, Center, Container, createStyles, Grid, Skeleton, Stack, Tabs, Text, Title} from "@mantine/core";
+import {
+    Blockquote,
+    Button,
+    Center,
+    Container,
+    createStyles,
+    Grid,
+    Skeleton,
+    Stack,
+    Tabs,
+    Text,
+    Title
+} from "@mantine/core";
 import {GlobalContext} from "../contexts/GlobalContext";
 import CreatorCard from "../components/CreatorCard";
 import {useRouter} from "next/router";
@@ -45,12 +57,12 @@ const useStyles = createStyles((theme) => ({
 
 export default function User() {
     const {classes} = useStyles();
-    const [nfts, setNfts] = useState<Array<any>>()
     const {address: guestAddress, isDisconnected} = useAccount()
     const [isFollowing, setIsFollowing] = useState(false)
     const [username, setUsername] = useState("User")
     const [userDid, setUserDid] = useState("")
     const [userAddress, setUserAddress] = useState("")
+    const [userDescription, setUserDescription] = useState("")
     const mounted = useIsMounted()
     const router = useRouter()
     const [renderUser, setUserRender] = useState<any>(<>
@@ -117,6 +129,7 @@ export default function User() {
         } else {
             setUserRender(<CreatorCard email={address} image={data?.details?.profile?.pfp} name={data?.username}/>)
             setUsername(data?.username || "User")
+            setUserDescription(data?.details?.profile?.description || "")
         }
     }
 
@@ -160,7 +173,6 @@ export default function User() {
             disallowClose: true,
             autoClose: false
         })
-        console.log(userDid)
         await connect()
         const {data, error} = await orbis.getConversations({
             did: userDid,
@@ -202,6 +214,7 @@ export default function User() {
             })
         }
     }
+
     useEffect(() => {
         if (!mounted) return
         if (router.query.address) {
@@ -241,6 +254,7 @@ export default function User() {
                                 </Button.Group>
                             </Grid.Col>
                         </Grid>
+                        <Blockquote>{userDescription}</Blockquote>
                         <Stack>
                             <StyledTabs defaultValue={"chat"}>
                                 <Center>

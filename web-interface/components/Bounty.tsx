@@ -126,6 +126,10 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                                         {
                                             slug: "address",
                                             title: address.toLowerCase()
+                                        },
+                                        {
+                                            slug: "query",
+                                            title: JSON.stringify(router.query)
                                         }
                                     ],
                                 }

@@ -1,4 +1,16 @@
-import {Button, Center, Container, createStyles, Grid, Skeleton, Stack, Tabs, Text, Title} from "@mantine/core";
+import {
+    Blockquote,
+    Button,
+    Center,
+    Container,
+    createStyles,
+    Grid,
+    Skeleton,
+    Stack,
+    Tabs,
+    Text,
+    Title
+} from "@mantine/core";
 import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useRouter} from "next/router";
@@ -173,14 +185,9 @@ export default function Space() {
 
     let renderBounties
     if(bountyPosts.length > 0) {
-        // console.log("Bounty posts: ", bountyPosts)
         renderBounties = bountyPosts.map((post: any, index: number) => {
-            // console.log("Bounty post: ", post)
             const commP = post.content.tags[1].title
-            const bountyReward = post.content?.tags[2]?.title
-            const numberOfBounties = post.content?.tags[3]?.title
-            const endDate = post.content?.tags[4]?.title
-            return <BountyCard key={index + 9999} streamId={post.streamId} numBounties={numberOfBounties} timestamp={post.timestamp} endDate={endDate} title={commP} tokenId={bountyReward} description={post.content.body} />
+            return <BountyCard key={index + 9999} streamId={post.streamId} timestamp={post.timestamp} title={commP} description={post.content.body} />
         })
     }
     
@@ -270,7 +277,7 @@ export default function Space() {
                         </Grid>
                     </Stack>}
 
-                    <Text m={"xl"} mb={"md"}>{groupDesc}</Text>
+                    <Blockquote>{groupDesc}</Blockquote>
                     <Stack>
                         <StyledTabs defaultValue={"nfts"}>
                             <Center>

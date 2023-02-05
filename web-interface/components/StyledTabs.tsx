@@ -37,7 +37,7 @@ export default function StyledTabs(props: TabsProps) {
 
                     '&[data-active]': {
                         backgroundColor: theme.colors.black,
-                        borderColor: theme.colors.grape[4],
+                        borderColor: theme.colors.violet[4],
                         color: theme.white,
                     },
                 },

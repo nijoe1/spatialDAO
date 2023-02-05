@@ -1,6 +1,5 @@
 import { HeaderSimple } from "./HeaderSimple"
 import { AppShell, Footer } from "@mantine/core"
-import {NavbarSide} from "./Navbar";
 import {ReactNode} from "react";
 
 interface Props {

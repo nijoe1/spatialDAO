@@ -151,7 +151,7 @@ export default function CreateDao() {
                         editable={true}
                         onRemove={removeVoter}
                     />
-                    <Button color={"#40107a"} disabled={loading} m={"md"} onClick={async () => await handleCreateDAO()}>Create DAO </Button>
+                    <Button color={"pink"} disabled={loading} m={"md"} onClick={async () => await handleCreateDAO()}>Create DAO </Button>
                 </Container>
 
             </Layout>
