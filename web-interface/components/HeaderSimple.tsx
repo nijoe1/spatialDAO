@@ -63,7 +63,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: theme.radius.md,
         textDecoration: "none",
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: theme.fontSizes.md,
 
         [theme.fn.smallerThan('sm')]: {

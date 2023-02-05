@@ -119,7 +119,7 @@ export default function ProposalCard({
             // voting
             setButtons(
                 <Button.Group sx={{width: "100%"}}>
-                    <Button fullWidth color={"green"} onClick={async () => {
+                    <Button fullWidth color={"green.6"} onClick={async () => {
                         showNotification({
                             id: "bounty",
                             title: "Creating bounty",
@@ -183,9 +183,9 @@ export default function ProposalCard({
             setBadgeText("Proposal Already Persisted")
             setBadgeColor("pink")
         }  else if (isEnded && activeState && isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
-            setButtons(<Button color={"cyan"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
+            setButtons(<Button color={"green.6"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
-            setBadgeColor("green")
+            setBadgeColor("green.6")
         } else {
             setButtons(<Button color={"gray"} fullWidth>Bounty already created</Button>)
             setBadgeText("Bounty already created")

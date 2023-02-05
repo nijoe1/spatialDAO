@@ -154,7 +154,7 @@ export default function Proposals() {
                             onChange={(event) => form.setFieldValue('proposalId', event.currentTarget.value)}
                             label={"Select the piece CID to create the proposal."}
                             required/>
-                        <Button color={"pink"} my={"sm"} type={"submit"}>
+                        <Button variant={"gradient"} gradient={{from: "pink", to: "blue", deg: 110}} my={"sm"} type={"submit"}>
                             Submit proposal
                         </Button>
                     </form>

@@ -18,15 +18,13 @@ import { MemberList } from '../components/MemberList';
 
 export default function CreateDao() {
     const [daoName, setDaoName] = useState<string>("")
+    const {address, isDisconnected} = useAccount()
     const [proposers, proposersHandlers] = useListState<string>([]);
     const [voters, votersHandlers] = useListState<string>([]);
     const [loading, setLoading] = useState(false)
     const [daoDescription, setDaoDescription] = useState<String>("")
     const {upload, uploadImage} = useNftStorage()
     const {createDataDao, getDataDaos} = useContract()
-    const router = useRouter()
-    const mounted = useIsMounted()
-    const {address, isDisconnected} = useAccount()
     const [disabled, setDisabled] = useState(true)
     const [spacePfp, setSpacePfp] = useState<File>()
     // @ts-ignore
@@ -49,6 +47,7 @@ export default function CreateDao() {
 
     const handleCreateDAO = async () => {
         setLoading(true)
+        addProposer(address as string)
         showNotification({
             id: "space",
             title: "Creating your dataDAO",
@@ -135,10 +134,10 @@ export default function CreateDao() {
                     <FileInput m={"md"} required label={"Upload your space image"} placeholder={"Upload image file"}
                                accept={"image/*"} icon={<IconUpload size={14}/>} value={spacePfp as any}
                                onChange={setSpacePfp as any}/>
-                    <Text m={"md"} size={"md"}>Add Proposers</Text>
+                    <Text m={"md"} size={"md"}>Add Admins</Text>
                     <AddressInput display={"Add"} onSubmit={addProposer} />
                     <MemberList
-                        label="Proposers"
+                        label="Admins"
                         members={proposers}
                         editable={true}
                         onRemove={removeProposer}
@@ -151,7 +150,7 @@ export default function CreateDao() {
                         editable={true}
                         onRemove={removeVoter}
                     />
-                    <Button color={"pink"} disabled={loading} m={"md"} onClick={async () => await handleCreateDAO()}>Create DAO </Button>
+                    <Button variant={"gradient"} gradient={{from: "pink", to: "blue", deg: 110}} disabled={loading} m={"md"} onClick={async () => await handleCreateDAO()}>Create DAO </Button>
                 </Container>
 
             </Layout>

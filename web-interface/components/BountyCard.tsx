@@ -87,7 +87,7 @@ export default function BountyCard({
     const {orbis} = useContext(GlobalContext)
 
     let address = ""
-    if(router.query.address)
+    if (router.query.address)
         address = router.query.address as string
     else
         address = daoAddress as string
@@ -114,16 +114,15 @@ export default function BountyCard({
 
     const time = dayjs.unix(timestamp)
     useEffect(() => {
-        if ( signer) {
+        if (signer) {
             getState()
         }
-    }, [commP, router.query.address, signer])
-
-    if(query){
-        const parsedQuery = JSON.parse(query)
-        setName(parsedQuery.id)
-        setLink(`/space/?id=${parsedQuery.id}&address=${parsedQuery.address}&groupId=${parsedQuery.groupId}`)
-    }
+        if (query) {
+            const parsedQuery = JSON.parse(query)
+            setName(parsedQuery.id)
+            setLink(`/space/?id=${parsedQuery.id}&address=${parsedQuery.address}&groupId=${parsedQuery.groupId}`)
+        }
+    }, [commP, router.query.address, signer, query])
 
     const getState = async () => {
         const commP_ = await getCommpProposal(contract, commP)
@@ -149,7 +148,7 @@ export default function BountyCard({
                             amt = e!
                         }}
                     />
-                    <Button fullWidth color={"green"} onClick={async () => {
+                    <Button fullWidth color={"green.6"} onClick={async () => {
                         showNotification({
                             id: "bounty",
                             title: "Creating bounty",
@@ -176,7 +175,7 @@ export default function BountyCard({
                         try {
                             if (!amt)
                                 throw "No amount specified"
-                            if(amt > parseInt(remainingTokens))
+                            if (amt > parseInt(remainingTokens))
                                 throw "Amount exceeds remaining tokens"
                             console.log(commP, amt)
                             await fundBounty(contract, commP, amt!.toString())
@@ -208,8 +207,7 @@ export default function BountyCard({
                 </>)
             setBadgeText("Remaining tokens: " + remainingTokens)
             setBadgeColor("orange")
-        }
-        else if (isBountyEnabled_) {
+        } else if (isBountyEnabled_) {
             // get the key for the stateMarket deals for which the cid is the commP
             const keys = [{value: "", label: "Select the deal ID"}];
             console.log(commP)
@@ -304,7 +302,7 @@ export default function BountyCard({
             onClose={() => setModalOpen(false)}
         >
             <Center>
-                <DealTable deals={deals!} />
+                <DealTable deals={deals!}/>
             </Center>
         </Modal>
     )
@@ -316,27 +314,35 @@ export default function BountyCard({
                     <BackgroundImage src={"/bounty.webp"}>
                         <div style={{height: 180, position: "relative"}}>
                             <Tooltip label={"View all bounty deals"} position={"top"}>
-                            <ActionIcon variant={"filled"} color={"pink"} onClick={() => setModalOpen(true)} sx={{position: "absolute", top: 0, right: 0, bottom: 0}}>
-                                <IconPlus />
-                            </ActionIcon>
+                                <ActionIcon variant={"filled"} color={"pink"} onClick={() => setModalOpen(true)}
+                                            sx={{position: "absolute", top: 0, right: 0, bottom: 0}}>
+                                    <IconPlus/>
+                                </ActionIcon>
                             </Tooltip>
                         </div>
                     </BackgroundImage>
                 </Card.Section>
                 <Card.Section pb={0} p={"sm"}>
                     <Badge color={badgeColor}>{badgeText}</Badge>
-                    <Text className={classes.title} lineClamp={4} weight={500}>
-                        {commP}
-                    </Text>
+                    <Tooltip label={"This is the commP"}>
+                        <Text className={classes.title} lineClamp={4} weight={500}>
+                            {commP}
+                        </Text>
+                    </Tooltip>
                     <Text size="xs" color="dimmed" lineClamp={4}>
                         {time.fromNow()}
                     </Text>
-                    <Text size="md" lineClamp={4}>
-                        {description}
-                    </Text>
-                    {name && <Text size={"sm"} color={"dimmed"} component={"a"} href={link}>
-                        {name}
-                    </Text>}
+                    <Tooltip label={"This is the description"}>
+                        <Text size="md" lineClamp={4}>
+                            {description}
+                        </Text>
+                    </Tooltip>
+                    {name &&
+                        <Tooltip label={"DAO Name"}>
+                            <Text size={"sm"} color={"dimmed"} component={"a"} href={link}>
+                                {name}
+                            </Text>
+                        </Tooltip>}
                 </Card.Section>
                 <Card.Section mt={"md"}>
                     {buttons}

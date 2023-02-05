@@ -59,7 +59,7 @@ export default function ExploreSpaces() {
             console.log(bounty)
             return (
                 <Grid.Col key={index} lg={4} md={6}>
-                    <BountyCard query={bounty?.content?.tags[6]?.title} daoAddress={bounty.content.tags[5].title} streamId={bounty.streamId} title={bounty.content.tags[1].title} description={bounty.content.body} timestamp={bounty.timestamp} />
+                    <BountyCard query={bounty.content.tags[6]?.title} daoAddress={bounty.content.tags[5].title} streamId={bounty.streamId} title={bounty.content.tags[1].title} description={bounty.content.body} timestamp={bounty.timestamp} />
                 </Grid.Col>
             );
         });
