@@ -1,12 +1,9 @@
 import {
   Center,
   Container,
-  createStyles,
   Grid,
   List,
-  SimpleGrid,
   Stack,
-  Text,
   ThemeIcon,
   Title,
 } from "@mantine/core";
@@ -15,7 +12,7 @@ import { Layout } from "../components/Layout";
 import { Hero } from "../components/Hero";
 import { Features } from "../components/Features";
 import { IconCheck } from "@tabler/icons";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import ComingSoon1 from "../components/ComingSoon1";
 import ComingSoon from "../components/ComingSoon";
 import { GlobalContext } from "../contexts/GlobalContext";
@@ -52,6 +49,7 @@ export default function Home() {
       </Head>
       <Center>
         <Layout>
+            
           <Container m={"xl"} size={1800}>
             <Hero />
           </Container>
@@ -74,19 +72,20 @@ export default function Home() {
                 }
               >
                 <List.Item>
-                  <b>Create your dataDAO</b> – choose the DAO proposers and
-                  Voters create you Decentralized social layer with one click
+                  <b>Create your dataDAO</b>: Choose the DAO admins and
+                  voters then create you Decentralized social layer. 
+                  All that with one click
                 </List.Item>
                 <List.Item>
-                  <b>Propose Files</b> – choose a file that your DAO wants it
+                  <b>Propose Files</b>: Choose a file that your DAO wants it
                   permanent
                 </List.Item>
                 <List.Item>
-                  <b>Create Bounties</b> – Create bunties on succesfully
+                  <b>Create Bounties</b>: Create bunties on succesfully
                   proposed files
                 </List.Item>
                 <List.Item>
-                  <b>Reward deal makers</b> – Reward deal clients that claim
+                  <b>Reward deal makers</b>: Reward deal clients that claim
                   your dataDAO bounties
                 </List.Item>
               </List>
@@ -100,17 +99,17 @@ export default function Home() {
               <Grid>
                 <Grid.Col lg={6}>
                   <ComingSoon
-                    title={"Proxy pattern Factory"}
+                    title={"Integrate OpenZeppelin Proxy pattern Factory"}
                     description={
-                      "We have plans to mitigate to a proxy pattern factory to save gas to our Users."
+                      "We have plans to create a proxy pattern factory to save gas for our Users."
                     }
                   />
                 </Grid.Col>
                 <Grid.Col lg={6}>
                   <ComingSoon1
-                    title={"Utialize open Zeppelin governor for more safety"}
+                    title={"Integrate OpenZeppelin governor"}
                     description={
-                      "We also have plans to use the Audited Governor from OpenZeppelin and combine it with Tableland once they implement their features on Filecoin that way we are going to gain our Actor( Smart Contract ) state and save fees for our users . "
+                      "We have plans to use the Audited Governor from OpenZeppelin and combine it with Tableland once they implement their features on Filecoin that way we are going to minimize the Actor( Smart Contract ) state and save fees for our users. "
                     }
                   />
                 </Grid.Col>

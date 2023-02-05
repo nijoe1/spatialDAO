@@ -1,7 +1,6 @@
-import {BigNumber, ethers} from "ethers";
-import {factory_abi, DAO_abi, daoFactoryAddress} from "../constants"
+import {ethers} from "ethers";
+import {factory_abi, daoFactoryAddress} from "../constants"
 import {useSigner} from "wagmi";
-import {Txt} from "tabler-icons-react";
 import CID from 'cids';
 
 
@@ -20,18 +19,17 @@ import CID from 'cids';
 // If isBountyCreated == false and isBountyEnabled == false {Fully claimed Phase}
 // if isProposalEnded == true && isValidProposedFile == true && !isBountyEnabled {you can create bounty}
 
-
 export const useContract = () => {
 
 
     const {data: signer} = useSigner()
 
     const contract = new ethers.Contract(daoFactoryAddress["dao-factory"], factory_abi, signer!)
-    const PROPOSER_ROLE = "0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1"
+    const ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000"
     const VOTER_ROLE = "0x72c3eec1760bf69946625c2d4fb8e44e2c806345041960b434674fb9ab3976cf"
     // Creates a new DataDao
-    const createDataDao = async (proposers: string[], voters: string[], name: string, groupID: string) => {
-        const tx = await contract.createDataDAO(proposers, voters, name, groupID)
+    const createDataDao = async (admins: string[], voters: string[], name: string, groupID: string) => {
+        const tx = await contract.createDataDAO(admins, voters, name, groupID)
         return await tx.wait()
     }
 
@@ -49,7 +47,7 @@ export const useContract = () => {
     const createProposal = async (DaoContract: ethers.Contract, commP: string, proposalMetadata: string, durationInBlocks: number) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, durationInBlocks)
+        const tx = await DaoContract.createProposal(cidHex, proposalMetadata, durationInBlocks, {gasLimit: 10000000000})
         return tx.wait()
     }
 
@@ -59,15 +57,7 @@ export const useContract = () => {
     const vote = async (DaoContract: ethers.Contract, commP: string, decision: boolean) => {
         const cidHexRaw = new CID(commP).toString('base16').substring(1)
         const cidHex = "0x00" + cidHexRaw
-        const tx = await DaoContract.vote(cidHex, decision)
-        return await tx.wait()
-    }
-
-    // Check first that the proposal has ended 
-    const executeProposal = async (DaoContract: ethers.Contract, commP: string) => {
-        const cidHexRaw = new CID(commP).toString('base16').substring(1)
-        const cidHex = "0x00" + cidHexRaw
-        const tx = await DaoContract.executeProposal(cidHex)
+        const tx = await DaoContract.vote(cidHex, decision, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
@@ -109,13 +99,6 @@ export const useContract = () => {
         return await DaoContract.getDeals(cidHex)
     }
 
-    // Returns a bool if the bounty has successfully funded and has more claims to give returns true
-    const isBountyEnabled = async (DaoContract: ethers.Contract, commP: string) => {
-        const cidHexRaw = new CID(commP).toString('base16').substring(1)
-        const cidHex = "0x00" + cidHexRaw
-        return await DaoContract.isBountyEnabled(cidHex)
-    }
-
     // Returns true from the time that the bounty has been created untill the bounty has gives all its claims
     const isBountyCreated = async (DaoContract: ethers.Contract, commP_Id: number) => {
         return await DaoContract.isBountyFunded(commP_Id)
@@ -131,22 +114,12 @@ export const useContract = () => {
 
     // Checks is an address has the voter role by returning a bool
     const checkVoterRole = async (DaoContract: ethers.Contract, voter: string) => {
-        return await DaoContract.checkVoterRole(voter)
+        return await DaoContract.hasRole(VOTER_ROLE,voter)
     }
 
     // Checks is an address has the proposer role by returning a bool
     const checkProposerRole = async (DaoContract: ethers.Contract, proposer: string) => {
-        return await DaoContract.checkProposerRole(proposer)
-    }
-
-    // Returns the total amount of CIDs proposed in the DAO 
-    const getTotalCIDs = async (DaoContract: ethers.Contract) => {
-        return await DaoContract.getTotalCIDs()
-    }
-
-    // returns the the CBOR value of the commP with ID x
-    const getCommpByID = async (DaoContract: ethers.Contract, id: number) => {
-        return await DaoContract.idToCommP(id)
+        return await DaoContract.hasRole(ADMIN_ROLE,proposer)
     }
 
     // returns the Bounty details of a CBOR commP
@@ -179,25 +152,25 @@ export const useContract = () => {
 
     // Only the creator of the DAO can do that the ADMIN
     const addVoter = async (DaoContract: ethers.Contract, newVoterAddress: string) => {
-        const tx = await DaoContract.grantRole(VOTER_ROLE, newVoterAddress,{gasLimit: 10000000000})
+        const tx = await DaoContract.grantRole(VOTER_ROLE, newVoterAddress, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const removeVoter = async (DaoContract: ethers.Contract, VoterAddress: string) => {
-        const tx = await DaoContract.revokeRole(VOTER_ROLE, VoterAddress,{gasLimit: 10000000000})
+        const tx = await DaoContract.revokeRole(VOTER_ROLE, VoterAddress, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const addProposer = async (DaoContract: ethers.Contract, newProposerAddress: string) => {
-        const tx = await DaoContract.grantRole(PROPOSER_ROLE, newProposerAddress,{gasLimit: 10000000000})
+        const tx = await DaoContract.grantRole(ADMIN_ROLE, newProposerAddress, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
     // Only the creator of the DAO can do that the ADMIN
     const removeProposer = async (DaoContract: ethers.Contract, newProposerAddress: string) => {
-        const tx = await DaoContract.revokeRole(PROPOSER_ROLE, newProposerAddress,{gasLimit: 10000000000})
+        const tx = await DaoContract.revokeRole(ADMIN_ROLE, newProposerAddress, {gasLimit: 10000000000})
         return await tx.wait()
     }
 
@@ -207,18 +180,14 @@ export const useContract = () => {
         getDataDaos,
         createProposal,
         vote,
-        executeProposal,
         createBounty,
         fundBounty,
         claim_bounty,
-        isBountyEnabled,
         isBountyCreated,
         isValidProposedFile,
         checkVoterRole,
         checkProposerRole,
-        getTotalCIDs,
         getCommpDeals,
-        getCommpByID,
         getCommpBounty,
         getCommpProposal,
         isProposalEnded,

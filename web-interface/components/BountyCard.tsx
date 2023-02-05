@@ -96,7 +96,6 @@ export default function BountyCard({
         getCommpBounty,
         isBountyCreated,
         getCommpDeals,
-        isBountyEnabled,
         getCommpProposal,
         claim_bounty,
         fundBounty
@@ -120,7 +119,7 @@ export default function BountyCard({
         if (query) {
             const parsedQuery = JSON.parse(query)
             setName(parsedQuery.id)
-            setLink(`/space/?id=${parsedQuery.id}&address=${parsedQuery.address}&groupId=${parsedQuery.groupId}`)
+            setLink(`/dao_page/?id=${parsedQuery.id}&address=${parsedQuery.address}&groupId=${parsedQuery.groupId}`)
         }
     }, [commP, router.query.address, signer, query])
 
@@ -128,7 +127,7 @@ export default function BountyCard({
         const commP_ = await getCommpProposal(contract, commP)
         const res = await getCommpBounty(contract, commP)
         const isBounty = await isBountyCreated(contract, parseInt(commP_[0]))
-        const isBountyEnabled_ = await isBountyEnabled(contract, commP)
+        const isBountyEnabled_ = res.enabled
         const remainingTokensHex = parseInt(res.requiredTokens._hex, 16)
         const tokensDonated = parseInt(res.donatedTokens._hex, 16)
         const numberOfBounties = parseInt(res.numberOfBounties._hex, 16)
@@ -151,7 +150,7 @@ export default function BountyCard({
                     <Button fullWidth color={"green.6"} onClick={async () => {
                         showNotification({
                             id: "bounty",
-                            title: "Creating bounty",
+                            title: "Funding bounty",
                             message: "Please wait",
                             loading: true,
                             disallowClose: true,
@@ -176,7 +175,7 @@ export default function BountyCard({
                             if (!amt)
                                 throw "No amount specified"
                             if (amt > parseInt(remainingTokens))
-                                throw "Amount exceeds remaining tokens"
+                                throw "Amount exceeds required tokens"
                             console.log(commP, amt)
                             await fundBounty(contract, commP, amt!.toString())
                             await orbis.createPost({
@@ -186,7 +185,7 @@ export default function BountyCard({
                             updateNotification({
                                 id: "bounty",
                                 title: "Success",
-                                message: "You voted for this proposal",
+                                message: "You succesfully funded that bounty",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
@@ -205,7 +204,7 @@ export default function BountyCard({
                         }
                     }}>Fund Bounty</Button>
                 </>)
-            setBadgeText("Remaining tokens: " + remainingTokens)
+            setBadgeText("Required tokens: " + remainingTokens)
             setBadgeColor("orange")
         } else if (isBountyEnabled_) {
             // get the key for the stateMarket deals for which the cid is the commP
@@ -242,7 +241,7 @@ export default function BountyCard({
                             if (res === false) {
                                 alert("Please connect to orbis first")
                                 updateNotification({
-                                    title: "Bounty Funding Failed",
+                                    title: "Bounty Claim Failed",
                                     message: "Please connect to orbis first",
                                     loading: false,
                                     disallowClose: false,
@@ -263,7 +262,7 @@ export default function BountyCard({
                             updateNotification({
                                 id: "bounty",
                                 title: "Success",
-                                message: "You executed the proposal",
+                                message: "Bounty Claimed",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
@@ -273,7 +272,7 @@ export default function BountyCard({
                             updateNotification({
                                 id: "bounty",
                                 color: "red",
-                                title: "Failed",
+                                title: "claim Failed",
                                 message: "Something went wrong",
                                 loading: false,
                                 disallowClose: false,
@@ -283,7 +282,7 @@ export default function BountyCard({
                     }}>Claim Bounty</Button>
                 </>
             )
-            setBadgeText("Number of bounties: " + numberOfBounties)
+            setBadgeText("remaining bounties: " + numberOfBounties)
             setBadgeColor("violet")
         } else if (!isBountyEnabled_ && !isBounty) {
             setButtons(<Button color={"lime"} fullWidth>Bounty Fully Claimed</Button>)
@@ -339,8 +338,8 @@ export default function BountyCard({
                     </Tooltip>
                     {name &&
                         <Tooltip label={"DAO Name"}>
-                            <Text size={"sm"} color={"dimmed"} component={"a"} href={link}>
-                                {name}
+                            <Text size={"sm"} color={"purple.7"} component={"a"} href={link}>
+                                {"Go to DAO page"}
                             </Text>
                         </Tooltip>}
                 </Card.Section>

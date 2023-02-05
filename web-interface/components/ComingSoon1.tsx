@@ -1,5 +1,5 @@
 import { createStyles, Paper, Text, ThemeIcon } from '@mantine/core';
-import {IconColorSwatch, IconPalette, TablerIcon} from '@tabler/icons';
+import {IconAdjustments} from '@tabler/icons';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -42,7 +42,7 @@ export default function ComingSoon1({ title, description }: CardGradientProps) {
                 variant="gradient"
                 gradient={{ deg: 0, from: 'indigo', to: 'violet' }}
             >
-                <IconPalette />
+                <IconAdjustments />
             </ThemeIcon>
             <Text size="xl" weight={500} mt="md">
                 {title}

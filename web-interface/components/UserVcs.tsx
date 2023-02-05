@@ -22,8 +22,10 @@ export default function UserVcs({address}: UserVCProps) {
         if(router.pathname === "/user"){
             let {data: dids} = await orbis.getDids(address)
             const {data, error} = await orbis.getCredentials(dids[0].did)
+            console.log(dids[0].did)
             if (data) {
                 const vcs = data.filter((vc: any) => vc.issuer === "did:key:z6mkghvghlobledj1bgrlhs4lpgjavbma1tn2zcryqmyu5lc")
+                console.log(vcs)
                 if(vcs.length > 0)
                     setVcs(vcs)
             }

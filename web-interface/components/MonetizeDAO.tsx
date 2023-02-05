@@ -123,7 +123,7 @@ export default function MonetizeDAO() {
         showNotification({
             id: "add",
             title: "Adding...",
-            message: "Adding member to DAO...",
+            message: "Adding an Admin to DAO...",
             loading: true,
             autoClose: false,
             disallowClose: true,
@@ -156,12 +156,9 @@ export default function MonetizeDAO() {
         <>
             <h1>Monetize DAO</h1>
             <Container>
-                <Title order={4}>Proposers</Title>
-                <Title order={6}>Add Proposer</Title>
+                <Title order={6}>Add Admin</Title>
                 <AddressInput display={"Add"} onSubmit={handleAddProposer}/>
-                <Title order={6}>Remove Proposer</Title>
-                <AddressInput display={"Remove"} onSubmit={handleDeleteProposer}/>
-                <Title order={4}>Voters</Title>
+                
                 <Title order={6}>Add Voter</Title>
                 <AddressInput display={"Add"} onSubmit={handleAddVoter}/>
                 <Title order={6}>Remove Voter</Title>

@@ -6,16 +6,12 @@ const useNftStorage = () => {
 
     const storage = new NFTStorage({ endpoint, token })
 
-    const upload = async (file: File) => {
-        const blob = new Blob([file], { type: "audio/*" })
-        return await storage.storeBlob(blob)
-    }
     const uploadImage = async (file: File) => {
         const blob = new Blob([file], { type: "image/*" })
         return await storage.storeBlob(blob)
     }
 
-    return { upload, uploadImage }
+    return { uploadImage }
 
     
 }

@@ -7,7 +7,7 @@ export default function StyledTabs(props: TabsProps) {
             styles={(theme) => ({
                 tab: {
                     ...theme.fn.focusStyles(),
-                    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.violet[5] : "#DA77F2",
+                    backgroundColor: theme.colorScheme === 'dark' ? "#780072" : "#DA77F2",
                     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.white,
                     border: `2px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : "#DA77F2"}`,
                     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,

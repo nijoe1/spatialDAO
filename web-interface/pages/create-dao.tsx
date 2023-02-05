@@ -47,7 +47,6 @@ export default function CreateDao() {
 
     const handleCreateDAO = async () => {
         setLoading(true)
-        addProposer(address as string)
         showNotification({
             id: "space",
             title: "Creating your dataDAO",
@@ -134,7 +133,7 @@ export default function CreateDao() {
                     <FileInput m={"md"} required label={"Upload your space image"} placeholder={"Upload image file"}
                                accept={"image/*"} icon={<IconUpload size={14}/>} value={spacePfp as any}
                                onChange={setSpacePfp as any}/>
-                    <Text m={"md"} size={"md"}>Add Admins</Text>
+                    <Text m={"md"} size={"md"}>Add Admins.</Text>
                     <AddressInput display={"Add"} onSubmit={addProposer} />
                     <MemberList
                         label="Admins"

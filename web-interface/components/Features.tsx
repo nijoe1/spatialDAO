@@ -1,9 +1,8 @@
 import { createStyles, Text, SimpleGrid, Container } from '@mantine/core';
 import {
-    IconTruck,
-    IconCertificate,
-    IconCoin,
+    IconSettings,
     TablerIcon,
+    IconAnchor,
     IconWallet,
     IconHeadphones,
     IconMessages
@@ -18,10 +17,10 @@ const useStyles = createStyles((theme) => ({
 
     overlay: {
         position: 'absolute',
-        height: 100,
-        width: 160,
-        top: 0,
-        left: 0,
+        height: 105,
+        width: 308,
+        top: 1,
+        left: -4,
         backgroundColor: theme.colors.violet[5],
         zIndex: 1,
     },
@@ -29,6 +28,7 @@ const useStyles = createStyles((theme) => ({
     content: {
         position: 'relative',
         zIndex: 2,
+        left: -23
     },
 
     icon: {
@@ -68,22 +68,22 @@ function Feature({ icon: Icon, title, description, className, ...others }: Featu
 
 const mockdata = [
     {
-        icon: IconWallet,
+        icon: IconSettings,
         title: 'Create your dataDAO',
         description:
-            'Host your community and persist your wanted files on filecoin',
-    },
-    {
-        icon: IconHeadphones,
-        title: 'Make file proposals',
-        description:
-            'So the community voters can decide about the files to get stored',
+            'Host your community and persist your DAO files on the filecoin network.',
     },
     {
         icon: IconMessages,
+        title: 'Make file proposals',
+        description:
+            'So the community voters can decide about the files to get stored.',
+    },
+    {
+        icon: IconAnchor,
         title: 'Create file bounties',
         description:
-            'Incentivize deal makers to store your community files by rewarding them for that',
+            'Incentivize deal makers to store DAO files by rewarding them.',
     },
 ];
 

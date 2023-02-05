@@ -2,7 +2,7 @@ import { Button, Container, Grid, Skeleton, Text, Title } from "@mantine/core";
 import Head from "next/head";
 import { Layout } from "../components/Layout";
 import { useContext, useEffect, useState } from "react";
-import SpaceCard from "../components/SpaceCard";
+import daoCard from "../components/daoCard";
 import { useAccount, useSigner } from "wagmi";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { useIsMounted } from '../hooks/useIsMounted';
@@ -87,7 +87,7 @@ export default function ExploreSpaces() {
             </Head>
             <Layout>
                 <Container size={"xl"} p={"xl"}>
-                    <Title>Explore Bounties</Title>
+                    <Title>Bounties explorer</Title>
                     <Grid gutter={"xl"}>{renderBounties}</Grid>
                 </Container>
             </Layout>

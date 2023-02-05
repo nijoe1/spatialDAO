@@ -82,9 +82,7 @@ export default function ProposalCard({
         checkVoterRole,
         checkProposerRole,
         isValidProposedFile,
-        isBountyEnabled,
         vote,
-        executeProposal,
         getCommpProposal,
         getCommpBounty,
         getCommpDeals
@@ -114,54 +112,65 @@ export default function ProposalCard({
         const isValid = await isValidProposedFile(contract, commP)
         const isBountyEnabled_ = getBounty.enabled
         if (isEnded === false) {
-            const isVoter = await checkVoterRole(contract, userWalletAddress!.toLowerCase())
-            const isProposer = await checkProposerRole(contract, userWalletAddress!.toLowerCase())
+            const isVoter = await checkVoterRole(contract, userWalletAddress!)
+            const isProposer = await checkProposerRole(contract, userWalletAddress!)
             // voting
             setButtons(
                 <Button.Group sx={{width: "100%"}}>
                     <Button fullWidth color={"green.6"} onClick={async () => {
-                        showNotification({
-                            id: "bounty",
-                            title: "Creating bounty",
-                            message: "Please wait",
-                            loading: true,
-                            disallowClose: true,
-                            autoClose: false,
-                        })
-                        try {
-                            if(!isVoter || !isProposer)
-                                throw new Error("You are not a voter or proposer")
-                            await vote(contract, commP, true)
-                            updateNotification({
+                        if(isVoter || isProposer){
+                            showNotification({
                                 id: "bounty",
-                                title: "Success",
-                                message: "You voted for this proposal",
-                                loading: false,
-                                disallowClose: false,
-                                autoClose: true,
+                                title: "casting vote",
+                                message: "Please wait",
+                                loading: true,
+                                disallowClose: true,
+                                autoClose: false,
                             })
-                        } catch (e) {
-                            console.log(e)
-                            updateNotification({
+                            await vote(contract, commP, true)
+                            showNotification({
                                 id: "bounty",
-                                title: "Error",
-                                message: "Something went wrong",
-                                loading: false,
-                                disallowClose: false,
-                                autoClose: true,
-                                color: "red"
+                                title: "success",
+                                message: "Vote casted!",
+                                loading: true,
+                                disallowClose: true,
+                                autoClose: false,
+                            })
+                        }else{
+                            showNotification({
+                                id: "bounty",
+                                title: "You are not a DAO member",
+                                message: "You are not a DAO member",
+                                loading: true,
+                                disallowClose: true,
+                                autoClose: false,
                             })
                         }
                     }}>Upvote</Button>
                     <Button fullWidth color={"red"} onClick={async () => {
                         try {
-                            if(!isVoter || !isProposer)
-                                throw new Error("You are not a voter or proposer")
-                            await vote(contract, commP, false)
-                            showNotification({
-                                title: "Success",
-                                message: "You voted against this proposal",
-                            })
+                            if(isVoter || isProposer){
+                                
+                                await vote(contract, commP, false)
+                                showNotification({
+                                    id: "bounty",
+                                    title: "casting vote",
+                                    message: "Please wait",
+                                    loading: true,
+                                    disallowClose: true,
+                                    autoClose: false,
+                                })
+                            }else{
+                                showNotification({
+                                    id: "bounty",
+                                    title: "you are not a DAO member",
+                                    message: "you cannot vote",
+                                    loading: true,
+                                    disallowClose: true,
+                                    autoClose: false,
+                                })
+                                return
+                            }
                         } catch (e) {
                             console.log(e)
                             showNotification({
@@ -181,14 +190,14 @@ export default function ProposalCard({
         } else if (isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00" && commpDeals.length > 0) {
             setButtons(<Button color={"pink.3"} fullWidth>Commp is already persisted on the network</Button>)
             setBadgeText("Proposal Already Persisted")
-            setBadgeColor("pink")
+            setBadgeColor("black")
         }  else if (isEnded && activeState && isEnded && isValid && !isBountyEnabled_ && numBounties === "0x00") {
             setButtons(<Button color={"green.6"} onClick={() => setModalOpen(true)} fullWidth>Create Bounty</Button>)
             setBadgeText("Proposal Accepted")
             setBadgeColor("green.6")
         } else {
             setButtons(<Button color={"gray"} fullWidth>Bounty already created</Button>)
-            setBadgeText("Bounty already created")
+            setBadgeText("proposal accepted")
             setBadgeColor("gray")
         }
     }

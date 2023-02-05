@@ -94,7 +94,6 @@ export function Hero() {
     const {classes} = useStyles();
 
     return (
-        <Center>
         <Container className={classes.wrapper} size={1400}>
             <Dots className={classes.dots} style={{left: 0, top: 0}}/>
             <Dots className={classes.dots} style={{left: 60, top: 0}}/>
@@ -123,11 +122,10 @@ export function Hero() {
                     </Button>
                     <Button href={"/create-dao"} component={"a"} className={classes.control}
                             size="lg" color={"violet.5"}>
-                        Create your DAO
+                        Create dataDAO
                     </Button>
                 </div>
             </div>
         </Container>
-        </Center>
     );
 }

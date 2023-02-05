@@ -8,9 +8,9 @@ import {
     Skeleton,
     Stack,
     Tabs,
-    Text,
     Title
 } from "@mantine/core";
+import {useContract} from './../hooks/useContract';
 import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useRouter} from "next/router";
@@ -23,7 +23,9 @@ import {
     IconMessageChatbot, IconMoneybag,
     IconUnlink
 } from "@tabler/icons";
-import {useAccount} from "wagmi";
+import {useSigner,useAccount} from "wagmi";
+import { ethers} from "ethers";
+import {DAO_abi} from "../constants";
 import {GlobalContext} from "../contexts/GlobalContext";
 import {showNotification} from "@mantine/notifications"
 import GroupPosts from "../components/GroupPosts";
@@ -68,7 +70,9 @@ const useStyles = createStyles((theme) => ({
 export default function Space() {
     const {classes} = useStyles()
     const router = useRouter()
+    const {data: signer} = useSigner()
     const {isConnected, isConnecting, isDisconnected, address} = useAccount()
+    const {checkProposerRole} = useContract()
     const [proposalPosts, setProposalPosts] = useState<any>([])
     const [bountyPosts, setBountyPosts] = useState<any>([])
     const [spaceName, setSpaceName] = useState("")
@@ -77,6 +81,7 @@ export default function Space() {
     const [groupDesc, setGroupDesc] = useState("")
     const [groupId, setGroupId] = useState("")
     const [spaceMember, setSpaceMember] = useState(false)
+    const [admin, setAdmin] = useState(false)
     const [renderCreator, setRenderCreator] = useState(<>
         <Skeleton height={50} circle mb="xl"/>
         <Skeleton height={8} radius="xl"/>
@@ -136,6 +141,9 @@ export default function Space() {
     useEffect(() => {
         (async () => {
             if (!router.isReady) return
+            console.log(address)
+            const contract =  new ethers.Contract(router.query.address, DAO_abi, signer!)
+            setAdmin(await checkProposerRole(contract, address))
             let {data: dids} = await orbis.getDids(address)
             const user = dids[0].did
             const {groupId} = router.query
@@ -238,12 +246,12 @@ export default function Space() {
             {user && isGroupMember &&
                 <Button variant={"light"} onClick={handleLeave} color={"indigo"} sx={{height: "-webkit-fill-available"}}
                         className={classes.btn}>
-                    Unfollow
+                    Unfollow DAO
                 </Button>}
             {user && !isGroupMember &&
                 <Button variant={"light"} onClick={handleJoin} color={"indigo"}
                         className={classes.btn}>
-                    Follow
+                    Follow DAO
                 </Button>}
             <Button variant={"subtle"} component={"a"} href={`${orbisGroup}`+"/"+`${groupId}`} target={"_blank"}
                     color={"indigo"} className={classes.btn}>
@@ -279,15 +287,15 @@ export default function Space() {
 
                     <Blockquote>{groupDesc}</Blockquote>
                     <Stack>
-                        <StyledTabs defaultValue={"nfts"}>
+                        <StyledTabs defaultValue={"proposals"}>
                             <Center>
                                 <Tabs.List mb={"sm"}>
                                     <Tabs.Tab key={1} value={"proposals"} icon={<IconAlbum size={16}/>}>Proposals</Tabs.Tab>
                                     <Tabs.Tab key={2} value={"bounties"} icon={<IconMoneybag size={16}/>}>Bounties</Tabs.Tab>
                                     <Tabs.Tab key={4} value={"chat"} icon={<IconMessageChatbot size={16}/>}>Group Chat</Tabs.Tab>
-                                    <Tabs.Tab key={5} value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposal</Tabs.Tab>
+                                    {admin && <Tabs.Tab key={5} value={"proposal"} icon={<IconUnlink size={16}/>}>Create Proposal</Tabs.Tab>}
                                     <Tabs.Tab key={3} value={"collab"} icon={<IconHeartHandshake size={16}/>}>Collab Request</Tabs.Tab>
-                                    <Tabs.Tab key={6} value={"monetize"} icon={<IconMoneybag size={16}/>}>Monetize</Tabs.Tab>
+                                    {admin && <Tabs.Tab key={6} value={"monetize"} icon={ <IconMoneybag size={16}/>}>Monetize</Tabs.Tab>}
                                 </Tabs.List>
                             </Center>
                             <Tabs.Panel value={"proposals"}>
