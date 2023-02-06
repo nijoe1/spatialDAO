@@ -21,7 +21,6 @@ export default function UserPosts() {
         const res = await orbis.getPosts({context: address.toLowerCase(), tag: address.toLowerCase()})
         if (res.status === 200) {
             setData(res.data)
-            console.log(res.data)
         } else {
             setData([])
         }
@@ -29,7 +28,7 @@ export default function UserPosts() {
 
     useEffect(() => {
         if (!isMounted) return
-        if (router.pathname === "/Profile") {
+        if (router.pathname === "/profile") {
             setIsDashboard(true)
             getPosts(address as string)
         }

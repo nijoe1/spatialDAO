@@ -4,7 +4,6 @@ import {GlobalContext} from "../contexts/GlobalContext";
 import {useIsMounted} from "../hooks/useIsMounted";
 import {useAccount} from "wagmi";
 import {useRouter} from "next/router";
-// import { PassportReader } from "@gitcoinco/passport-sdk-reader";
 
 interface UserVCProps {
     address?: string
@@ -20,7 +19,7 @@ export default function UserVcs({address}: UserVCProps) {
 
     const getCredentials = async () => {
         if(router.pathname === "/user"){
-            let {data: dids} = await orbis.getDids(address)
+            let {data: dids} = await orbis.getDids(userAddress)
             const {data, error} = await orbis.getCredentials(dids[0].did)
             console.log(dids[0].did)
             if (data) {
