@@ -6,7 +6,7 @@
 <img src="./web-interface/public/logo.webp" alt="alt text" width="40%"/>
 </p>
 
-[Demo video](https://youtu.be/I24-SiVT1fg)
+[Demo video](https://stream.mux.com/hMlMlXtSLYVoXjFdMgPhRtG00r9FluR2NjI02aAmw00MSw/high.mp4)
 
 to run on localhost just run
 **yarn install**
