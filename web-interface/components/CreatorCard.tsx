@@ -6,6 +6,8 @@ import {
     Text,
     createStyles,
 } from '@mantine/core';
+import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
 
 const useStyles = createStyles((theme) => ({
     user: {
@@ -45,9 +47,16 @@ interface UserButtonProps extends UnstyledButtonProps {
 
 export default function CreatorCard({ image, name, email, icon, ...others }: UserButtonProps) {
     const { classes } = useStyles();
+    const router = useRouter()
+    const [link, setLink] = useState<string>("#")
+    useEffect(() => {
+        if(router.pathname !== "/dao_page") {
+            setLink(`/user/?address=${email}`)
+        }
+    }, [])
 
     return (
-        <Paper className={classes.user} {...others} component={"a"} href={`/user/?address=${email}`}>
+        <Paper className={classes.user} {...others} component={"a"} href={link}>
             <Group>
                 <Avatar src={image} radius="xl" />
 

@@ -10,7 +10,7 @@ import {
     Tabs,
     Title
 } from "@mantine/core";
-import {useContract} from './../hooks/useContract';
+import {useContract} from '../hooks/useContract';
 import Head from "next/head";
 import {Layout} from "../components/Layout";
 import {useRouter} from "next/router";
@@ -142,8 +142,8 @@ export default function Space() {
         (async () => {
             if (!router.isReady) return
             console.log(address)
-            const contract =  new ethers.Contract(router.query.address, DAO_abi, signer!)
-            setAdmin(await checkProposerRole(contract, address))
+            const contract =  new ethers.Contract(router.query.address as string, DAO_abi, signer!)
+            setAdmin(await checkProposerRole(contract, address as string))
             let {data: dids} = await orbis.getDids(address)
             const user = dids[0].did
             const {groupId} = router.query

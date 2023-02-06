@@ -23,7 +23,7 @@ export default function CreateDao() {
     const [voters, votersHandlers] = useListState<string>([]);
     const [loading, setLoading] = useState(false)
     const [daoDescription, setDaoDescription] = useState<String>("")
-    const {upload, uploadImage} = useNftStorage()
+    const {uploadImage} = useNftStorage()
     const {createDataDao, getDataDaos} = useContract()
     const [disabled, setDisabled] = useState(true)
     const [spacePfp, setSpacePfp] = useState<File>()
@@ -47,17 +47,16 @@ export default function CreateDao() {
 
     const handleCreateDAO = async () => {
         setLoading(true)
-        showNotification({
-            id: "space",
-            title: "Creating your dataDAO",
-            message: "Please wait while we create your space",
-            loading: true,
-            disallowClose: true,
-            autoClose: false
-        })
-        // const res = await getDataDaos()
-        // console.log("res", res)
         if (daoName && spacePfp) {
+            addProposer(address as string)
+            showNotification({
+                id: "space",
+                title: "Creating your dataDAO",
+                message: "Please wait while we create your space",
+                loading: true,
+                disallowClose: true,
+                autoClose: false
+            })
             const cid = await uploadImage(spacePfp!)
             const res = await orbis.createGroup({
                 pfp: `https://ipfs.io/ipfs/${cid}`,
