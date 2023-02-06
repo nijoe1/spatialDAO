@@ -55,7 +55,8 @@ This is how we used the FEVM hyperspace testnet - Spheron || NFT.Storage - Orbis
        All the metadata files for each user and each dataDAO are stored on the IPFS network using NFT.STORAGE
        The code snippets that are using NFT.STORAGE modules are located here:
        <br/>
-        // ** **
+       https://github.com/nijoe1/spatialDAO/blob/main/web-interface/hooks/useNftStorage.ts
+       <br/>
     <br />
    
   ## SmartContracts
@@ -72,6 +73,8 @@ One dataDAO contract :
 daoFactoryContract : 
 <br/>https://explorer.glif.io/address/0xAF454A764dC42c6D1e835c04D318671203aD9b78/?network=hyperspacenet
 <br/>
+The useContract is located here : 
+<br/> https://github.com/nijoe1/spatialDAO/blob/main/web-interface/hooks/useContract.ts
 <br/>
 
 to run on localhost just run
