@@ -6,14 +6,8 @@
 <img src="./web-interface/public/logo.webp" alt="alt text" width="40%"/>
 </p>
 
-[Demo video](https://stream.mux.com/hMlMlXtSLYVoXjFdMgPhRtG00r9FluR2NjI02aAmw00MSw/high.mp4)
-
-to run on localhost just run
-**yarn install**
-**yarn dev**
-
-Our application is hosted on that link.
- * [dapp link](https://spatialdao.live/)
+Our application is hosted on IPFS using Spheron.
+ * [Spheron dapp link](https://spatialdao.live/)
 
 
 Authors
@@ -36,35 +30,53 @@ SpatialDAO is a platform that enables organizations to create and monetize their
 # Technologies Used
 
 <br/>
-This is how we used the FEVM hyperspace testnet - NFT.Storage - Orbis SDK - Gitcoin Passport
+This is how we used the FEVM hyperspace testnet - Spheron || NFT.Storage - Orbis SDK
 <br />
 <br />
   
-   **Gitcoin Passport** 
+   **Our FEVM dataDAOFactory and dataDAO Contracts** 
     <br />
-        We are using Gitcoin Passport by leveraging the Orbis SDK to display to each UserProfile their Verifiable Credentials but also we are using the VCs to lock content and finally to assign into a Vocdoni Proposal only members with the isHuman Verifiable Credential to be sure that no bot is able to vote into that proposal.
+        We created fully complied contracts using the Zondax and OpenZeppelin standards. The contracts are extended version of the dealRewarded contract You can find the contracts in those links: 
         <br/>
-        **Here is the code snippet that we are leveraging GitcoinPassport**
+        **Here is the contract folder**
         <br/>
-        **https://github.com/Suhel-Kap/the-crypto-studio/blob/main/components/UserVcs.tsx**
-  <br/>
+        **https://github.com/nijoe1/spatialDAO/tree/main/spaceWarpContracts/contracts**
+<br />
+<br />
    **Orbis SDK** 
     <br />
-       The Crypto Studio uses the orbis SDK, built on the Ceramic network, to power its decentralized social platform. Orbis provides us user profiles, posts, and spaces for organization and collaboration managment, as well as tools for creating polls (via Vocdoni), posts, encrypted posts (via Lit Protocol), and NFTs. All of this information is stored on the Ceramic network to ensure a decentralized and secure environment. Orbis plays a key role in enabling The Crypto Studio to function as a decentralized social platform and provide a range of features for users to connect and engage with NFT communities.
-        <br />
-         // ** **
+       The spatialDAO uses the orbis SDK, built on the Ceramic network, to power its decentralized social platform. Orbis provides us user profiles, posts, and one social space for each dataDAO for communication and collaboration between the DAO members. All of this information is stored on the Ceramic network to ensure a decentralized and secure environment. Orbis plays a key role in enabling The spatialDAO to function as a decentralized social platform and provide a range of features for users to connect and engage with dataDAO communities in a scalable and decentralized way.
          <br />
          <br />
-  **NFT.STORAGE**
+  **Spheron & NFT.STORAGE**
      <br />
-       All the files that consist an NFT are stored on the IPFS network using NFT.STORAGE
+       Our application interface is hosted using Spheron to the IPFS network.
+       <br/>
+       All the metadata files for each user and each dataDAO are stored on the IPFS network using NFT.STORAGE
        The code snippets that are using NFT.STORAGE modules are located here:
        <br/>
         // ** **
     <br />
    
   ## SmartContracts
-  Our contract is deployed on FEVM HyperSpace Testnet here is the contract glif explorer Link . 
+  Our contract is deployed on FEVM HyperSpace Testnet here is the contract glif explorer Link. 
+  <br/> You can use the spacialDAO.abi.json and contractFactory.abi.json that are on the below links to check in the explorer the interactions and the method names
+  <br/>
+  https://github.com/nijoe1/spatialDAO/blob/main/web-interface/constants/factory.abi.json
+  <br/>
+  https://github.com/nijoe1/spatialDAO/blob/main/web-interface/constants/spatialdao.abi.json
 <br />
-####https://explorer.glif.io/address/t410fhqvk5g43q5jjeyqdxd3aizi6mii7bm45xft3kvy/?network=hyperspacenet
+One dataDAO contract :
+<br/>https://explorer.glif.io/address/0xD5eD553EAFf3decDCc25D237e3F31F74b379F0ED/?network=hyperspacenet
+<br/>
+daoFactoryContract : 
+<br/>https://explorer.glif.io/address/0xAF454A764dC42c6D1e835c04D318671203aD9b78/?network=hyperspacenet
+<br/>
+<br/>
+
+to run on localhost just run
+
+**yarn install**
+**yarn dev**
+
 
