@@ -51,13 +51,14 @@ export default function Home() {
         <Layout>
             
           <Container m={"xl"} size={1800}>
+            
             <Hero />
           </Container>
-          <Container m={"xl"} mt={100} size={1800}>
+          <Container m={"xl"} mt={100} size={1800} bottom={600}>
             <Features />
           </Container>
           <Center p={"xl"} m={"xl"}>
-            <Stack mt={75}>
+            <Stack mt={75} top={-600}>
               <Center>
                 <Title order={1}>How to use this platform?</Title>
               </Center>
@@ -65,6 +66,7 @@ export default function Home() {
                 my={"md"}
                 spacing="xl"
                 size="xl"
+                top={-600}
                 icon={
                   <ThemeIcon color={"violet"} size={20} radius="xl">
                     <IconCheck size={12} stroke={1.5} />
@@ -87,6 +89,9 @@ export default function Home() {
                 <List.Item>
                   <b>Reward deal makers</b>: Reward deal clients that claim
                   your dataDAO bounties
+                </List.Item>
+                <List.Item>
+                  <b>Connect with DAO members</b>: We offer a decetralized social layer powered by orbis.club for each dataDAO
                 </List.Item>
               </List>
             </Stack>

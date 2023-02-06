@@ -1,4 +1,4 @@
-import {createStyles, Title, Text, Button, Container, Center} from '@mantine/core';
+import {createStyles, Title, Text, Button, Container, Image} from '@mantine/core';
 import {Dots} from './Dots';
 import Link from "next/link";
 
@@ -94,13 +94,20 @@ export function Hero() {
     const {classes} = useStyles();
 
     return (
-        <Container className={classes.wrapper} size={1400}>
-            <Dots className={classes.dots} style={{left: 0, top: 0}}/>
-            <Dots className={classes.dots} style={{left: 60, top: 0}}/>
-            <Dots className={classes.dots} style={{right: 60, top: 0}}/>
-            <Dots className={classes.dots} style={{right: 0, top: 0}}/>
+        <Container className={classes.wrapper} size={1400} top={-130} >
+            <Dots className={classes.dots} style={{left: 120, top: 120}}/>
+            <Dots className={classes.dots} style={{left: 180, top: 120}}/>
+            <Dots className={classes.dots} style={{right: 180, top: 120}}/>
+            <Dots className={classes.dots} style={{right: 120, top: 120}}/>
 
             <div className={classes.inner}>
+            <div style={{ height : 240 ,width: 480, top : -900,marginLeft: 'auto', marginRight: 'auto' }}>
+                <Image
+                  radius="md"
+                  src="https://ipfs.io/ipfs/bafkreigaukwtcmztja424dy652srgjelbarpzvodw3fqaea5j75i7nabii"
+                  alt="Random unsplash image"
+                />
+            </div>
                 <Title className={classes.title}>
                     Create{' '}
                     <Text component="span" color={"violet.5"} inherit>
@@ -111,7 +118,7 @@ export function Hero() {
 
                 <Container p={0} size={600}>
                     <Text size="lg" color="dimmed" className={classes.description}>
-                    SpatialDAO is a DataDAO that allows organizations to create deal bounties for specific pieces of data. Deal clients, on the other hand, are hunting bounties and making storage deals for DAO-proposed data and getting rewarded for that!
+                    SpatialDAO is a dataDAO Factory that allows created dataDAOs in the platform to make file proposals and bounties for specific commitment pieces. Deal clients, on the other hand, are hunting bounties and making storage deals for DAO-proposed data and getting rewarded for that!
                     </Text>
                 </Container>
 
