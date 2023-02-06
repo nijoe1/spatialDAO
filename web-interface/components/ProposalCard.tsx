@@ -141,9 +141,7 @@ export default function ProposalCard({
                                 id: "bounty",
                                 title: "You are not a DAO member",
                                 message: "You are not a DAO member",
-                                loading: true,
-                                disallowClose: true,
-                                autoClose: false,
+                                color: "red"
                             })
                         }
                     }}>Upvote</Button>
