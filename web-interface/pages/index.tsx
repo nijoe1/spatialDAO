@@ -50,13 +50,12 @@ export default function Home() {
       <Center>
         <Layout>
             
-          <Container m={"xl"} size={1800}>
-            
+          <Center mb={"xl"}>
             <Hero />
-          </Container>
-          <Container m={"xl"} mt={100} size={1800} bottom={600}>
+          </Center>
+          <Center mt={"xl"}>
             <Features />
-          </Container>
+          </Center>
           <Center p={"xl"} m={"xl"}>
             <Stack mt={75} top={-600}>
               <Center>
