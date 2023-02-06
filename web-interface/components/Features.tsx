@@ -13,6 +13,7 @@ const useStyles = createStyles((theme) => ({
         position: 'relative',
         paddingTop: theme.spacing.xl,
         paddingLeft: theme.spacing.xl,
+        marginTop: -110
     },
 
     overlay: {
@@ -91,7 +92,7 @@ export function Features() {
     const items = mockdata.map((item) => <Feature {...item} key={item.title} />);
 
     return (
-        <Container mt={30} mb={30} size="lg">
+        <Container mb={30} size="lg">
             <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]} spacing={50}>
                 {items}
             </SimpleGrid>
