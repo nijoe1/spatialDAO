@@ -6,7 +6,7 @@ import {GlobalContext} from "../contexts/GlobalContext";
 import {useContext} from "react";
 import {ethers} from "ethers";
 import {DAO_abi} from "../constants"
-import {useSigner} from "wagmi";
+import {useAccount, useSigner} from "wagmi";
 import {showNotification, updateNotification} from "@mantine/notifications";
 
 interface BountyProps {
@@ -16,7 +16,8 @@ interface BountyProps {
 }
 
 export default function Bounty({commP, fileSize, streamId}: BountyProps) {
-    const {createBounty} = useContract()
+    const {createBounty, checkProposerRole} = useContract()
+    const {address: userAddress} = useAccount()
     const router = useRouter()
     const {data: signer} = useSigner()
     let address = ""
@@ -56,6 +57,9 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                         })
                         console.log(values)
                         try {
+                            const isProposer = await checkProposerRole(contract, userAddress as string)
+                            if (!isProposer)
+                                throw "You are not an admin of this DAO"
                             orbis.isConnected().then((res: any) => {
                                 if (res === false){
                                     alert("Please connect to orbis first")
@@ -147,7 +151,9 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             updateNotification({
                                 id: "proposal",
                                 title: "Bounty Creation Failed",
-                                message: "Your bounty could not be created",
+                                // @ts-ignore
+                                message: e,
+                                color: "red",
                                 loading: false,
                                 disallowClose: false,
                                 autoClose: true,
@@ -177,7 +183,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                         <NumberInput
                             required
                             label="Number of Deal Days"
-                            description={"The number of days the bounty will be active for"}
+                            description={"The number of required remaining days for a deal to be successfully claimed"}
                             placeholder="Enter the number of deal days"
                             min={160}
                             my={"sm"}
