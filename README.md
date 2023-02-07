@@ -67,8 +67,11 @@ This is how we used the FEVM hyperspace testnet - Spheron || NFT.Storage - Orbis
   <br/>
   https://github.com/nijoe1/spatialDAO/blob/main/web-interface/constants/spatialdao.abi.json
 <br />
-One dataDAO contract :
+One of many dataDAO contract :
 <br/>https://explorer.glif.io/address/0xD5eD553EAFf3decDCc25D237e3F31F74b379F0ED/?network=hyperspacenet
+<br/>
+Here is a succesfull client bounty claim recorded on the glif explorer : https://explorer.glif.io/tx/bafy2bzaceagcsrthxvkh2lhygf5hrioa4wdplzmkibxv34ajhqiwu5ms2yp54/?network=hyperspacenet  
+<br/>That transaction shows the last step of undertanding that everything works!
 <br/>
 daoFactoryContract : 
 <br/>https://explorer.glif.io/address/0xAF454A764dC42c6D1e835c04D318671203aD9b78/?network=hyperspacenet
