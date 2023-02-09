@@ -16,7 +16,7 @@ Authors
 
 ## Short Description
 
-SpatialDAO is a dataDAO Factory that allows created dataDAOs in the platform to make file proposals and bounties for specific commitment pieces. Deal clients, on the other hand, are hunting bounties and making storage deals for DAO-proposed data and getting rewarded for that!
+SpatialDAO is a dataDAO Factory that allows created dataDAOs in the platform to make file proposals and bounties for specific commitment pieces to manage them and permanently store them on the filecoin network. Deal clients, on the other hand, are hunting bounties and making storage deals for DAO-proposed data and getting rewarded for that!
 <br/>
 
 ## Long Description
@@ -26,7 +26,17 @@ SpatialDAO is a platform that enables organizations to create and monetize their
 
 <p align="left">
 <img src="./web-interface/public/spatialDAO_architecture.webp"/>
- 
+<br/>
+# The Future of spatialDAO 
+<br/>
+We are going to create a server that will generate for the users the commitment piece CID of the file that they need to propose and also store it on IPFS using NFT.STORAGE for Clients in the filecoin ecosystem to find them and make storage deals for those files.
+<br/>
+We have plans to create a proxy pattern dataDAO factory with openZeppelins standards for saving gas for new created DAOs.
+<br/>
+We have plans for introducing a contract that will handle storing files but for each user separately. And let them choose for encrypted or non encrypted files. To permanently store them using our smart contracts that we are going to create only for user services.
+<br/>
+We have plans to create a fair payment model for DAO creations and user file uploads to keep growing the platform.
+<br/>
 # Technologies Used
 
 <br/>
