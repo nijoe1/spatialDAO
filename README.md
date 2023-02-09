@@ -22,21 +22,26 @@ SpatialDAO is a dataDAO Factory that allows created dataDAOs in the platform to 
 ## Long Description
 SpatialDAO is a platform that enables organizations to create and monetize their own dataDAOs (Decentralized Autonomous Organizations) using the Filecoin Ethereum Virtual Machine (FEVM). The platform operates on a bounty philosophy, where each organization has a set of proposers, voters, and administrators. Administrators can add or remove proposers, proposers can create proposals for data storage, and voters can vote on the importance of the data. If a proposal is accepted, proposers can create bounties to fund the storage of that data. Bounties can only be created for successfully voted files, and they keep information about the bounty reward and the number of bounties the organization will offer for that file. Deal clients in the Filecoin ecosystem can search for bounties, create storage deals for the files that have bounties, and claim bounties once the dataDAO contract verifies that the storage deal has been made on the network. The SpatialDAO offers a social layer that utilizes Orbis.club that is operating on the Ceramic network to allow organizations to explore proposals and bounties, as well as providing a communication layer for its members.
 
- ## ARCHITECTURE
+## ARCHITECTURE
 
 <p align="left">
 <img src="./web-interface/public/spatialDAO_architecture.webp"/>
 <br/>
 # The Future of spatialDAO 
 <br/>
+
 We are going to create a server that will generate for the users the commitment piece CID of the file that they need to propose and also store it on IPFS using NFT.STORAGE for Clients in the filecoin ecosystem to find them and make storage deals for those files.
 <br/>
+
 We have plans to create a proxy pattern dataDAO factory with openZeppelins standards for saving gas for new created DAOs.
 <br/>
+
 We have plans for introducing a contract that will handle storing files but for each user separately. And let them choose for encrypted or non encrypted files. To permanently store them using our smart contracts that we are going to create only for user services.
 <br/>
+
 We have plans to create a fair payment model for DAO creations and user file uploads to keep growing the platform.
 <br/>
+
 # Technologies Used
 
 <br/>
