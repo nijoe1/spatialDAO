@@ -27,6 +27,7 @@ SpatialDAO is a platform that enables organizations to create and monetize their
 <p align="left">
 <img src="./web-interface/public/spatialDAO_architecture.webp"/>
 <br/>
+
 # The Future of spatialDAO 
 <br/>
 
