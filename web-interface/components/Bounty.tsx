@@ -185,7 +185,7 @@ export default function Bounty({commP, fileSize, streamId}: BountyProps) {
                             label="Number of Deal Days"
                             description={"The number of required remaining days for a deal to be successfully claimed"}
                             placeholder="Enter the number of deal days"
-                            min={160}
+                            min={2}
                             my={"sm"}
                             {...form.getInputProps('numberOfDealDays')} />
                         <Button variant={"gradient"} gradient={{from: "pink", to: "blue", deg: 110}} my={"sm"} type={"submit"}>
