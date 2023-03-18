@@ -174,7 +174,7 @@ export default function BountyCard({
                         try {
                             if (!amt)
                                 throw "No amount specified"
-                            if (amt > parseInt(remainingTokens))
+                            if (amt > parseFloat(remainingTokens))
                                 throw "Amount exceeds required tokens"
                             console.log(commP, amt)
                             await fundBounty(contract, commP, amt!.toString())
